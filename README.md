@@ -22,10 +22,13 @@ import "github.com/sentenz/percent/pkg/percent"
 
 The percent package provides several functions for working with percentages, including:
 
-- percent.Of(): Calculates the percentage of a given value.
-- percent.Change(): Calculates the percentage change between two values.
+- percent.Percent()
+  > Calculates the percentage of a given value.
 
-Here's an example of how you might use the percent package to calculate the percentage of a value:
+- percent.Change()
+  > Calculates the percentage change between two values.
+
+Example of Percent:
 
 ```go
 package main
@@ -42,12 +45,12 @@ func main() {
 
     result, err := percent.Percent(percentage, value)
     if err != nil {
-        fmt.Printf("calculating percentage %v%%: %v", percentage, err)
+        fmt.Printf("calculating percentage %v%% of %v: %v", percentage, value, err)
 
         return
     }
 
-    fmt.Printf("%d%% of %d is %.0f\n", percentage, value, result)
+    fmt.Printf("%v%% of %v is %.0f\n", percentage, value, result)
 }
 ```
 

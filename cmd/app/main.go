@@ -34,10 +34,10 @@ func main() {
 
 	result, err := percent.Percent(percentage, value)
 	if err != nil {
-		fmt.Printf("calculating percentage %v%%: %v", percentage, err)
+		fmt.Printf("calculating percentage %v%% of %v: %v", percentage, value, err)
 
 		return
 	}
 
-	fmt.Printf("%d%% of %d is %.0f\n", percentage, value, result)
+	fmt.Printf("%v%% of %v is %.0f\n", percentage, value, result)
 }
