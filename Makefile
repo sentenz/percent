@@ -30,8 +30,7 @@ setup-integration: ## Setup dependencies and tools for the integration service
 .PHONY: setup-integration
 
 setup-build: ## Setup dependencies and tools for the build service
-	# TODO(AK)
-	# cd $(@D)/scripts/pipeline && chmod +x setup_build.sh && ./setup_build.sh
+	cd $(@D)/scripts/pipeline && chmod +x setup_build.sh && ./setup_build.sh
 .PHONY: setup-build
 
 setup-testing: ## Setup dependencies and tools for the testing service
