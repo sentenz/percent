@@ -82,6 +82,7 @@ scan:
     - usr/local/
     - etc/
     - test/
+    - tools/
 
   # Same as '--skip-files'
   # Default is empty
