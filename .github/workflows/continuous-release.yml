@@ -1,0 +1,25 @@
+---
+name: Continuous Release
+on:
+  push:
+    branches:
+      - main
+jobs:
+  release:
+    name: continuous-release
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v3
+      - name: Setup Release
+        run: |
+          make setup-continuous-release
+      - name: Run Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          make run-continuous-release

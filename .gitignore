@@ -1,0 +1,4 @@
+cmd/bin/
+logs/
+*.log
+.env

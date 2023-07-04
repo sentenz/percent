@@ -1,0 +1,35 @@
+---
+name: Continuous-Build
+on:
+  workflow_run:
+    workflows:
+      - Continuous-Integration
+    types:
+      - completed
+jobs:
+  build:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    name: continuous-build
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
+          fetch-depth: 0
+      - name: Setup Build
+        run: |
+          make setup-continuous-build
+      - name: Run Build
+        run: |
+          make run-continuous-build
+      - name: Upload Artifacts
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: continuous-build-artifact
+          path: cmd/bin/*

@@ -1,0 +1,30 @@
+{
+  "name": "Base",
+  "image": "mcr.microsoft.com/vscode/devcontainers/base:ubuntu-22.04",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": "true",
+      "username": "vscode",
+      "userUid": "1000",
+      "userGid": "1000",
+      "upgradePackages": "true"
+    },
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest",
+      "ppa": "false"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": []
+    }
+  },
+  "runArgs": [
+    "--name", "dev-app",
+    "-v", "dev-data:/app/data"
+  ],
+  "forwardPorts": [],
+  "onCreateCommand": "",
+  "postCreateCommand": "",
+  "remoteUser": "vscode"
+}

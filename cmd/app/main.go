@@ -23,21 +23,23 @@
 package main
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/sentenz/percent/pkg/percent"
 )
 
-func main() {
-	percentage := 25
-	value := 100
+const (
+	percentage = 25
+	value      = 100
+)
 
+func main() {
 	result, err := percent.Percent(percentage, value)
 	if err != nil {
-		fmt.Printf("calculating percentage %v%%: %v", percentage, err)
+		log.Printf("calculating percentage %v%% of %v: %v", percentage, value, err)
 
 		return
 	}
 
-	fmt.Printf("%d%% of %d is %.0f\n", percentage, value, result)
+	log.Printf("%v%% of %v is %.0f\n", percentage, value, result)
 }
