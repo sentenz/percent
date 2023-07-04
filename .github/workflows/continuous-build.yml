@@ -1,15 +1,15 @@
 ---
-name: Continuous-Testing
+name: Continuous-Build
 on:
   workflow_run:
     workflows:
-      - Continuous-Build
+      - Continuous-Integration
     types:
       - completed
 jobs:
-  testing:
+  build:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    name: continuous-testing
+    name: continuous-build
     permissions:
       contents: read
       security-events: write
@@ -21,15 +21,15 @@ jobs:
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
           fetch-depth: 0
-      - name: Setup Testing
+      - name: Setup Build
         run: |
-          make setup-continuous-testing
-      - name: Run Testing
+          make setup-continuous-build
+      - name: Run Build
         run: |
-          make run-continuous-testing
+          make run-continuous-build
       - name: Upload Artifacts
-        if: success() || failure()
+        if: success()
         uses: actions/upload-artifact@v3
         with:
-          name: continuous-testing-artifact
-          path: logs/**/*.log
+          name: continuous-build-artifact
+          path: cmd/**/*
