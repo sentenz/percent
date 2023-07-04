@@ -115,11 +115,13 @@ run-continuous-integration: ## Perform task in continuous integration pipeline
 .PHONY: run-continuous-integration
 
 run-continuous-build: ## Perform task in continuous build pipeline
-	# TODO(AK)
+	$(MAKE) app-build
+	$(MAKE) app-run
 .PHONY: run-continuous-build
 
 run-continuous-testing: ## Perform task in continuous testing pipeline
-	# TODO(AK)
+	$(MAKE) test-unit
+	$(MAKE) test-cover
 .PHONY: run-continuous-testing
 
 run-continuous-release: ## Perform task in continuous release pipeline
@@ -163,3 +165,24 @@ app-audit: ## Perform application audit
 	go mod vendor
 	go list -json -m | tee $(@D)/logs/audit/audit.log
 .PHONY: app-audit
+
+test-unit: ## Perform unit test
+	mkdir -p $(@D)/logs/test
+	go test -race ./... | tee $(@D)/logs/test/test.log
+.PHONY: app-test
+
+test-fuzz: ## ## Perform fuzz test
+	go test --fuzz=Fuzz -fuzztime=10s
+.PHONY: test-fuzz
+
+test-bench: ## Perform benchmark test
+	mkdir -p $(@D)/logs/test
+	go test -timeout 30s -race -count 3 -bench=. -benchmem ./... | tee $(@D)/logs/test/benchmark.log
+.PHONY: test-bench
+
+test-cover: ## Perform code coverage
+	mkdir -p $(@D)/logs/test
+	go test -race -coverprofile=logs/test/coverage.log -covermode=atomic ./...
+	go tool cover -func=$(@D)/logs/test/coverage.log
+	go tool cover -html=$(@D)/logs/test/coverage.log
+.PHONY: test-cover
