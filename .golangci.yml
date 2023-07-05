@@ -195,7 +195,7 @@ linters-settings:
           - $gostd
           - github.com/sentenz
           - github.com/sentenz/crypto
-          - github.com/google/go-cmp
+          - github.com/google/go-cmp/cmp
           - golang.org/x/exp/constraints
         # Packages that are not allowed where the value is a suggestion.
         deny:
@@ -749,11 +749,13 @@ linters-settings:
       modules:
         - gopkg.in/yaml.v2
         - gonum.org/v1/gonum
+        - github.com/google/go-cmp/cmp
         - github.com/sentenz
       # List of allowed module domains.
       # Default: []
       domains:
         - golang.org
+        - github.com/google
     blocked:
       # List of blocked modules.
       # Default: []
