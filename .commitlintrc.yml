@@ -29,14 +29,11 @@ rules:
   scope-enum:
     - 2
     - always
-    - - build
-      - cmd
-      - configs
-      - scripts
-      - configs
-      - external
+    - - cmd
+      - pkg
       - internal
-      - deployments
+      - vendor
+      - scripts
       - githooks
       - tools
       - release
