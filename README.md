@@ -1,6 +1,9 @@
 # Percent
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/sentenz/percent.svg)](https://pkg.go.dev/github.com/sentenz/percent)
+![Go Version](https://img.shields.io/github/go-mod/go-version/sentenz/percent)
+![Go SemVer](https://img.shields.io/github/v/release/sentenz/percent)
+[![Go Report](https://goreportcard.com/badge/github.com/sentenz/percent)](https://goreportcard.com/report/github.com/sentenz/percent)
 
 The `percent` package provides a simple and easy-to-use API for working with percentages in Go.
 
@@ -20,7 +23,7 @@ To use the `percent` package in your Go program, import it like this:
 import "github.com/sentenz/percent/pkg/percent"
 ```
 
-The percent package provides several functions for working with percentages, including:
+The percent package provides functions for working with percentages, including:
 
 - percent.Percent()
   > Calculates the percentage of a given value.
@@ -34,23 +37,25 @@ Example of Percent:
 package main
 
 import (
-    "fmt"
+  "fmt"
 
-    "github.com/sentenz/percent/pkg/percent"
+  "github.com/sentenz/percent/pkg/percent"
+)
+
+const (
+  percentage = -25
+  value      = 100
 )
 
 func main() {
-    percentage := 25
-    value := 100
+  result, err := percent.Percent(percentage, value)
+  if err != nil {
+    log.Printf("calculating percentage %v%% of %v: %v", percentage, value, err)
 
-    result, err := percent.Percent(percentage, value)
-    if err != nil {
-        fmt.Printf("calculating percentage %v%% of %v: %v", percentage, value, err)
+    return
+  }
 
-        return
-    }
-
-    fmt.Printf("%v%% of %v is %.0f\n", percentage, value, result)
+  log.Printf("%v%% of %v is %.0f\n", percentage, value, result)
 }
 ```
 

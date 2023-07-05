@@ -23,7 +23,10 @@
 package percent_test
 
 import (
+	"errors"
 	"testing"
+
+	"github.com/google/go-cmp/cmp"
 
 	"github.com/sentenz/percent/internal/pkg/resource"
 	"github.com/sentenz/percent/pkg/percent"
@@ -85,12 +88,11 @@ func TestPercent(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := percent.Percent(tt.in.percent, tt.in.value)
-			if err != tt.want.err {
+			if !errors.Is(err, tt.want.err) {
 				t.Errorf("Percent() error = %v, want err %v", err, tt.want.err)
-				return
 			}
-			if got != tt.want.value {
-				t.Errorf("Percent() = %v, want %v", got, tt.want.value)
+			if !cmp.Equal(got, tt.want.value) {
+				t.Errorf("Percent(%+v) = %v, want %v", tt.in, got, tt.want.value)
 			}
 		})
 	}
@@ -163,12 +165,11 @@ func TestOf(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := percent.Of(tt.in.part, tt.in.total)
-			if err != tt.want.err {
+			if !errors.Is(err, tt.want.err) {
 				t.Errorf("Of() error = %v, want err %v", err, tt.want.err)
-				return
 			}
-			if got != tt.want.value {
-				t.Errorf("Of() = %v, want %v", got, tt.want.value)
+			if !cmp.Equal(got, tt.want.value) {
+				t.Errorf("Of(%+v) = %v, want %v", tt.in, got, tt.want.value)
 			}
 		})
 	}
@@ -230,12 +231,11 @@ func TestChange(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := percent.Change(tt.in.oldValue, tt.in.newValue)
-			if err != tt.want.err {
+			if !errors.Is(err, tt.want.err) {
 				t.Errorf("Change() error = %v, want err %v", err, tt.want.err)
-				return
 			}
-			if got != tt.want.value {
-				t.Errorf("Change() = %v, want %v", got, tt.want.value)
+			if !cmp.Equal(got, tt.want.value) {
+				t.Errorf("Change(%+v) = %v, want %v", tt.in, got, tt.want.value)
 			}
 		})
 	}
@@ -297,12 +297,11 @@ func TestRemain(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := percent.Remain(tt.in.percent, tt.in.value)
-			if err != tt.want.err {
+			if !errors.Is(err, tt.want.err) {
 				t.Errorf("Remain() error = %v, want err %v", err, tt.want.err)
-				return
 			}
-			if got != tt.want.value {
-				t.Errorf("Remain() = %v, want %v", got, tt.want.value)
+			if !cmp.Equal(got, tt.want.value) {
+				t.Errorf("Remain(%+v) = %v, want %v", tt.in, got, tt.want.value)
 			}
 		})
 	}
@@ -350,12 +349,11 @@ func TestFromRatio(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := percent.FromRatio(tt.in.ratio)
-			if err != tt.want.err {
+			if !errors.Is(err, tt.want.err) {
 				t.Errorf("FromRatio() error = %v, want err %v", err, tt.want.err)
-				return
 			}
-			if got != tt.want.value {
-				t.Errorf("FromRatio() = %v, want %v", got, tt.want.value)
+			if !cmp.Equal(got, tt.want.value) {
+				t.Errorf("FromRatio(%+v) = %v, want %v", tt.in, got, tt.want.value)
 			}
 		})
 	}
@@ -403,12 +401,11 @@ func TestToRatio(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := percent.ToRatio(tt.in.percent)
-			if err != tt.want.err {
+			if !errors.Is(err, tt.want.err) {
 				t.Errorf("ToRatio() error = %v, want err %v", err, tt.want.err)
-				return
 			}
-			if got != tt.want.value {
-				t.Errorf("ToRatio() = %v, want %v", got, tt.want.value)
+			if !cmp.Equal(got, tt.want.value) {
+				t.Errorf("ToRatio(%+v) = %v, want %v", tt.in, got, tt.want.value)
 			}
 		})
 	}

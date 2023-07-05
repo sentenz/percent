@@ -409,14 +409,13 @@ linters-settings:
       # List of allowed modules
       modules:
         - gopkg.in/yaml.v2
+        - gonum.org/v1/gonum
+        - github.com/google/go-cmp/cmp
+        - github.com/sentenz
       # List of allowed module domains
       domains:
         - golang.org
-        - github.com/go-echarts/go-echarts
-        - github.com/markcheno/go-talib
-        - gonum.org/v1/gonum
-        - github.com/montanaflynn/stats
-        - github.com/cnkei/gospline
+        - github.com/google
     blocked:
       # List of blocked modules
       modules:
