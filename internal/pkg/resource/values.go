@@ -25,4 +25,6 @@ package resource
 const (
 	PercentMin = 0.0
 	PercentMax = 100.0
+	RatioMin   = 0.0
+	RatioMax   = 100.0
 )

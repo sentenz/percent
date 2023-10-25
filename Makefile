@@ -18,7 +18,7 @@ setup-devops: ## Setup dependencies and tools for the devops service
 
 setup-devcontainer: ## Setup dependencies and tools for the vscode devcontainer
 	$(MAKE) update-submodule
-	$(MAKE) setup
+	$(MAKE) setup-devops
 .PHONY: setup-devcontainer
 
 setup-security: ## Setup dependencies and tools for the security service

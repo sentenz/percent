@@ -31,7 +31,7 @@ import (
 
 // Percent returns the percentage of value.
 func Percent[T constraints.Integer | constraints.Float](percent, value T) (float64, error) {
-	if float64(percent) < 0 || float64(percent) > 100 {
+	if float64(percent) < resource.PercentMin || float64(percent) > resource.PercentMax {
 		return 0, resource.ErrOutOfRange
 	}
 
@@ -62,7 +62,7 @@ func Change[T constraints.Integer | constraints.Float](oldValue, newValue T) (fl
 
 // Remain returns the percentage of value that remains after subtracting the percentage.
 func Remain[T constraints.Integer | constraints.Float](percent, value T) (float64, error) {
-	if float64(percent) < 0 || float64(percent) > 100 {
+	if float64(percent) < resource.PercentMin || float64(percent) > resource.PercentMax {
 		return 0, resource.ErrOutOfRange
 	}
 
@@ -71,7 +71,7 @@ func Remain[T constraints.Integer | constraints.Float](percent, value T) (float6
 
 // FromRatio returns the percent of ratio.
 func FromRatio[T constraints.Integer | constraints.Float](ratio T) (float64, error) {
-	if float64(ratio) < 0 || float64(ratio) > 1 {
+	if float64(ratio) < resource.RatioMin || float64(ratio) > resource.RatioMax {
 		return 0, resource.ErrOutOfRange
 	}
 
@@ -80,7 +80,7 @@ func FromRatio[T constraints.Integer | constraints.Float](ratio T) (float64, err
 
 // ToRatio returns the ratio of percent.
 func ToRatio[T constraints.Integer | constraints.Float](percent T) (float64, error) {
-	if float64(percent) < 0 || float64(percent) > 100 {
+	if float64(percent) < resource.PercentMin || float64(percent) > resource.PercentMax {
 		return 0, resource.ErrOutOfRange
 	}
 
