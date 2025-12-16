@@ -1,0 +1,7 @@
+{
+  "extends": ["config:base"],
+  "timezone": "UTC",
+  "schedule": ["before 3am on monday"],
+  "labels": ["dependencies"],
+  "packageRules": []
+}
