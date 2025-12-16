@@ -15,8 +15,8 @@ jobs:
         uses: actions/checkout@v6.0.1
 
       - name: Pull Image
-        run: docker pull openpolicyagent/conftest:latest
+        run: docker pull openpolicyagent/conftest:v0.65.0@sha256:afa510df6d4562ebe24fb3e457da6f6d6924124140a13b51b950cc6cb1d25525
 
       - name: Conftest
         run: |
-          docker run --rm -v $(pwd):/project -w /project openpolicyagent/conftest:latest test --policy policy .
+          docker run --rm -v $(pwd):/project -w /project openpolicyagent/conftest test --policy policy .
