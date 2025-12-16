@@ -1323,15 +1323,16 @@ linters:
 
       # List of rules to disable.
       # Default: empty
-      disable:
-        - pkg-doc
-        - single-pkg-doc
-        - require-pkg-doc
-        - start-with-name
-        - require-doc
-        - deprecated
-        - max-len
-        - no-unused-link
+      # disable:
+      #   - pkg-doc
+      #   - single-pkg-doc
+      #   - require-pkg-doc
+      #   - start-with-name
+      #   - require-doc
+      #   - deprecated
+      #   - max-len
+      #   - no-unused-link
+      disable: []
 
       # A map for fine-tuning individual rules.
       # All subkeys are optional.
@@ -3867,7 +3868,7 @@ linters:
         name: false
         # Check t.Helper() begins helper function.
         # Default: true
-        begin: false
+        begin: true
       benchmark:
         # Check *testing.B is first param (or after context.Context) of helper function.
         # Default: true
@@ -4283,29 +4284,7 @@ linters:
         - leading-whitespace
         - trailing-whitespace
 
-    # The custom section can be used to define linter plugins to be loaded at runtime.
-    # See README documentation for more info.
-    custom:
-      # Each custom linter should have a unique name.
-      example:
-        # The plugin type.
-        # It can be `goplugin` or `module`.
-        # Default: goplugin
-        type: module
-        # The path to the plugin *.so. Can be absolute or local.
-        # Required for each custom linter.
-        path: /path/to/example.so
-        # The description of the linter.
-        # Optional.
-        description: This is an example usage of a plugin linter.
-        # Intended to point to the repo location of the linter.
-        # Optional.
-        original-url: github.com/golangci/example-linter
-        # Plugins settings/configuration.
-        # Only work with plugin based on `linterdb.PluginConstructor`.
-        # Optional.
-        settings:
-          foo: bar
+
 
   # Defines a set of rules to ignore issues.
   # It does not skip the analysis, and so does not ignore "typecheck" errors.
