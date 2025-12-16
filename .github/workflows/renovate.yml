@@ -13,9 +13,11 @@ jobs:
       pull-requests: write
       issues: write
     steps:
-      - name: Run Renovate
-        uses: renovate/renovate@latest
+      - name: Checkout
+        uses: actions/checkout@v6.0.1
+      - name: Renovate
+        uses: renovatebot/github-action@v44.1.0
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RENOVATE_TOKEN }}
         env:
           TZ: UTC
