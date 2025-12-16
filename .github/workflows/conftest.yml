@@ -12,11 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6.0.1
 
-      - name: Pull Conftest Image
+      - name: Pull Image
         run: docker pull openpolicyagent/conftest:latest
 
-      - name: Run Conftest
+      - name: Conftest
         run: |
           docker run --rm -v $(pwd):/project -w /project openpolicyagent/conftest:latest test --policy policy .
