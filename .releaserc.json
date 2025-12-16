@@ -2,24 +2,26 @@
   "branches": [
     "main"
   ],
+  "tagFormat": "${version}",
   "plugins": [
-    "@semantic-release/changelog",
-    "@semantic-release/release-notes-generator",
-    "@semantic-release/git",
-    "@semantic-release/github",
     [
       "@semantic-release/commit-analyzer",
       {
+        "preset": "conventionalcommits",
         "verifyRelease": [
           "semantic-commitlint"
         ]
       }
     ],
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
     [
       "@semantic-release/exec",
       {
         "publishCmd": "git tag ${nextRelease.version}"
       }
-    ]
+    ],
+    "@semantic-release/git",
+    "@semantic-release/github"
   ]
 }
