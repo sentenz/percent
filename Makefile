@@ -187,5 +187,6 @@ test-cover: ## Perform code coverage
 .PHONY: test-cover
 
 analysis-golangci: ## Perform static code analysis
-	 docker run --rm -v "${PWD}:/workspace" -w /workspace golangci/golangci-lint:v2.7.2-alpine@sha256:1e1851102b736971267400e08b3e4b2e7799c73976a998820f6f6b6b86b48343 golangci-lint run ./...
+	@mkdir -p $(@D)/logs/analysis
+	docker run --rm -v "${PWD}:/workspace" -w /workspace golangci/golangci-lint:v2.7.2-alpine@sha256:1e1851102b736971267400e08b3e4b2e7799c73976a998820f6f6b6b86b48343 golangci-lint run ./...
 .PHONY: analysis-golangci
