@@ -1,6 +1,9 @@
----
 # This file contains all available configuration options
 # with their default values.
+
+# Defines the configuration version.
+# The only possible value is "2".
+version: "2"
 
 # options for analysis running
 run:
@@ -41,7 +44,7 @@ run:
   # "/" will be replaced by current OS file path separator to properly work
   # on Windows.
   skip-files:
-    - ".*\\.my\\.go$"
+    - ".*\.my\.go$"
     - lib/bad.go
 
   # Allow multiple parallel golangci-lint instances running.
@@ -52,7 +55,8 @@ run:
 output:
   # colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml|github-actions
   # default is "colored-line-number"
-  format: colored-line-number
+  formats: 
+    - format: colored-line-number
 
   # print lines of code with issue, default is true
   print-issued-lines: true
@@ -68,6 +72,85 @@ output:
 
   # sorts results by: filepath, line and column
   sort-results: false
+
+linters:
+  # Default set of linters.
+  # The value can be:
+  # - `standard`:
+  # - `all`: enables all linters by default.
+  # - `none`: disables all linters by default.
+  # - `fast`: enables only linters considered as "fast"
+  # Default: standard
+  default: all
+
+  disable:
+    - maligned
+    - prealloc
+    - gochecknoglobals
+    - promlinter
+    # deprecated (since v1.38.0)
+    - interfacer
+    # deprecated (since v1.38.0)
+    - maligned
+    # deprecated (since v1.39.0)
+    - scopelint
+    # deprecated (since v1.41.0)
+    - golint
+    # deprecated (since v1.48.0)
+    - ifshort
+    # deprecated (since v1.48.1)
+    - nosnakecase
+    # - gomodguard
+    # - typecheck
+    # - bodyclose
+    # - deadcode
+    # - depguard
+    # - dogsled
+    # - dupl
+    # - errcheck
+    # - exportloopref
+    # - exhaustive
+    # - funlen
+    # - gochecknoinits
+    # - goconst
+    # - gocritic
+    # - gocyclo
+    # - gofmt
+    # - goimports
+    # - gomnd
+    # - goprintffuncname
+    # - gosec
+    # - gosimple
+    # - govet
+    # - ineffassign
+    # - lll
+    # - misspell
+    # - nakedret
+    # - noctx
+    # - nolintlint
+    # - rowserrcheck
+    # - staticcheck
+    # - structcheck
+    # - stylecheck
+    # - unconvert
+    # - unparam
+    # - unused
+    # - varcheck
+    # - whitespace
+    # - asciicheck
+    # - gocognit
+    # - godot
+    # - godox
+    # - goerr113
+    # - nestif
+    # - prealloc
+    # - testpackage
+    # - revive
+    # - wsl
+  # presets:
+  #   - bugs
+  #   - unused
+  fast: false
 
 # all available settings of specific linters
 linters-settings:
@@ -252,38 +335,6 @@ linters-settings:
         sizeThreshold: 32
         # whether to check test functions (default true)
         skipTestFuncs: true
-      # ruleguard:
-      #   # Enable debug to identify which 'Where' condition was rejected.
-      #   # The value of the parameter is the name of a function in a ruleguard file.
-      #   #
-      #   # When a rule is evaluated:
-      #   # If:
-      #   #   The Match() clause is accepted; and
-      #   #   One of the conditions in the Where() clause is rejected,
-      #   # Then:
-      #   #   ruleguard prints the specific Where() condition that was rejected.
-      #   #
-      #   # The flag is passed to the ruleguard 'debug-group' argument.
-      #   debug: "emptyDecl"
-      #   # Deprecated, use 'failOn' param.
-      #   # If set to true, identical to failOn='all', otherwise failOn=''
-      #   failOnError: false
-      #   # Determines the behavior when an error occurs while parsing ruleguard files.
-      #   # If flag is not set, log error and skip rule files that contain an error.
-      #   # If flag is set, the value must be a comma-separated list of error conditions.
-      #   # - 'all':    fail on all errors.
-      #   # - 'import': ruleguard rule imports a package that cannot be found.
-      #   # - 'dsl':    gorule file does not comply with the ruleguard DSL.
-      #   failOn: dsl
-      #   # Comma-separated list of file paths containing ruleguard rules.
-      #   # If a path is relative, it is relative to the directory where the golangci-lint command
-      #   # is executed. The '${configDir}' variable is substituted with the absolute
-      #   # directory containing the golangci config file.
-      #   # Glob patterns such as 'rules-*.go' may be specified.
-      #   rules: "${configDir}/ruleguard/rules-*.go,${configDir}/myrule1.go"
-      #   tooManyResultsChecker:
-      #   # maximum number of results (default 5)
-      #   maxResults: 10
       truncateCmp:
         # whether to skip int/uint/uintptr types (default true)
         skipArchDependent: true
@@ -366,13 +417,6 @@ linters-settings:
       OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
       SOFTWARE.
 
-    # As alternative of directive 'template', you may put the path to file with the template source.
-    # Useful if you need to load the template from a specific file.
-    # Default: ""
-    # template-path:
-    #   # alternative of directive 'template' you may put the path to file with the template source
-    #   ./.golangci-licenses
-
   goimports:
     # put imports beginning with prefix after 3rd-party packages;
     # it's a comma-separated list of prefixes
@@ -382,15 +426,13 @@ linters-settings:
     # minimal confidence for issues, default is 0.8
     min-confidence: 0.8
 
-  gomnd:
-    settings:
-      mnd:
-        # the list of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for
-        # description.
-        checks: [argument, case, condition, operation, return, assign]
-        # ignored-numbers: 1000
-        # ignored-files: magic_.*.go
-        # ignored-functions: math.*
+  mnd:
+    # the list of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for
+    # description.
+    checks: [argument, case, condition, operation, return, assign]
+    # ignored-numbers: 1000
+    # ignored-files: magic_.*.go
+    # ignored-functions: math.*
 
   gomoddirectives:
     # Allow local `replace` directives. Default is false.
@@ -463,9 +505,6 @@ linters-settings:
     confidence: "low"
 
     # To specify the configuration of rules.
-    # The configuration of rules is not fully documented by gosec:
-    # https://github.com/securego/gosec#configuration
-    # https://github.com/securego/gosec/blob/569328eade2ccbad4ce2d0f21ee158ab5356a5cf/rules/rulelist.go#L60-L102
     config:
       G306: "0600"
       G101:
@@ -510,16 +549,16 @@ linters-settings:
     disable-all: false
 
   depguard:
-    list-type: blacklist
-
-    include-go-root: false
-
-    packages:
-      - github.com/sirupsen/logrus
-
-    packages-with-error-message:
-      # specify an error message to output when a blacklisted package is used
-      - github.com/sirupsen/logrus: "logging is allowed only by logutils.Log"
+    rules:
+      main:
+        list-mode: lax
+        files:
+          - "$all"
+        allow:
+          - $gostd
+        deny:
+          - pkg: "github.com/sirupsen/logrus"
+            desc: "logging is allowed only by logutils.Log"
 
   ifshort:
     # Maximum length of variable declaration measured in number of lines, after which linter won't
@@ -862,94 +901,6 @@ linters-settings:
     force-short-decl-cuddling: false
     strict-append: true
 
-# The custom section can be used to define linter plugins to be loaded at runtime.
-# See README doc for more info.
-# custom:
-#   # Each custom linter should have a unique name.
-#   example:
-#     # The path to the plugin *.so. Can be absolute or local. Required for each custom linter
-#     path: /path/to/example.so
-#     # The description of the linter. Optional, just for documentation purposes.
-#     description: This is an example usage of a plugin linter.
-#     # Intended to point to the repo location of the linter.Optional, just for documentation
-#     # purposes.
-#     original-url: github.com/golangci/example-linter
-
-linters:
-  # disable-all: true
-  # enable:
-  #   - megacheck
-  #   - govet
-  enable-all: true
-  disable:
-    - maligned
-    - prealloc
-    - gochecknoglobals
-    - promlinter
-    # deprecated (since v1.38.0)
-    - interfacer
-    # deprecated (since v1.38.0)
-    - maligned
-    # deprecated (since v1.39.0)
-    - scopelint
-    # deprecated (since v1.41.0)
-    - golint
-    # deprecated (since v1.48.0)
-    - ifshort
-    # deprecated (since v1.48.1)
-    - nosnakecase
-    # - gomodguard
-    # - typecheck
-    # - bodyclose
-    # - deadcode
-    # - depguard
-    # - dogsled
-    # - dupl
-    # - errcheck
-    # - exportloopref
-    # - exhaustive
-    # - funlen
-    # - gochecknoinits
-    # - goconst
-    # - gocritic
-    # - gocyclo
-    # - gofmt
-    # - goimports
-    # - gomnd
-    # - goprintffuncname
-    # - gosec
-    # - gosimple
-    # - govet
-    # - ineffassign
-    # - lll
-    # - misspell
-    # - nakedret
-    # - noctx
-    # - nolintlint
-    # - rowserrcheck
-    # - staticcheck
-    # - structcheck
-    # - stylecheck
-    # - unconvert
-    # - unparam
-    # - unused
-    # - varcheck
-    # - whitespace
-    # - asciicheck
-    # - gocognit
-    # - godot
-    # - godox
-    # - goerr113
-    # - nestif
-    # - prealloc
-    # - testpackage
-    # - revive
-    # - wsl
-  # presets:
-  #   - bugs
-  #   - unused
-  fast: false
-
 issues:
   # List of regexps of issue texts to exclude, empty list by default.
   # But independently from this option we use default exclude patterns,
@@ -1013,12 +964,6 @@ issues:
   # of integration: much better don't allow issues in new code.
   # Default is false.
   new: false
-
-  # Show only new issues created after git revision `REV`
-  # new-from-rev: REV
-
-  # Show only new issues created in git patch with set file path.
-  # new-from-patch: path/to/patch/file
 
   # Fix found issues (if it's supported by the linter)
   fix: true
