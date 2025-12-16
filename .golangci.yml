@@ -1291,7 +1291,7 @@ linters:
       # Default set of rules to enable.
       # Possible values are: `basic`, `all` or `none`.
       # Default: `basic` (enables `pkg-doc`, `single-pkg-doc`, `start-with-name`, and `deprecated`)
-      default: all
+      default: basic
 
       # List of rules to enable in addition to the default set.
       # Default: empty
