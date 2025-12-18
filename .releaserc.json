@@ -7,21 +7,27 @@
     [
       "@semantic-release/commit-analyzer",
       {
-        "preset": "conventionalcommits",
-        "verifyRelease": [
-          "semantic-commitlint"
-        ]
+        "preset": "conventionalcommits"
       }
     ],
-    "@semantic-release/release-notes-generator",
-    "@semantic-release/changelog",
     [
-      "@semantic-release/exec",
+      "@semantic-release/release-notes-generator",
       {
-        "publishCmd": "git tag ${nextRelease.version}"
+        "preset": "conventionalcommits"
       }
     ],
-    "@semantic-release/git",
+    [
+      "@semantic-release/changelog",
+      {
+        "changelogTitle": "# Changelog"
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "message": "chore(release): version ${nextRelease.version} [skip ci]"
+      }
+    ],
     "@semantic-release/github"
   ]
 }

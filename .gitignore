@@ -1,4 +1,6 @@
-cmd/bin/
+# https://www.toptal.com/developers/gitignore/
+
+build/
 logs/
 *.log
 .env
