@@ -1,4 +1,4 @@
-package main
+package main.policy
 
 import rego.v1
 
@@ -13,7 +13,10 @@ deny contains msg if {
 	some name, version in dependencies
 
 	not is_strict_semver(version)
-	msg := sprintf("Dependency '%s' uses ranged version specifier '%s'. Pin to the exact semantic versioning tag like 'v1.2.3'.", [name, version])
+	msg := sprintf(
+		"Dependency '%s' uses ranged version specifier '%s'. Pin to the exact semantic versioning tag like 'v1.2.3'.",
+		[name, version],
+	)
 }
 
 deny contains msg if {
@@ -23,7 +26,10 @@ deny contains msg if {
 	some name, version in dependencies
 
 	not is_strict_semver(version)
-	msg := sprintf("Dev Dependency '%s' uses ranged version specifier '%s'. Pin to the exact semantic versioning tag like 'v1.2.3'.", [name, version])
+	msg := sprintf(
+		"Dev Dependency '%s' uses ranged version specifier '%s'. Pin to the exact semantic versioning tag like 'v1.2.3'.",
+		[name, version],
+	)
 }
 
 is_strict_semver(v) if {

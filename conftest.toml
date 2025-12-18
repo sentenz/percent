@@ -1,5 +1,5 @@
 policy = "tests/policy"
-namespace = "main"
+namespace = "main.policy"
 no_color = true
 output = "json"
-ignore = ".git/|.devcontainer/|build/|logs/|CODEOWNER|LICENSE"
+ignore = ".git/|.devcontainer/|build/|logs/|CODEOWNERS|LICENSE"

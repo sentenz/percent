@@ -1,4 +1,4 @@
-package main
+package main.policy
 
 import rego.v1
 

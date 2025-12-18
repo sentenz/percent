@@ -1,4 +1,4 @@
-name: Regal Lint
+name: Regal
 on:
   pull_request:
 jobs:

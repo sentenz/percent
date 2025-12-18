@@ -1,4 +1,4 @@
-package main
+package main.policy
 
 import rego.v1
 
@@ -15,7 +15,10 @@ deny contains msg if {
 	version := parts[count(parts) - 1]
 
 	not is_strict_semver(version)
-	msg := sprintf("Component '%s' uses label tags specifier '%s'. Pin to the exact semantic versioning tag like 'v1.2.3'.", [component, version])
+	msg := sprintf(
+		"Component '%s' uses label tags specifier '%s'. Pin to the exact semantic versioning tag like 'v1.2.3'.",
+		[component, version],
+	)
 }
 
 is_strict_semver(v) if {
