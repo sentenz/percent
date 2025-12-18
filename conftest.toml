@@ -1,4 +1,4 @@
-policy = "test/policy"
+policy = "tests/policy"
 namespace = "main"
 no_color = true
 output = "json"
