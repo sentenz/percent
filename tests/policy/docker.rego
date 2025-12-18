@@ -6,7 +6,13 @@ is_dockerfile if {
 	input[0].Cmd # Dockerfile input is an array of objects with a "Cmd" key
 }
 
-deny contains msg if {
+# METADATA
+# title: Dockerfile base image pinning
+# description: Ensure Dockerfile base image is pinned by digest
+# custom:
+#   severity: medium
+# entrypoint: true
+deny_dockerfile contains msg if {
 	is_dockerfile
 
 	some cmd in input

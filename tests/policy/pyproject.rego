@@ -6,7 +6,13 @@ is_pyproject if {
 	input.tool.poetry # Specific to Poetry, adjust for Flit/Hatch if needed
 }
 
-deny contains msg if {
+# METADATA
+# title: Poetry dependency version pinning
+# description: Ensure Poetry dependencies are pinned to a specific version
+# custom:
+#   severity: medium
+# entrypoint: true
+deny_poetry_deps contains msg if {
 	is_pyproject
 
 	dependencies := input.tool.poetry.dependencies
@@ -19,7 +25,13 @@ deny contains msg if {
 	)
 }
 
-deny contains msg if {
+# METADATA
+# title: Poetry dev dependency version pinning
+# description: Ensure Poetry dev dependencies are pinned to a specific version
+# custom:
+#   severity: medium
+# entrypoint: true
+deny_poetry_dev_deps contains msg if {
 	is_pyproject
 
 	dependencies := input.poetry.group.dev.dependencies

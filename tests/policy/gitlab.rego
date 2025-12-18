@@ -6,7 +6,13 @@ is_gitlab_ci if {
 	input.include
 }
 
-deny contains msg if {
+# METADATA
+# title: GitLab CI component version pinning
+# description: Ensure GitLab CI components are pinned to a specific version
+# custom:
+#   severity: medium
+# entrypoint: true
+deny_gitlab_ci contains msg if {
 	is_gitlab_ci
 
 	some include in input.include
