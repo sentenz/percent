@@ -1,0 +1,13 @@
+name: Regal Lint
+on:
+  pull_request:
+jobs:
+  lint-rego:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: open-policy-agent/setup-regal@v1
+        with:
+          version: latest
+      - name: Lint
+        run: regal lint --format=github ./tests/policy
