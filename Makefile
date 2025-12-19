@@ -64,6 +64,7 @@ go-test-coverage:
 
 	go test -coverprofile=logs/coverage/coverage.out ./...
 	go tool cover -html=logs/coverage/coverage.out -o logs/coverage/coverage.html
+	go run -mod=vendor github.com/boumenot/gocover-cobertura < logs/coverage/coverage.out > logs/coverage/coverage.xml
 .PHONY: go-test-coverage
 
 ## Run Go benchmarks
