@@ -170,5 +170,5 @@ The [Renovate CI/CD Component](https://gitlab.samscm.net/explore/catalog/develop
 
 ## 3. References
 
-- GitLab [DX Concept](https://gitlab.samscm.net/development-environment/templates/dx-concept) template repository.
-- Sentenz [Manager Tools](https://gitlab.samscm.net/alkl/convention/-/issues/95) article.
+- GitHub [Template DX](https://github.com/sentenz/template-dx) repository.
+- Sentenz [Manager Tools](https://github.com/sentenz/convention/issues/392) article.
