@@ -1,74 +1,174 @@
 # Percent
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/sentenz/percent.svg)](https://pkg.go.dev/github.com/sentenz/percent)
-![Go Version](https://img.shields.io/github/go-mod/go-version/sentenz/percent)
-![Go SemVer](https://img.shields.io/github/v/release/sentenz/percent)
-[![Go Report](https://goreportcard.com/badge/github.com/sentenz/percent)](https://goreportcard.com/report/github.com/sentenz/percent)
+[![GoDoc](https://godoc.org/github.com/sentenz/percent?status.svg)](https://godoc.org/github.com/sentenz/percent/pkg/percent)
+[![Go Report Card](https://goreportcard.com/badge/github.com/sentenz/percent)](https://goreportcard.com/report/github.com/sentenz/percent)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-The `percent` package provides a simple and easy-to-use API for working with percentages in Go.
+Percent is a Go package that provides utility functions for calculating percentages and performing related operations.
 
-## Installation
+- [1. Details](#1-details)
+  - [1.1. Prerequisites](#11-prerequisites)
+  - [1.2. Installation](#12-installation)
+- [2. Usage](#2-usage)
+  - [2.1. Bootstrap](#21-bootstrap)
+  - [2.2. Dev Containers](#22-dev-containers)
+  - [2.3. Task Runner](#23-task-runner)
+    - [2.3.1. Make](#231-make)
+  - [2.4. Release Manager](#24-release-manager)
+    - [2.4.1. Semantic-Release](#241-semantic-release)
+  - [2.5. Update Manager](#25-update-manager)
+    - [2.5.1. Renovate](#251-renovate)
+  - [2.6. Secrets Manager](#26-secrets-manager)
+    - [2.6.1. SOPS](#261-sops)
+- [3. References](#3-references)
 
-Use `go get` to install this package:
+## 1. Details
 
-```shell
+### 1.1. Prerequisites
+
+- [Go](https://golang.org/)
+  > Go programming language environment for building and running Go applications.
+
+- [Make](https://www.gnu.org/software/make/)
+  > Task automation tool to manage build processes and workflows.
+
+- [Docker](https://www.docker.com/)
+  > Containerization tool to run applications in isolated container environments and execute container-based tasks.
+
+### 1.2. Installation
+
+Install the package via `go get`.
+
+```bash
 go get github.com/sentenz/percent
 ```
 
-## Usage
-
-To use the `percent` package in your Go program, import it like this:
+Import the package in a called Go source file.
 
 ```go
 import "github.com/sentenz/percent/pkg/percent"
 ```
 
-The percent package provides functions for working with percentages, including:
+## 2. Usage
 
-- percent.Percent()
-  > Calculates the percentage of a given value.
+### 2.1. Bootstrap
 
-- percent.Change()
-  > Calculates the percentage change between two values.
+A bootstrap script initializes an environment, application, or system by installing dependencies, configuring settings, or preparing the system for further operations.
 
-Example of Percent:
+- [scripts/](scripts/README.md)
+  > Collection of bootstrap, setup, or teardown scripts across multiple environments.
 
-```go
-package main
+### 2.2. Dev Containers
 
-import (
-  "fmt"
+A Development Container (Dev Container) utilizes a container as a full-featured development environment.
 
-  "github.com/sentenz/percent/pkg/percent"
-)
+- [.devcontainer/](.devcontainer/README.md)
+  > Collection of Dev Container resources published under `mcr.microsoft.com/devcontainers`.
 
-const (
-  percentage = -25
-  value      = 100
-)
+### 2.3. Task Runner
 
-func main() {
-  result, err := percent.Percent(percentage, value)
-  if err != nil {
-    log.Printf("calculating percentage %v%% of %v: %v", percentage, value, err)
+#### 2.3.1. Make
 
-    return
-  }
+- [Makefile](Makefile)
+  > A Makefile is used to define and manage tasks for building, testing, and maintaining the project.
 
-  log.Printf("%v%% of %v is %.0f\n", percentage, value, result)
-}
-```
+  > [!NOTE]
+  > - Run the `make help` command in the terminal to list the tasks used for the project.
+  > - Targets **must** have a leading comment line starting with `##` to be included in the task list.
 
-This will output:
+  ```plaintext
+  $ make help
 
-```shell
-25% of 100 is 25
-```
+  Tasks
+          A collection of tasks used in the current project.
 
-## Contributing
+  Usage
+          make <task>
 
-Contributions to the percent package are welcome! If you find a bug or have a feature request, please open an issue on the GitHub repository.
+          bootstrap                   Initialize a software development workspace with requisites
+          setup                       Install and configure all dependencies essential for development
+          teardown                    Remove development artifacts and restore the host to its pre-setup state
+          go-test-unit                Run Go unit tests with race detection
+          go-test-coverage            Run Go tests with coverage report
+          go-test-bench               Run Go benchmarks
+          go-test-fuzz                Run fuzz tests
+          go-check                    Run all Go code quality checks
+          secrets-sops-encrypt        Encrypt file using SOPS
+          secrets-sops-decrypt        Decrypt file using SOPS
+          analysis-policy-conftest    Analyze configuration files using Conftest for policy violations and generate a report
+          analysis-lint-regal         Lint Rego policies using Regal and generate a report
+  ```
 
-## License
+### 2.4. Release Manager
 
-The percent package is available under the MIT License. See the LICENSE file for more information.
+#### 2.4.1. Semantic-Release
+
+The [Semantic-Release CI/CD Component](https://gitlab.samscm.net/explore/catalog/development-environment/ci-cd/manager) tool automates release workflows, including determining the next version number, generating a `CHANGELOG.md` file, and publishing the release notes with artifacts.
+
+- [.gitlab-ci.yml](.gitlab-ci.yml)
+
+  ```yaml
+  include:
+    - component: $CI_SERVER_FQDN/development-environment/ci-cd/manager/semantic-release@<version>
+  ```
+
+### 2.5. Update Manager
+
+#### 2.5.1. Renovate
+
+The [Renovate CI/CD Component](https://gitlab.samscm.net/explore/catalog/development-environment/ci-cd/manager) automates dependency updates by creating Pull Requests (PRs) or Merge Requests (MRs) to update versions.
+
+- [.gitlab-ci.yml](.gitlab-ci.yml)
+
+  ```yaml
+  include:
+    - component: $CI_SERVER_FQDN/development-environment/ci-cd/manager/renovate@<version>
+  ```
+
+### 2.6. Secrets Manager
+
+#### 2.6.1. SOPS
+
+1. GPG Key Pair Generation
+
+    - Task Runner
+      > Generate a new key pair to be used with SOPS.
+
+      > [!NOTE]
+      > The UID can be customized via the `SECRETS_SOPS_UID` variable (defaults to `sops-dx`).
+
+      ```sh
+      make secrets-gpg-generate SECRETS_SOPS_UID=<uid>
+      ```
+
+2. GPG Public Key Fingerprint
+
+    - Task Runner
+      > Print the  GPG Public Key fingerprint associated with a given UID.
+
+      ```sh
+      make secrets-gpg-show SECRETS_SOPS_UID=<uid>
+      ```
+
+    - [.sops.yaml](.sops.yaml)
+      > The GPG UID is required for populating in `.sops.yaml`.
+
+      ```yaml
+      creation_rules:
+        - pgp: "<fingerprint>" # <uid>
+      ```
+
+3. SOPS Encrypt/Decrypt
+
+    - Task Runner
+      > Encrypt/decrypt one or more files in place using SOPS.
+
+      ```sh
+      make secrets-sops-encrypt <files>
+      make secrets-sops-decrypt <files>
+      ```
+
+## 3. References
+
+- GitLab [DX Concept](https://gitlab.samscm.net/development-environment/templates/dx-concept) template repository.
+- Sentenz [Manager Tools](https://gitlab.samscm.net/alkl/convention/-/issues/95) article.
