@@ -1,192 +1,225 @@
+# SPDX-License-Identifier: Apache-2.0
+
 ifneq (,$(wildcard .env))
 	include .env
 	export
 endif
 
-# See https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
-help: ## Display help screen
-	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-30s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
+# Define Variables
+
+PIP_VENV := .venv/bin
+
+SHELL := bash
+.SHELLFLAGS := -euo pipefail -c
+.ONESHELL:
+
+# Define Targets
+
+default: help
+
+# NOTE Targets MUST have a leading comment line starting with `##` to be included in the list. See the targets below for examples.
+help:
+	@awk 'BEGIN {printf "Tasks\n\tA collection of tasks used in the current project.\n\n"}'
+	@awk 'BEGIN {printf "Usage\n\tmake $(shell tput -Txterm setaf 6)<task>$(shell tput -Txterm sgr0)\n\n"}' $(MAKEFILE_LIST)
+	@awk '/^##/{c=substr($$0,3);next}c&&/^[[:alpha:]][[:alnum:]_-]+:/{print "$(shell tput -Txterm setaf 6)\t" substr($$1,1,index($$1,":")) "$(shell tput -Txterm sgr0)",c}1{c=0}' $(MAKEFILE_LIST) | column -s: -t
 .PHONY: help
 
-setup: ## Setup dependencies and tools
-	cd $(@D)/scripts && chmod +x setup.sh && ./setup.sh
+# ── Setup & Teardown ─────────────────────────────────────────────────────────────────────────────
+
+## Initialize a software development workspace with requisites
+bootstrap:
+	@cd ./scripts/ && bash ./bootstrap.sh
+.PHONY: bootstrap
+
+## Install and configure all dependencies essential for development
+setup:
+	@cd ./scripts/ && bash ./setup.sh
 .PHONY: setup
 
-setup-devops: ## Setup dependencies and tools for the devops service
-	cd $(DEVOPS_PATH)/scripts && chmod +x setup.sh && ./setup.sh
-.PHONY: setup-devops
+## Remove development artifacts and restore the host to its pre-setup state
+teardown:
+	@cd ./scripts/ && bash ./teardown.sh
+.PHONY: teardown
 
-setup-devcontainer: ## Setup dependencies and tools for the vscode devcontainer
-	$(MAKE) update-submodule
-	$(MAKE) setup
-.PHONY: setup-devcontainer
+# ── Go Tools ─────────────────────────────────────────────────────────────────────────────────────
 
-setup-security: ## Setup dependencies and tools for the security service
-	cd $(@D)/scripts/pipeline && chmod +x setup_security.sh && ./setup_security.sh
-.PHONY: setup-security
-
-setup-integration: ## Setup dependencies and tools for the integration service
-	cd $(@D)/scripts/pipeline && chmod +x setup_integration.sh && ./setup_integration.sh
-.PHONY: setup-integration
-
-setup-build: ## Setup dependencies and tools for the build service
-	cd $(@D)/scripts/pipeline && chmod +x setup_build.sh && ./setup_build.sh
-.PHONY: setup-build
-
-setup-testing: ## Setup dependencies and tools for the testing service
-	cd $(@D)/scripts/pipeline && chmod +x setup_testing.sh && ./setup_testing.sh
-.PHONY: setup-testing
-
-setup-release: ## Setup dependencies and tools for the release service
-	cd $(@D)/scripts/pipeline && chmod +x setup_release.sh && ./setup_release.sh
-.PHONY: setup-release
-
-setup-continuous-security: ## Setup dependencies and tools for the continuous security pipeline
-	$(MAKE) update-submodule
-	$(MAKE) setup-security
-.PHONY: setup-continuous-security
-
-setup-continuous-integration: ## Setup dependencies and tools for the continuous integration pipeline
-	$(MAKE) update-submodule
-	$(MAKE) setup-integration
-.PHONY: setup-continuous-integration
-
-setup-continuous-build: ## Setup dependencies and tools for the continuous build pipeline
-	$(MAKE) setup-build
-.PHONY: setup-continuous-build
-
-setup-continuous-testing: ## Setup dependencies and tools for the continuous testing pipeline
-	$(MAKE) setup-testing
-.PHONY: setup-continuous-testing
-
-setup-continuous-release: ## Setup dependencies and tools for the continuous release pipeline
-	$(MAKE) setup-release
-.PHONY: setup-continuous-release
-
-teardown-devops: ## Teardown dependencies and tools for the devops service
-	cd $(DEVOPS_PATH)/scripts && chmod +x teardown.sh && ./teardown.sh
-.PHONY: teardown-devops
-
-update-devops: ## Update dependencies and tools for the devops service
-	$(MAKE) teardown-devops
-	$(MAKE) update-submodule
-	$(MAKE) setup-devops
-.PHONY: update-devops
-
-run-linter-staged: ## Perform analysis of local staged files
-	cd $(DEVOPS_PATH)/cmd/app && chmod +x sast.sh && ./sast.sh -l staged
-.PHONY: run-linter-staged
-
-run-linter-diff: ## Perform analysis of local modified files
-	cd $(DEVOPS_PATH)/cmd/app && chmod +x sast.sh && ./sast.sh -l diff
-.PHONY: run-linter-diff
-
-run-linter-ci: ## Perform analysis of modified files in continuous integration pipeline
-	cd $(DEVOPS_PATH)/cmd/app && chmod +x sast.sh && ./sast.sh -l ci
-.PHONY: run-linter-ci
-
-run-linter-commit: ## Perform analysis of the commit message
-	commitlint --edit .git/COMMIT_EDITMSG
-.PHONY: run-linter-commit
-
-run-sanitizer-app: ## Perform analysis of the application binary file
-	cd $(DEVOPS_PATH)/cmd/app && chmod +x dast.sh && ./dast.sh -b $(PATH_BINARY_APP)
-.PHONY: run-sanitizer-app
-
-run-sanitizer-test: ## Perform analysis of the test binary file
-	cd $(DEVOPS_PATH)/cmd/app && chmod +x dast.sh && ./dast.sh -b $(PATH_BINARY_TEST)
-.PHONY: run-sanitizer-test
-
-run-security-scan: ## Perform security analysis of local project
-	cd $(DEVOPS_PATH)/cmd/app && chmod +x sca.sh && ./sca.sh -p $(@D)
-.PHONY: run-security-scan
-
-run-release: ## Perform release service task
-	npx semantic-release
-.PHONY: run-release
-
-run-continuous-security: ## Perform task in continuous security pipeline
-	$(MAKE) run-security-scan
-.PHONY: run-continuous-security
-
-run-continuous-integration: ## Perform task in continuous integration pipeline
-	$(MAKE) run-linter-ci
-.PHONY: run-continuous-integration
-
-run-continuous-build: ## Perform task in continuous build pipeline
-	$(MAKE) app-build
-	$(MAKE) app-run
-.PHONY: run-continuous-build
-
-run-continuous-testing: ## Perform task in continuous testing pipeline
-	$(MAKE) test-unit
-	$(MAKE) test-cover
-.PHONY: run-continuous-testing
-
-run-continuous-release: ## Perform task in continuous release pipeline
-	$(MAKE) run-release
-.PHONY: run-continuous-release
-
-setup-submodule-devops: ## Setup git submodule devops service
-	git submodule add -f --name $(DEVOPS_NAME) $(DEVOPS_URL) $(DEVOPS_PATH)
-.PHONY: setup-submodule-devops
-
-teardown-submodule-devops: ## Teardown git submodule devops service
-	git submodule deinit -f $(DEVOPS_PATH)
-	rm -rf .git/modules/$(DEVOPS_NAME)
-	git rm -rf $(DEVOPS_PATH)
-.PHONY: teardown-submodule-devops
-
-setup-submodule: ## Setup git submodules
-	$(MAKE) setup-submodule-devops
-.PHONY: setup-submodule
-
-update-submodule: ## Update git submodules
-	git submodule update --remote --recursive --merge --init
-.PHONY: update-submodule
-
-teardown-submodule: ## Remove git submodules
-	$(MAKE) teardown-submodule-devops
-.PHONY: teardown-submodule
-
-app-build: ## Perform application build
-	mkdir -p $(@D)/cmd/bin
-	go build -buildvcs=false -o $(@D)/cmd/bin -race -v $(@D)/cmd/app
-.PHONY: app-build
-
-app-run: ## Perform application run
-	go run $(@D)/cmd/app/main.go
-.PHONY: app-run
-
-app-audit: ## Perform application audit
-	mkdir -p $(@D)/logs/audit
+## Tidy Go modules
+go-mod-tidy:
 	go mod tidy
+.PHONY: go-mod-tidy
+
+## Vendor Go modules
+go-mod-vendor:
 	go mod vendor
-	go list -json -m | tee $(@D)/logs/audit/audit.log
-.PHONY: app-audit
+.PHONY: go-mod-vendor
 
-test-unit: ## Perform unit test
-	mkdir -p $(@D)/logs/test
-	go test -race ./... | tee $(@D)/logs/test/test.log
-.PHONY: app-test
+## Run Go unit tests with race detection
+go-test-unit:
+	go test -race -v ./...
+.PHONY: go-test-unit
 
-test-fuzz: ## ## Perform fuzz test
-	go test --fuzz=Fuzz -fuzztime=10s
-.PHONY: test-fuzz
+## Run Go tests with coverage report
+go-test-coverage:
+	@mkdir -p logs/coverage
 
-test-bench: ## Perform benchmark test
-	mkdir -p $(@D)/logs/test
-	go test -timeout 30s -race -count 3 -bench=. -benchmem ./... | tee $(@D)/logs/test/benchmark.log
-.PHONY: test-bench
+	go test -coverprofile=logs/coverage/coverage.out ./...
+	go tool cover -html=logs/coverage/coverage.out -o logs/coverage/coverage.html
+	go run -mod=vendor github.com/boumenot/gocover-cobertura < logs/coverage/coverage.out > logs/coverage/coverage.xml
+.PHONY: go-test-coverage
 
-test-cover: ## Perform code coverage
-	mkdir -p $(@D)/logs/test
-	go test -race -coverprofile=logs/test/coverage.log -covermode=atomic ./...
-	go tool cover -func=$(@D)/logs/test/coverage.log
-	go tool cover -html=$(@D)/logs/test/coverage.log
-.PHONY: test-cover
+## Run Go benchmarks
+go-test-bench:
+	go test -bench=. -benchmem ./...
+.PHONY: go-test-bench
 
-analysis-golangci: ## Perform static code analysis
-	@mkdir -p $(@D)/logs/analysis
-	docker run --rm -v "${PWD}:/workspace" -w /workspace golangci/golangci-lint:v2.7.2-alpine@sha256:1e1851102b736971267400e08b3e4b2e7799c73976a998820f6f6b6b86b48343 golangci-lint run ./...
-.PHONY: analysis-golangci
+## Run fuzz tests
+go-test-fuzz:
+	go test -fuzz=Fuzz -fuzztime=10s ./pkg/percent
+.PHONY: go-test-fuzz
+
+## Format Go code according to Go standards
+go-fmt:
+	go fmt ./...
+.PHONY: go-fmt
+
+## Check Go code for common mistakes
+go-vet:
+	go vet ./...
+.PHONY: go-vet
+
+## Check Go code for known vulnerabilities
+go-vuln:
+	go run -mod=vendor golang.org/x/vuln/cmd/govulncheck ./...
+.PHONY: go-vuln
+
+## Run all Go code quality checks
+go-check:
+	$(MAKE) go-fmt
+	$(MAKE) go-vet
+	$(MAKE) go-vuln
+.PHONY: go-check
+
+# ── Secrets Manager ──────────────────────────────────────────────────────────────────────────────
+
+SECRETS_SOPS_UID ?= sops-percent
+
+# Usage: make secrets-gpg-generate SECRETS_SOPS_UID=<uid>
+#
+## Generate a new GPG key pair for SOPS
+secrets-gpg-generate:
+	@gpg --batch --quiet --passphrase '' --quick-generate-key "$(SECRETS_SOPS_UID)" ed25519 cert,sign 0
+	@NEW_FPR="$$(gpg --list-keys --with-colons "$(SECRETS_SOPS_UID)" | awk -F: '/^fpr:/ {print $$10; exit}')"
+	@gpg --batch --quiet --passphrase '' --quick-add-key "$${NEW_FPR}" cv25519 encrypt 0
+.PHONY: secrets-gpg-generate
+
+# Usage: make secrets-gpg-show SECRETS_SOPS_UID=<uid>
+#
+## Print the GPG key fingerprint for SOPS (.sops.yaml)
+secrets-gpg-show:
+	@FPR="$$(gpg --list-keys --with-colons "$(SECRETS_SOPS_UID)" | awk -F: '/^fpr:/ {print $$10; exit}')"; \
+	if [ -z "$${FPR}" ]; then \
+		echo "error: no fingerprint found for UID '$(SECRETS_SOPS_UID)'" >&2; \
+		exit 1; \
+	fi; \
+	echo -e "UID: $(SECRETS_SOPS_UID)\nFingerprint: $${FPR}"
+.PHONY: secrets-gpg-show
+
+# Usage: make secrets-gpg-remove SECRETS_SOPS_UID=<uid>
+#
+## Remove an existing GPG key for SOPS (interactive)
+secrets-gpg-remove:
+	if ! gpg --list-keys "$(SECRETS_SOPS_UID)" >/dev/null 2>&1; then
+		echo "warning: no key found for '$(SECRETS_SOPS_UID)'" >&2
+		exit 0
+	fi
+	echo "info: deleting key for '$(SECRETS_SOPS_UID)'"
+	# Delete private key first, then public key
+	gpg --yes --delete-secret-keys "$(SECRETS_SOPS_UID)"
+	gpg --yes --delete-keys "$(SECRETS_SOPS_UID)"
+.PHONY: secrets-gpg-remove
+
+# Usage: make secrets-sops-encrypt <files>
+#
+## Encrypt file using SOPS
+secrets-sops-encrypt:
+	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
+		echo "usage: make secrets-sops-encrypt <files>"; \
+		exit 1; \
+	fi
+
+	export PATH="$$PATH:$(shell go env GOPATH 2>/dev/null)/bin"
+	@for file in $(filter-out $@,$(MAKECMDGOALS)); do \
+		if [ -f "$$file" ]; then \
+			sops --encrypt --in-place "$$file"; \
+		else \
+			echo "Skipping (not found): $$file" >&2; \
+		fi; \
+	done
+.PHONY: secrets-sops-encrypt
+
+# Usage: make secrets-sops-decrypt <files>
+#
+## Decrypt file using SOPS
+secrets-sops-decrypt:
+	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
+		echo "usage: make secrets-sops-encrypt <files>"; \
+		exit 1; \
+	fi
+
+	export PATH="$$PATH:$(shell go env GOPATH 2>/dev/null)/bin"
+	@for file in $(filter-out $@,$(MAKECMDGOALS)); do \
+		if [ -f "$$file" ]; then \
+			sops --decrypt --in-place "$$file"; \
+		else \
+			echo "Skipping (not found): $$file" >&2; \
+		fi; \
+	done
+.PHONY: secrets-sops-decrypt
+
+# Usage: make secrets-sops-view <file>
+#
+## View a file encrypted with SOPS
+secrets-sops-view:
+	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
+		echo "usage: make secrets-sops-view <file>"; \
+		exit 1; \
+	fi
+
+	export PATH="$$PATH:$(shell go env GOPATH 2>/dev/null)/bin"
+	sops --decrypt "$(filter-out $@,$(MAKECMDGOALS))"
+.PHONY: secrets-sops-view
+
+# ── Analysis Manager ─────────────────────────────────────────────────────────────────────────────
+
+POLICY_IMAGE_CONFTEST ?= openpolicyagent/conftest:v0.65.0@sha256:afa510df6d4562ebe24fb3e457da6f6d6924124140a13b51b950cc6cb1d25525
+
+# Usage: make analysis-policy-conftest <filepath>
+#
+## Analyze configuration files using Conftest for policy violations and generate a report
+analysis-policy-conftest:
+	@mkdir -p logs/policy
+
+	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
+		echo "usage: make analysis-policy-conftest <filepath>"; \
+		exit 1; \
+	fi
+
+	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(POLICY_IMAGE_CONFTEST)" test "$(filter-out $@,$(MAKECMDGOALS))" > logs/policy/conftest.json 2>&1
+.PHONY: analysis-policy-conftest
+
+POLICY_IMAGE_REGAL ?= ghcr.io/openpolicyagent/regal:0.37.0@sha256:a09884658f3c8c9cc30de136b664b3afdb7927712927184ba891a155a9676050
+
+# Usage: make analysis-lint-regal <filepath>
+#
+## Lint Rego policies using Regal and generate a report
+analysis-lint-regal:
+	@mkdir -p logs/analysis
+
+	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
+		echo "usage: make analysis-lint-regal"; \
+		exit 1; \
+	fi
+
+	docker pull "$(POLICY_IMAGE_REGAL)"
+	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(POLICY_IMAGE_REGAL)" regal lint "$(filter-out $@,$(MAKECMDGOALS))" --format json > logs/analysis/regal.json 2>&1
+.PHONY: analysis-lint-regal
