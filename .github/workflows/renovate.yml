@@ -16,15 +16,13 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v6.0.1
-      # - name: Renovate
-      #   uses: renovatebot/github-action@v44.2.0
-      #   with:
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #   env:
-      #     TZ: UTC
-
       - name: Renovate
         run: |
-          docker run --rm  -t --env RENOVATE_TOKEN=${{ secrets.GITHUB_TOKEN }} --env NODE_OPTIONS="--no-deprecation" --volume /tmp:/tmp ghcr.io/renovatebot/renovate:42.64.1@sha256:e09f71019881fff15f397560d979736c6c6fd712f790fdb0a75697a324ee965a --autodiscover
+          docker run --rm  -t --env NODE_OPTIONS="--no-deprecation" --volume /tmp:/tmp ghcr.io/renovatebot/renovate:42.64.1@sha256:e09f71019881fff15f397560d979736c6c6fd712f790fdb0a75697a324ee965a
         env:
           TZ: UTC
+          RENOVATE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RENOVATE_CONFIG_FILE: renovate.json
+          RENOVATE_PLATFORM: github
+          RENOVATE_AUTODISCOVER: "true"
+          RENOVATE_LOG_LEVEL: info
