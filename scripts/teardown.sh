@@ -13,10 +13,6 @@ source "$(dirname "${BASH_SOURCE[0]}")/shell/pkg.sh"
 
 # Constant Variables
 
-readonly -A GO_PACKAGES=(
-  ["sops"]=""
-)
-
 readonly -A APT_PACKAGES=(
   ["make"]=""
   ["git"]=""
@@ -32,12 +28,6 @@ function teardown() {
   # NOTE Use reversed order of `bootstrap.sh` and `setup.sh` scripts for tearing down the environment
 
   local -i retval=0
-
-  pkg_go_uninstall_list GO_PACKAGES
-  ((retval |= $?))
-
-  pkg_go_clean
-  ((retval |= $?))
 
   pkg_apt_uninstall_list APT_PACKAGES
   ((retval |= $?))

@@ -88,16 +88,15 @@ go-vet:
 .PHONY: go-vet
 
 ## Check Go code for known vulnerabilities
-go-vulnerability:
+go-vuln:
 	go run -mod=vendor golang.org/x/vuln/cmd/govulncheck ./...
-.PHONY: go-vulnerability
+.PHONY: go-vuln
 
 ## Run all Go code quality checks
 go-check:
 	$(MAKE) go-fmt
 	$(MAKE) go-vet
-	$(MAKE) go-vulnerability
-	$(MAKE) go-mod-tidy
+	$(MAKE) go-vuln
 .PHONY: go-check
 
 # ── Secrets Manager ──────────────────────────────────────────────────────────────────────────────
@@ -196,7 +195,7 @@ POLICY_IMAGE_CONFTEST ?= openpolicyagent/conftest:v0.65.0@sha256:afa510df6d4562e
 
 # Usage: make analysis-policy-conftest <filepath>
 #
-## Run Conftest container in REPL (Read-Eval-Print-Loop) to evaluate policies against input data and generate a report
+## Analyze configuration files using Conftest for policy violations and generate a report
 analysis-policy-conftest:
 	@mkdir -p logs/policy
 

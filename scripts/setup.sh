@@ -14,7 +14,6 @@ source "$(dirname "${BASH_SOURCE[0]}")/shell/pkg.sh"
 # Constant Variables
 
 readonly -A GO_PACKAGES=(
-  ["go.mozilla.org/sops/cmd/sops"]="3.4.0"
 )
 
 # Control Flow Logic
