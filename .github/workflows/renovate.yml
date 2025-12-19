@@ -2,7 +2,7 @@ name: Renovate
 
 on:
   schedule:
-    - cron: '0 3 * * 1'
+    - cron: "0 3 * * 1"
   workflow_dispatch:
 
 jobs:
@@ -16,9 +16,15 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v6.0.1
+      # - name: Renovate
+      #   uses: renovatebot/github-action@v44.2.0
+      #   with:
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #   env:
+      #     TZ: UTC
+
       - name: Renovate
-        uses: renovatebot/github-action@v44.2.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          docker run --rm  -t --env RENOVATE_TOKEN=${{ secrets.GITHUB_TOKEN }} --volume /tmp:/tmp renovatebot/renovate:42.64.1@sha256:e09f71019881fff15f397560d979736c6c6fd712f790fdb0a75697a324ee965a --autodiscover
         env:
           TZ: UTC
