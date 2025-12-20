@@ -1,5 +1,17 @@
 # Changelog
 
+# [2.1.0](https://github.com/sentenz/percent/compare/2.0.2...2.1.0) (2025-12-20)
+
+
+### Bug Fixes
+
+* resolve plugin configuration in .releaserc.json ([cffd6f3](https://github.com/sentenz/percent/commit/cffd6f351d792cde7856972fce93f528a151643e))
+
+
+### Features
+
+* add AGENTS.md for automated unit testing guidelines ([812e990](https://github.com/sentenz/percent/commit/812e990ec324ae3106e73c632824c3142b785891))
+
 ## <small>2.0.2 (2025-12-20)</small>
 
 * fix: remove hidden types from release notes configuration ([c15a938](https://github.com/sentenz/percent/commit/c15a938))
