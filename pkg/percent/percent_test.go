@@ -42,7 +42,7 @@ func TestPercent(t *testing.T) {
 			},
 		},
 		{
-			name: "valid nagative input",
+			name: "valid negative input",
 			in: in{
 				percent: 50,
 				value:   -200,
@@ -53,7 +53,40 @@ func TestPercent(t *testing.T) {
 			},
 		},
 		{
-			name: "invalid percentage",
+			name: "zero percent",
+			in: in{
+				percent: 0,
+				value:   100,
+			},
+			want: want{
+				value: 0,
+				err:   nil,
+			},
+		},
+		{
+			name: "hundred percent",
+			in: in{
+				percent: 100,
+				value:   50,
+			},
+			want: want{
+				value: 50,
+				err:   nil,
+			},
+		},
+		{
+			name: "negative percent",
+			in: in{
+				percent: -10,
+				value:   100,
+			},
+			want: want{
+				value: 0,
+				err:   resource.ErrOutOfRange,
+			},
+		},
+		{
+			name: "invalid percentage over 100",
 			in: in{
 				percent: 150,
 				value:   100,
@@ -67,7 +100,12 @@ func TestPercent(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			// Arrange
+
+			// Act
 			got, err := percent.Percent(tt.in.percent, tt.in.value)
+
+			// Assert
 			if !errors.Is(err, tt.want.err) {
 				t.Errorf("Percent() error = %v, want err %v", err, tt.want.err)
 			}
@@ -108,7 +146,7 @@ func TestOf(t *testing.T) {
 			},
 		},
 		{
-			name: "valid nagative input",
+			name: "valid negative input",
 			in: in{
 				part:  -200,
 				total: -50,
@@ -119,7 +157,29 @@ func TestOf(t *testing.T) {
 			},
 		},
 		{
-			name: "invalid part",
+			name: "part equals total",
+			in: in{
+				part:  100,
+				total: 100,
+			},
+			want: want{
+				value: 100,
+				err:   nil,
+			},
+		},
+		{
+			name: "zero part",
+			in: in{
+				part:  0,
+				total: 100,
+			},
+			want: want{
+				value: 0,
+				err:   nil,
+			},
+		},
+		{
+			name: "part greater than total",
 			in: in{
 				part:  150,
 				total: 100,
@@ -130,7 +190,7 @@ func TestOf(t *testing.T) {
 			},
 		},
 		{
-			name: "invalid total",
+			name: "zero total",
 			in: in{
 				part:  150,
 				total: 0,
@@ -144,7 +204,12 @@ func TestOf(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			// Arrange
+
+			// Act
 			got, err := percent.Of(tt.in.part, tt.in.total)
+
+			// Assert
 			if !errors.Is(err, tt.want.err) {
 				t.Errorf("Of() error = %v, want err %v", err, tt.want.err)
 			}
@@ -196,7 +261,18 @@ func TestChange(t *testing.T) {
 			},
 		},
 		{
-			name: "invalid zero value",
+			name: "no change",
+			in: in{
+				oldValue: 100,
+				newValue: 100,
+			},
+			want: want{
+				value: 0,
+				err:   nil,
+			},
+		},
+		{
+			name: "zero old value",
 			in: in{
 				oldValue: 0,
 				newValue: 100,
@@ -210,7 +286,12 @@ func TestChange(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			// Arrange
+
+			// Act
 			got, err := percent.Change(tt.in.oldValue, tt.in.newValue)
+
+			// Assert
 			if !errors.Is(err, tt.want.err) {
 				t.Errorf("Change() error = %v, want err %v", err, tt.want.err)
 			}
@@ -251,7 +332,7 @@ func TestRemain(t *testing.T) {
 			},
 		},
 		{
-			name: "valid nagative input",
+			name: "valid negative input",
 			in: in{
 				percent: 50,
 				value:   -200,
@@ -262,7 +343,40 @@ func TestRemain(t *testing.T) {
 			},
 		},
 		{
-			name: "invalid percentage input",
+			name: "zero percent",
+			in: in{
+				percent: 0,
+				value:   100,
+			},
+			want: want{
+				value: 100,
+				err:   nil,
+			},
+		},
+		{
+			name: "hundred percent",
+			in: in{
+				percent: 100,
+				value:   50,
+			},
+			want: want{
+				value: 0,
+				err:   nil,
+			},
+		},
+		{
+			name: "negative percent",
+			in: in{
+				percent: -10,
+				value:   100,
+			},
+			want: want{
+				value: 0,
+				err:   resource.ErrOutOfRange,
+			},
+		},
+		{
+			name: "invalid percentage over 100",
 			in: in{
 				percent: 150,
 				value:   100,
@@ -276,7 +390,12 @@ func TestRemain(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			// Arrange
+
+			// Act
 			got, err := percent.Remain(tt.in.percent, tt.in.value)
+
+			// Assert
 			if !errors.Is(err, tt.want.err) {
 				t.Errorf("Remain() error = %v, want err %v", err, tt.want.err)
 			}
@@ -315,7 +434,37 @@ func TestFromRatio(t *testing.T) {
 			},
 		},
 		{
-			name: "invalid input",
+			name: "zero ratio",
+			in: in{
+				ratio: 0,
+			},
+			want: want{
+				value: 0,
+				err:   nil,
+			},
+		},
+		{
+			name: "one ratio",
+			in: in{
+				ratio: 1,
+			},
+			want: want{
+				value: 100,
+				err:   nil,
+			},
+		},
+		{
+			name: "negative ratio",
+			in: in{
+				ratio: -0.1,
+			},
+			want: want{
+				value: 0,
+				err:   resource.ErrOutOfRange,
+			},
+		},
+		{
+			name: "ratio over 1",
 			in: in{
 				ratio: 2,
 			},
@@ -328,7 +477,12 @@ func TestFromRatio(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			// Arrange
+
+			// Act
 			got, err := percent.FromRatio(tt.in.ratio)
+
+			// Assert
 			if !errors.Is(err, tt.want.err) {
 				t.Errorf("FromRatio() error = %v, want err %v", err, tt.want.err)
 			}
@@ -367,7 +521,37 @@ func TestToRatio(t *testing.T) {
 			},
 		},
 		{
-			name: "invalid input",
+			name: "zero percent",
+			in: in{
+				percent: 0,
+			},
+			want: want{
+				value: 0,
+				err:   nil,
+			},
+		},
+		{
+			name: "hundred percent",
+			in: in{
+				percent: 100,
+			},
+			want: want{
+				value: 1,
+				err:   nil,
+			},
+		},
+		{
+			name: "negative percent",
+			in: in{
+				percent: -10,
+			},
+			want: want{
+				value: 0,
+				err:   resource.ErrOutOfRange,
+			},
+		},
+		{
+			name: "percent over 100",
 			in: in{
 				percent: 150,
 			},
@@ -380,7 +564,12 @@ func TestToRatio(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			// Arrange
+
+			// Act
 			got, err := percent.ToRatio(tt.in.percent)
+
+			// Assert
 			if !errors.Is(err, tt.want.err) {
 				t.Errorf("ToRatio() error = %v, want err %v", err, tt.want.err)
 			}
