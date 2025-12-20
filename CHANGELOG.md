@@ -1,5 +1,9 @@
 # Changelog
 
+## <small>2.0.2 (2025-12-20)</small>
+
+* fix: remove hidden types from release notes configuration ([c15a938](https://github.com/sentenz/percent/commit/c15a938))
+
 ## <small>2.0.1 (2025-12-20)</small>
 
 * fix: resolve semantic-release configuration to adhere conventional commits ([c377588](https://github.com/sentenz/percent/commit/c377588))
