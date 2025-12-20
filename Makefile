@@ -53,16 +53,11 @@ go-mod-vendor:
 	go mod vendor
 .PHONY: go-mod-vendor
 
-## Run Go unit tests with race detection
+## Run Go unit tests with race detection and JUnit XML report
 go-test-unit:
-	go test -race -v ./...
+	@mkdir -p logs/unit
+	go test -race -json ./... 2>&1 | tee logs/unit/test-output.json | go run -mod=vendor github.com/jstemmer/go-junit-report/v2 -set-exit-code -iocopy -out logs/unit/junit-report.xml
 .PHONY: go-test-unit
-
-## Run Go tests with JUnit XML report
-go-test-junit:
-	@mkdir -p logs/tests
-	go test -race -json ./... 2>&1 | tee logs/tests/test-output.json | go run -mod=vendor github.com/jstemmer/go-junit-report/v2 -set-exit-code -iocopy -out logs/tests/junit-report.xml
-.PHONY: go-test-junit
 
 ## Run Go tests with coverage report
 go-test-coverage:

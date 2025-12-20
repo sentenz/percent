@@ -22,13 +22,13 @@ jobs:
           go-version-file: 'go.mod'
 
       - name: Run Go Unit Tests with JUnit Report
-        run: make go-test-junit
+        run: make go-test-unit
 
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v4.3.1
         if: always()
         with:
-          report_paths: 'logs/tests/junit-report.xml'
+          report_paths: 'logs/unit/junit-report.xml'
           check_name: 'Go Test Results'
           detailed_summary: true
           include_passed: true
@@ -69,5 +69,5 @@ jobs:
         if: always()
         with:
           name: test-report
-          path: logs/tests/
+          path: logs/unit/
           retention-days: 30
