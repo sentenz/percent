@@ -11,17 +11,22 @@ Percent is a Go package that provides utility functions for calculating percenta
   - [1.1. Prerequisites](#11-prerequisites)
   - [1.2. Installation](#12-installation)
 - [2. Usage](#2-usage)
-  - [2.1. Bootstrap](#21-bootstrap)
-  - [2.2. Dev Containers](#22-dev-containers)
-  - [2.3. Task Runner](#23-task-runner)
-    - [2.3.1. Make](#231-make)
+  - [2.1. Task](#21-task)
+    - [2.1.1. Make](#211-make)
+  - [2.2. Bootstrap](#22-bootstrap)
+    - [2.2.1. Scripts](#221-scripts)
+  - [2.3. Dev Containers](#23-dev-containers)
   - [2.4. Release Manager](#24-release-manager)
     - [2.4.1. Semantic-Release](#241-semantic-release)
   - [2.5. Update Manager](#25-update-manager)
     - [2.5.1. Renovate](#251-renovate)
   - [2.6. Secrets Manager](#26-secrets-manager)
     - [2.6.1. SOPS](#261-sops)
-- [3. References](#3-references)
+  - [2.7. Policy Manager](#27-policy-manager)
+    - [2.7.1. Conftest](#271-conftest)
+- [3. Troubleshoot](#3-troubleshoot)
+  - [3.1. TODO](#31-todo)
+- [4. References](#4-references)
 
 ## 1. Details
 
@@ -38,37 +43,25 @@ Percent is a Go package that provides utility functions for calculating percenta
 
 ### 1.2. Installation
 
-Install the package via `go get`.
+- Install
+  > Install the package via `go get`.
 
-```bash
-go get github.com/sentenz/percent
-```
+  ```bash
+  go get github.com/sentenz/percent
+  ```
 
-Import the package in a called Go source file.
+- Import
+  > Import the package in a called Go source file.
 
-```go
-import "github.com/sentenz/percent/pkg/percent"
-```
+  ```go
+  import "github.com/sentenz/percent/pkg/percent"
+  ```
 
 ## 2. Usage
 
-### 2.1. Bootstrap
+### 2.1. Task
 
-A bootstrap script initializes an environment, application, or system by installing dependencies, configuring settings, or preparing the system for further operations.
-
-- [scripts/](scripts/README.md)
-  > Collection of bootstrap, setup, or teardown scripts across multiple environments.
-
-### 2.2. Dev Containers
-
-A Development Container (Dev Container) utilizes a container as a full-featured development environment.
-
-- [.devcontainer/](.devcontainer/README.md)
-  > Collection of Dev Container resources published under `mcr.microsoft.com/devcontainers`.
-
-### 2.3. Task Runner
-
-#### 2.3.1. Make
+#### 2.1.1. Make
 
 - [Makefile](Makefile)
   > A Makefile is used to define and manage tasks for building, testing, and maintaining the project.
@@ -86,68 +79,96 @@ A Development Container (Dev Container) utilizes a container as a full-featured 
   Usage
           make <task>
 
-          bootstrap                   Initialize a software development workspace with requisites
-          setup                       Install and configure all dependencies essential for development
-          teardown                    Remove development artifacts and restore the host to its pre-setup state
-          go-test-unit                Run Go unit tests with race detection
-          go-test-coverage            Run Go tests with coverage report
-          go-test-bench               Run Go benchmarks
-          go-test-fuzz                Run fuzz tests
-          go-check                    Run all Go code quality checks
-          secrets-sops-encrypt        Encrypt file using SOPS
-          secrets-sops-decrypt        Decrypt file using SOPS
-          analysis-policy-conftest    Analyze configuration files using Conftest for policy violations and generate a report
-          analysis-lint-regal         Lint Rego policies using Regal and generate a report
+          bootstrap         Initialize a software development workspace with requisites
+          setup             Install and configure all dependencies essential for development
+          teardown          Remove development artifacts and restore the host to its pre-setup state
+  ```
+
+### 2.2. Bootstrap
+
+#### 2.2.1. Scripts
+
+[scripts/](scripts/README.md) provides scripts to bootstrap, setup, and teardown a software development workspace with requisites.
+
+- Tasks
+
+  ```bash
+  make bootstrap
+  ```
+
+  ```bash
+  make setup
+  ```
+
+  ```bash
+  make teardown
+  ```
+
+### 2.3. Dev Containers
+
+[.devcontainer/](.devcontainer/README.md) provides Dev Containers as a consistent development environment using Docker containers.
+
+- Tasks
+
+  ```bash
+  # TODO
+  # make devcontainer-go
   ```
 
 ### 2.4. Release Manager
 
 #### 2.4.1. Semantic-Release
 
-The [Semantic-Release CI/CD Component](https://gitlab.samscm.net/explore/catalog/development-environment/ci-cd/manager) tool automates release workflows, including determining the next version number, generating a `CHANGELOG.md` file, and publishing the release notes with artifacts.
+[Semantic-Release](https://github.com/semantic-release/semantic-release) automates the release process by analyzing commit messages to determine the next version number, generating changelog and release notes, and publishing the release.
 
-- [.gitlab-ci.yml](.gitlab-ci.yml)
+[.releaserc.json](.releaserc.json) configuration file for Semantic-Release specifying release rules and plugins.
+
+- CI/CD
 
   ```yaml
-  include:
-    - component: $CI_SERVER_FQDN/development-environment/ci-cd/manager/semantic-release@<version>
+  # TODO
   ```
 
 ### 2.5. Update Manager
 
 #### 2.5.1. Renovate
 
-The [Renovate CI/CD Component](https://gitlab.samscm.net/explore/catalog/development-environment/ci-cd/manager) automates dependency updates by creating Pull Requests (PRs) or Merge Requests (MRs) to update versions.
+[Renovate](https://github.com/renovatebot/renovate) automates dependency updates by creating merge requests for outdated dependencies, ensuring that projects stay up-to-date with the latest versions of libraries and packages.
 
-- [.gitlab-ci.yml](.gitlab-ci.yml)
+[renovate.json](renovate.json) configuration file for Renovate specifying update rules and schedules.
+
+- CI/CD
 
   ```yaml
-  include:
-    - component: $CI_SERVER_FQDN/development-environment/ci-cd/manager/renovate@<version>
+  # TODO
   ```
 
 ### 2.6. Secrets Manager
 
 #### 2.6.1. SOPS
 
+[SOPS (Secrets OPerationS)](https://github.com/getsops/sops) is a tool for managing and encrypting sensitive data such as passwords, API keys, and other secrets.
+
+[.sops.yaml](.sops.yaml) configuration file for SOPS specifying encryption rules and key management.
+
 1. GPG Key Pair Generation
 
-    - Task Runner
+    - Tasks
       > Generate a new key pair to be used with SOPS.
 
       > [!NOTE]
       > The UID can be customized via the `SECRETS_SOPS_UID` variable (defaults to `sops-dx`).
 
-      ```sh
+      ```bash
       make secrets-gpg-generate SECRETS_SOPS_UID=<uid>
       ```
 
 2. GPG Public Key Fingerprint
 
-    - Task Runner
+    - Tasks
       > Print the  GPG Public Key fingerprint associated with a given UID.
 
-      ```sh
+      ```bash
       make secrets-gpg-show SECRETS_SOPS_UID=<uid>
       ```
 
@@ -161,15 +182,50 @@ The [Renovate CI/CD Component](https://gitlab.samscm.net/explore/catalog/develop
 
 3. SOPS Encrypt/Decrypt
 
-    - Task Runner
+    - Tasks
       > Encrypt/decrypt one or more files in place using SOPS.
 
-      ```sh
+      ```bash
       make secrets-sops-encrypt <files>
+      ```
+
+      ```bash
       make secrets-sops-decrypt <files>
       ```
 
-## 3. References
+### 2.7. Policy Manager
+
+#### 2.7.1. Conftest
+
+[Conftest](https://www.conftest.dev/) is a **Policy as Code (PaC)** tool to streamline policy management for improved development, security and audit capability.
+
+[conftest.toml](conftest.toml) configuration file for Conftest specifying policy paths and output formats.
+
+[tests/policy](tests/policy/) directory contains Rego policies for Conftest to enforce best practices and compliance standards.
+
+- CI/CD
+
+  ```yaml
+  # TODO
+  ```
+
+- Tasks
+
+  ```bash
+  make policy-lint-regal <filepath>
+  ```
+
+  ```bash
+  make policy-analysis-conftest <filepath>
+  ```
+
+## 3. Troubleshoot
+
+### 3.1. TODO
+
+TODO
+
+## 4. References
 
 - GitHub [Template DX](https://github.com/sentenz/template-dx) repository.
 - Sentenz [Manager Tools](https://github.com/sentenz/convention/issues/392) article.
