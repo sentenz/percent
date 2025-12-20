@@ -7,13 +7,87 @@
     [
       "@semantic-release/commit-analyzer",
       {
-        "preset": "conventionalcommits"
+        "preset": "conventionalcommits",
+        "releaseRules": [
+          {
+            "type": "chore",
+            "release": false
+          },
+          {
+            "type": "ci",
+            "release": false
+          },
+          {
+            "type": "docs",
+            "release": false
+          },
+          {
+            "type": "style",
+            "release": false
+          },
+          {
+            "type": "refactor",
+            "release": false
+          },
+          {
+            "type": "test",
+            "release": false
+          },
+          {
+            "type": "fix",
+            "release": "patch"
+          },
+          {
+            "type": "feat",
+            "release": "minor"
+          }
+        ]
       }
     ],
     [
       "@semantic-release/release-notes-generator",
       {
-        "preset": "conventionalcommits"
+        "preset": "conventionalcommits",
+        "presetConfig": {
+          "types": [
+            {
+              "type": "feat",
+              "section": "Features"
+            },
+            {
+              "type": "fix",
+              "section": "Bug Fixes"
+            },
+            {
+              "type": "chore",
+              "hidden": true
+            },
+            {
+              "type": "ci",
+              "hidden": true
+            },
+            {
+              "type": "docs",
+              "hidden": true
+            },
+            {
+              "type": "style",
+              "hidden": true
+            },
+            {
+              "type": "refactor",
+              "hidden": true
+            },
+            {
+              "type": "perf",
+              "hidden": true
+            },
+            {
+              "type": "test",
+              "hidden": true
+            }
+          ]
+        }
       }
     ],
     [
