@@ -190,37 +190,37 @@ secrets-sops-view:
 	sops --decrypt "$(filter-out $@,$(MAKECMDGOALS))"
 .PHONY: secrets-sops-view
 
-# ── Analysis Manager ─────────────────────────────────────────────────────────────────────────────
+# ── Policy Manager ───────────────────────────────────────────────────────────────────────────────
 
 POLICY_IMAGE_CONFTEST ?= openpolicyagent/conftest:v0.65.0@sha256:afa510df6d4562ebe24fb3e457da6f6d6924124140a13b51b950cc6cb1d25525
 
-# Usage: make analysis-policy-conftest <filepath>
+# Usage: make policy-analysis-conftest <filepath>
 #
 ## Analyze configuration files using Conftest for policy violations and generate a report
-analysis-policy-conftest:
+policy-analysis-conftest:
 	@mkdir -p logs/policy
 
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
-		echo "usage: make analysis-policy-conftest <filepath>"; \
+		echo "usage: make policy-analysis-conftest <filepath>"; \
 		exit 1; \
 	fi
 
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(POLICY_IMAGE_CONFTEST)" test "$(filter-out $@,$(MAKECMDGOALS))" > logs/policy/conftest.json 2>&1
-.PHONY: analysis-policy-conftest
+.PHONY: policy-analysis-conftest
 
 POLICY_IMAGE_REGAL ?= ghcr.io/openpolicyagent/regal:0.37.0@sha256:a09884658f3c8c9cc30de136b664b3afdb7927712927184ba891a155a9676050
 
-# Usage: make analysis-lint-regal <filepath>
+# Usage: make policy-lint-regal <filepath>
 #
 ## Lint Rego policies using Regal and generate a report
-analysis-lint-regal:
+policy-lint-regal:
 	@mkdir -p logs/analysis
 
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
-		echo "usage: make analysis-lint-regal"; \
+		echo "usage: make policy-lint-regal"; \
 		exit 1; \
 	fi
 
 	docker pull "$(POLICY_IMAGE_REGAL)"
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(POLICY_IMAGE_REGAL)" regal lint "$(filter-out $@,$(MAKECMDGOALS))" --format json > logs/analysis/regal.json 2>&1
-.PHONY: analysis-lint-regal
+.PHONY: policy-lint-regal
