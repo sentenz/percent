@@ -12,6 +12,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+      checks: write
     steps:
       - uses: actions/checkout@v6.0.1
 
@@ -20,8 +21,27 @@ jobs:
         with:
           go-version-file: 'go.mod'
 
+      - name: Install go-junit-report
+        run: go install github.com/jstemmer/go-junit-report/v2@latest
+
       - name: Run Go Unit Tests
-        run: make go-test-unit
+        run: |
+          mkdir -p logs/tests
+          make go-test-unit 2>&1 | tee logs/tests/test-output.txt
+
+      - name: Generate JUnit Test Report
+        if: always()
+        run: |
+          go test -json ./... 2>&1 | go-junit-report -set-exit-code -iocopy -out logs/tests/junit-report.xml
+
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v4.3.1
+        if: always()
+        with:
+          report_paths: 'logs/tests/junit-report.xml'
+          check_name: 'Go Test Results'
+          detailed_summary: true
+          include_passed: true
 
       - name: Run Go Coverage Tests
         run: make go-test-coverage
@@ -48,7 +68,16 @@ jobs:
 
       - name: Upload Coverage Report
         uses: actions/upload-artifact@v4.5.0
+        if: always()
         with:
           name: coverage-report
           path: logs/coverage/
+          retention-days: 30
+
+      - name: Upload Test Report
+        uses: actions/upload-artifact@v4.5.0
+        if: always()
+        with:
+          name: test-report
+          path: logs/tests/
           retention-days: 30
