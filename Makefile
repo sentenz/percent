@@ -61,7 +61,6 @@ go-test-unit:
 ## Run Go tests with JUnit XML report
 go-test-junit:
 	@mkdir -p logs/tests
-
 	go install github.com/jstemmer/go-junit-report/v2@latest
 	export PATH="$$PATH:$$(go env GOPATH)/bin" && \
 	go test -race -json ./... 2>&1 | tee logs/tests/test-output.json | go-junit-report -set-exit-code -iocopy -out logs/tests/junit-report.xml
