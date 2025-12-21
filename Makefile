@@ -83,6 +83,11 @@ go-fmt:
 	go fmt ./...
 .PHONY: go-fmt
 
+## Update Go source files to use new APIs
+go-fix:
+	go fix ./...
+.PHONY: go-fix
+
 ## Check Go code for common mistakes
 go-vet:
 	go vet ./...
