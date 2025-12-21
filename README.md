@@ -11,7 +11,7 @@ Percent is a Go package that provides utility functions for calculating percenta
   - [1.1. Prerequisites](#11-prerequisites)
   - [1.2. Installation](#12-installation)
 - [2. Usage](#2-usage)
-  - [2.1. Task](#21-task)
+  - [2.1. Task Runner](#21-task-runner)
     - [2.1.1. Make](#211-make)
   - [2.2. Bootstrap](#22-bootstrap)
     - [2.2.1. Scripts](#221-scripts)
@@ -59,16 +59,16 @@ Percent is a Go package that provides utility functions for calculating percenta
 
 ## 2. Usage
 
-### 2.1. Task
+### 2.1. Task Runner
 
 #### 2.1.1. Make
 
 - [Makefile](Makefile)
-  > A Makefile is used to define and manage tasks for building, testing, and maintaining the project.
+  > Makefile defining tasks for building, testing, and managing the project.
 
   > [!NOTE]
-  > - Run the `make help` command in the terminal to list the tasks used for the project.
-  > - Targets **must** have a leading comment line starting with `##` to be included in the task list.
+  > - Run `make help` in the terminal to list the project tasks.
+  > - Each task description must begin with `##` to be included in the task list.
 
   ```plaintext
   $ make help
