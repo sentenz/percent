@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v6.0.1
 
       - name: Run Conftest
-        uses: sentenz/actions/conftest@latest
+        uses: sentenz/actions/conftest@v1
         with:
           path: "."
           output-format: "github"
