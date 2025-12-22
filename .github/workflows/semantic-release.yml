@@ -19,6 +19,6 @@ jobs:
           fetch-depth: 0
 
       - name: Run Semantic Release
-        uses: sentenz/actions/semantic-release@latest
+        uses: sentenz/actions/semantic-release@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

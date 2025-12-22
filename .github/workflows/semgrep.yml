@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v6.0.1
 
       - name: Run Semgrep
-        uses: sentenz/actions/semgrep@latest
+        uses: sentenz/actions/semgrep@main
         with:
           path: "."
           config: "auto"
