@@ -18,6 +18,6 @@ jobs:
         uses: sentenz/actions/semgrep@main
         with:
           path: "."
-          config: "auto"
+          config: "p/default"
           metrics: "off"
           no-secrets-validation: "true"
