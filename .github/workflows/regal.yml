@@ -1,17 +1,23 @@
+# SPDX-License-Identifier: Apache-2.0
+
 name: Regal
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
 
 jobs:
-  lint-rego:
+  regal:
+    name: Regal Action
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.1
+      - name: Checkout
+        uses: actions/checkout@v6.0.1
 
       - name: Run Regal
-        uses: sentenz/actions/regal@main
+        uses: sentenz/actions/regal@1.0.4
         with:
           path: "./tests/policy"
-          output-format: "github"
           regal-version: "latest"

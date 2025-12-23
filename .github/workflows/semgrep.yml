@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 name: Semgrep
 
 on:
@@ -10,14 +12,15 @@ on:
 
 jobs:
   semgrep:
+    name: Semgrep Action
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.1
+      - name: Checkout
+        uses: actions/checkout@v6.0.1
 
       - name: Run Semgrep
-        uses: sentenz/actions/semgrep@main
+        uses: sentenz/actions/semgrep@1.0.4
         with:
-          path: "."
-          config: "p/default"
-          metrics: "off"
+          config: "auto"
+          metrics: "auto"
           no-secrets-validation: "true"
