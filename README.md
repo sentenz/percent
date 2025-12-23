@@ -126,7 +126,7 @@ Percent is a Go package that provides utility functions for calculating percenta
 - CI/CD
 
   ```yaml
-  # TODO
+  uses: sentenz/actions/semantic-release@latest
   ```
 
 ### 2.5. Update Manager
@@ -140,7 +140,7 @@ Percent is a Go package that provides utility functions for calculating percenta
 - CI/CD
 
   ```yaml
-  # TODO
+  uses: sentenz/actions/renovate@latest
   ```
 
 ### 2.6. Secrets Manager
@@ -206,7 +206,11 @@ Percent is a Go package that provides utility functions for calculating percenta
 - CI/CD
 
   ```yaml
-  # TODO
+  uses: sentenz/actions/regal@latest
+  ```
+
+  ```yaml
+  uses: sentenz/actions/conftest@latest
   ```
 
 - Tasks
