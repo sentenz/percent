@@ -11,6 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6.0.1
-      - name: Conftest
-        run: |
-          docker run --rm -v "${PWD}:/workspace" -w /workspace openpolicyagent/conftest:v0.65.0@sha256:afa510df6d4562ebe24fb3e457da6f6d6924124140a13b51b950cc6cb1d25525 test .
+
+      - name: Run Conftest
+        uses: sentenz/actions/conftest@main
+        with:
+          path: "."
+          policy-path: "./tests/policy"
+          output-format: "github"
+          fail-on-warn: "false"
+          all-namespaces: "true"

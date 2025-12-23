@@ -1,13 +1,17 @@
 name: Regal
+
 on:
   pull_request:
+
 jobs:
   lint-rego:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: open-policy-agent/setup-regal@v1.0.0
+      - uses: actions/checkout@v6.0.1
+
+      - name: Run Regal
+        uses: sentenz/actions/regal@main
         with:
-          version: latest
-      - name: Lint
-        run: regal lint --format=github ./tests/policy
+          path: "./tests/policy"
+          output-format: "github"
+          regal-version: "latest"

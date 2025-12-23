@@ -17,15 +17,8 @@ jobs:
       - uses: actions/checkout@v6.0.1
         with:
           fetch-depth: 0
-      - name: Semantic Release
-        uses: cycjimmy/semantic-release-action@v6.0.0
+
+      - name: Run Semantic Release
+        uses: sentenz/actions/semantic-release@main
         with:
-          semantic_version: 25.0.2
-          extra_plugins: |
-            @semantic-release/changelog
-            @semantic-release/git
-            @semantic-release/exec
-            semantic-release-commitlint
-            semantic-commitlint
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
