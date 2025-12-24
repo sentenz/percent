@@ -62,6 +62,8 @@ Percent is a Go package that provides utility functions for calculating percenta
 
   import (
       "fmt"
+      "log"
+      
       "github.com/sentenz/percent/pkg/percent"
   )
 
@@ -69,7 +71,10 @@ Percent is a Go package that provides utility functions for calculating percenta
       value := 50.0
       total := 200.0
 
-      pct := percent.Calculate(value, total)
+      pct, err := percent.Of(value, total)
+      if err != nil {
+          log.Fatalf("Error calculating percentage: %v", err)
+      }
       fmt.Printf("Percentage: %.2f%%\n", pct) // Output: Percentage: 25.00%
   }
   ```
