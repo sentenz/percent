@@ -21,10 +21,8 @@ Percent is a Go package that provides utility functions for calculating percenta
     - [2.4.1. Semantic-Release](#241-semantic-release)
   - [2.5. Update Manager](#25-update-manager)
     - [2.5.1. Renovate](#251-renovate)
-  - [2.6. Secrets Manager](#26-secrets-manager)
-    - [2.6.1. SOPS](#261-sops)
-  - [2.7. Policy Manager](#27-policy-manager)
-    - [2.7.1. Conftest](#271-conftest)
+  - [2.6. Policy Manager](#26-policy-manager)
+    - [2.6.1. Conftest](#261-conftest)
 - [3. Troubleshoot](#3-troubleshoot)
   - [3.1. TODO](#31-todo)
 - [4. References](#4-references)
@@ -202,64 +200,9 @@ Percent is a Go package that provides utility functions for calculating percenta
       uses: sentenz/actions/renovate@latest
       ```
 
-### 2.6. Secrets Manager
+### 2.6. Policy Manager
 
-#### 2.6.1. SOPS
-
-[SOPS (Secrets OPerationS)](https://github.com/getsops/sops) is a tool for managing and encrypting sensitive data such as passwords, API keys, and other secrets.
-
-1. Insights and Details
-
-    - [.sops.yaml](.sops.yaml)
-      > Configuration file for SOPS specifying encryption rules and key management.
-
-2. Usage and Instructions
-
-    - GPG Key Pair Generation
-
-      - Tasks
-        > Generate a new key pair to be used with SOPS.
-
-        > [!NOTE]
-        > The UID can be customized via the `SECRETS_SOPS_UID` variable (defaults to `sops-percent`).
-
-        ```bash
-        make secrets-gpg-generate SECRETS_SOPS_UID=<uid>
-        ```
-
-    - GPG Public Key Fingerprint
-
-      - Tasks
-        > Print the  GPG Public Key fingerprint associated with a given UID.
-
-        ```bash
-        make secrets-gpg-show SECRETS_SOPS_UID=<uid>
-        ```
-
-      - [.sops.yaml](.sops.yaml)
-        > The GPG UID is required for populating in `.sops.yaml`.
-
-        ```yaml
-        creation_rules:
-          - pgp: "<fingerprint>" # <uid>
-        ```
-
-    - SOPS Encrypt/Decrypt
-
-      - Tasks
-        > Encrypt/decrypt one or more files in place using SOPS.
-
-        ```bash
-        make secrets-sops-encrypt <files>
-        ```
-
-        ```bash
-        make secrets-sops-decrypt <files>
-        ```
-
-### 2.7. Policy Manager
-
-#### 2.7.1. Conftest
+#### 2.6.1. Conftest
 
 [Conftest](https://www.conftest.dev/) is a **Policy as Code (PaC)** tool to streamline policy management for improved development, security and audit capability.
 
