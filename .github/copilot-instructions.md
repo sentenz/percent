@@ -191,7 +191,6 @@ The repository uses GitHub Actions for CI/CD:
 ## Security
 
 - Run `make go-vuln` to check for known vulnerabilities
-- Secrets are managed with SOPS (see `.sops.yaml`)
 - Never commit secrets or sensitive data
 - Security scanning is performed in CI/CD
 
