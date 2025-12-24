@@ -10,7 +10,8 @@ Percent is a Go package that provides utility functions for calculating percenta
 - [1. Details](#1-details)
   - [1.1. Prerequisites](#11-prerequisites)
   - [1.2. Installation](#12-installation)
-- [2. Usage](#2-usage)
+  - [1.3. Usage](#13-usage)
+- [2. Developer Guide](#2-developer-guide)
   - [2.1. Task Runner](#21-task-runner)
     - [2.1.1. Make](#211-make)
   - [2.2. Bootstrap](#22-bootstrap)
@@ -35,12 +36,6 @@ Percent is a Go package that provides utility functions for calculating percenta
 - [Go](https://golang.org/)
   > Go programming language environment for building and running Go applications.
 
-- [Make](https://www.gnu.org/software/make/)
-  > Task automation tool to manage build processes and workflows.
-
-- [Docker](https://www.docker.com/)
-  > Containerization tool to run applications in isolated container environments and execute container-based tasks.
-
 ### 1.2. Installation
 
 - Install
@@ -57,7 +52,29 @@ Percent is a Go package that provides utility functions for calculating percenta
   import "github.com/sentenz/percent/pkg/percent"
   ```
 
-## 2. Usage
+### 1.3. Usage
+
+- Examples
+  > Examples of how to use the Percent package.
+
+  ```go
+  package main
+
+  import (
+      "fmt"
+      "github.com/sentenz/percent/pkg/percent"
+  )
+
+  func main() {
+      value := 50.0
+      total := 200.0
+
+      pct := percent.Calculate(value, total)
+      fmt.Printf("Percentage: %.2f%%\n", pct) // Output: Percentage: 25.00%
+  }
+  ```
+
+## 2. Developer Guide
 
 ### 2.1. Task Runner
 
