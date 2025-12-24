@@ -68,14 +68,21 @@ Percent is a Go package that provides utility functions for calculating percenta
   )
 
   func main() {
-      value := 50.0
-      total := 200.0
+      // Example 1: Calculate what percentage of a value is
+      // What is 25% of 200?
+      result, err := percent.Percent(25, 200.0)
+      if err != nil {
+          log.Fatalf("Error calculating percent: %v", err)
+      }
+      fmt.Printf("25%% of 200 = %.2f\n", result) // Output: 25% of 200 = 50.00
 
-      pct, err := percent.Of(value, total)
+      // Example 2: Calculate what percentage a value is of a total
+      // What percentage is 50 of 200?
+      pct, err := percent.Of(50.0, 200.0)
       if err != nil {
           log.Fatalf("Error calculating percentage: %v", err)
       }
-      fmt.Printf("Percentage: %.2f%%\n", pct) // Output: Percentage: 25.00%
+      fmt.Printf("50 is %.2f%% of 200\n", pct) // Output: 50 is 25.00% of 200
   }
   ```
 
