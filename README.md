@@ -23,9 +23,7 @@ Percent is a Go package that provides utility functions for calculating percenta
     - [2.5.1. Renovate](#251-renovate)
   - [2.6. Policy Manager](#26-policy-manager)
     - [2.6.1. Conftest](#261-conftest)
-- [3. Troubleshoot](#3-troubleshoot)
-  - [3.1. TODO](#31-todo)
-- [4. References](#4-references)
+- [3. References](#3-references)
 
 ## 1. Details
 
@@ -236,13 +234,7 @@ Percent is a Go package that provides utility functions for calculating percenta
       make policy-analysis-conftest <filepath>
       ```
 
-## 3. Troubleshoot
-
-### 3.1. TODO
-
-TODO
-
-## 4. References
+## 3. References
 
 - GitHub [Template DX](https://github.com/sentenz/template-dx) repository.
 - Sentenz [Manager Tools](https://github.com/sentenz/convention/issues/392) article.
