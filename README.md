@@ -11,7 +11,7 @@ Percent is a Go package that provides utility functions for calculating percenta
   - [1.1. Prerequisites](#11-prerequisites)
   - [1.2. Installation](#12-installation)
   - [1.3. Usage](#13-usage)
-- [2. Developer Guide](#2-developer-guide)
+- [2. Contribute](#2-contribute)
   - [2.1. Task Runner](#21-task-runner)
     - [2.1.1. Make](#211-make)
   - [2.2. Bootstrap](#22-bootstrap)
@@ -84,7 +84,7 @@ Percent is a Go package that provides utility functions for calculating percenta
   }
   ```
 
-## 2. Developer Guide
+## 2. Contribute
 
 ### 2.1. Task Runner
 
