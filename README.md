@@ -3,7 +3,10 @@
 [![GoDoc](https://godoc.org/github.com/sentenz/percent?status.svg)](https://godoc.org/github.com/sentenz/percent/pkg/percent)
 [![Go Report Card](https://goreportcard.com/badge/github.com/sentenz/percent)](https://goreportcard.com/report/github.com/sentenz/percent)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/sentenz/percent/actions/workflows/go-tests.yml)
-[![License](https://img.shields.io/github/license/sentenz/percent)](https://opensource.org/licenses/Apache-2.0)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Semantic Release](https://img.shields.io/badge/semantic--release-enabled-brightgreen.svg)](https://semantic-release.gitbook.io/semantic-release/)
+[![Renovate Enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
+[![Conftest Enabled](https://img.shields.io/badge/conftest-enabled-brightgreen.svg)](https://www.conftest.dev/)
 
 Percent is a Go package that provides utility functions for calculating percentages and performing related operations.
 
@@ -84,6 +87,8 @@ Percent is a Go package that provides utility functions for calculating percenta
 
 ## 2. Contribute
 
+Contribution guidelines and project management tools.
+
 ### 2.1. Task Runner
 
 #### 2.1.1. Make
@@ -150,6 +155,15 @@ Percent is a Go package that provides utility functions for calculating percenta
 
     - [go/](.devcontainer/go/)
       > Dev Container configuration for Go development environment.
+
+      ```json
+      // ...
+      "postCreateCommand": "sudo make bootstrap && sudo make setup",
+      // ...
+      ```
+
+      > [!NOTE]
+      > The `devcontainer.json` runs the `bootstrap` and `setup` scripts to initialize and configure the development environment.
 
 2. Usage and Instructions
 
