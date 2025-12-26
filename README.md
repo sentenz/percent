@@ -206,6 +206,9 @@ Contribution guidelines and project management tools.
     - [go.sum](go.sum)
       > Go checksum file containing expected cryptographic checksums of module dependencies.
 
+    - [vendor/](vendor/)
+      > Directory containing vendored dependencies.
+
 2. Usage and Instructions
 
     - Tasks
@@ -226,6 +229,9 @@ Contribution guidelines and project management tools.
 
 1. Insights and Details
 
+    - `testing.T`
+      > Unit tests use the standard Go testing package with `testing.T`.
+
     - [AGENTS.md](./AGENTS.md)
       > Automate unit test generation using Large Language Models (LLMs) Agents.
 
@@ -245,7 +251,7 @@ Contribution guidelines and project management tools.
 
 #### 2.5.2. Code Coverage
 
-[go test -cover](https://go.dev/blog/cover) provides code coverage analysis for Go tests.
+[go tool cover](https://pkg.go.dev/cmd/cover) provides code coverage analysis for Go tests.
 
 1. Insights and Details
 
@@ -271,9 +277,10 @@ Contribution guidelines and project management tools.
 
 1. Insights and Details
 
-    - Benchmarks use the standard Go testing package with `testing.B`.
+    - `testing.B`
+      > Benchmark tests use the standard Go testing package with `testing.B`.
 
-2. Usage and Instructions
+1. Usage and Instructions
 
     - Tasks
 
@@ -287,9 +294,10 @@ Contribution guidelines and project management tools.
 
 1. Insights and Details
 
-    - Fuzz tests use the standard Go testing package with `testing.F`.
+    - `testing.F`
+      > Fuzz tests use the standard Go testing package with `testing.F`.
 
-2. Usage and Instructions
+1. Usage and Instructions
 
     - Tasks
 
