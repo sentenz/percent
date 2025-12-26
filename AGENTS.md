@@ -28,13 +28,19 @@ Instructions for AI coding agents on automating unit test creation using consist
 ### 1.1. Testing Patterns
 
 - In-Got-Want
-  > Use explicit variable names (`in` for inputs, `got` for actual results, `want` for expected) and detailed assertion messages for clear test intentions.
+  > In-Got-Want is a software testing pattern that structures test cases into three distinct sections of In (input), Got (actual output), and Want (expected output).
 
 - Table-Driven Testing
-  > Organize test cases in tabular structures (slices of structs) to easily add and manage multiple scenarios, reducing boilerplate and improving maintainability as new cases are added.
+  > Table-Driven Testing is a software testing technique in which test cases are organized in a tabular format.
+
+- Data-Driven Testing (DDT)
+  > Data-Driven Testing (DDT) is a software testing methodology that separates test data from test logic, allowing the same test logic to be executed with multiple sets of input data (e.g., JSON, CSV).
 
 - Arrange, Act, Assert (AAA)
-  > Structure tests with three distinct phases: setup (Arrange), execution (Act), and verification (Assert) for clarity and maintainability.
+  > Arrange, Act, Assert (AAA) is a software testing pattern that structures test cases into three distinct phases of Arrange (setup), Act (execution), and Assert (verification).
+
+- Test Fixtures
+  > Test Fixtures are a software testing pattern that provides a consistent and reusable setup and teardown mechanism for test cases.
 
 ### 1.2. Test Workflow
 
