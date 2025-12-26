@@ -20,12 +20,19 @@ Percent is a Go package that provides utility functions for calculating percenta
   - [2.2. Bootstrap](#22-bootstrap)
     - [2.2.1. Scripts](#221-scripts)
   - [2.3. Dev Containers](#23-dev-containers)
-  - [2.4. Release Manager](#24-release-manager)
-    - [2.4.1. Semantic-Release](#241-semantic-release)
-  - [2.5. Update Manager](#25-update-manager)
-    - [2.5.1. Renovate](#251-renovate)
-  - [2.6. Policy Manager](#26-policy-manager)
-    - [2.6.1. Conftest](#261-conftest)
+  - [2.4. Dependency Manager](#24-dependency-manager)
+    - [2.4.1. Go Modules](#241-go-modules)
+  - [2.5. Software Testing](#25-software-testing)
+    - [2.5.1. Unit Testing](#251-unit-testing)
+    - [2.5.2. Code Coverage](#252-code-coverage)
+    - [2.5.3. Benchmarks](#253-benchmarks)
+    - [2.5.4. Fuzz Testing](#254-fuzz-testing)
+  - [2.6. Release Manager](#26-release-manager)
+    - [2.6.1. Semantic-Release](#261-semantic-release)
+  - [2.7. Update Manager](#27-update-manager)
+    - [2.7.1. Renovate](#271-renovate)
+  - [2.8. Policy Manager](#28-policy-manager)
+    - [2.8.1. Conftest](#281-conftest)
 - [3. References](#3-references)
 
 ## 1. Details
@@ -185,9 +192,114 @@ Contribution guidelines and project management tools.
       # make devcontainer-go
       ```
 
-### 2.4. Release Manager
+### 2.4. Dependency Manager
 
-#### 2.4.1. Semantic-Release
+#### 2.4.1. Go Modules
+
+[Go Modules](https://go.dev/ref/mod) is the dependency management system for Go that simplifies the process of managing dependencies and libraries.
+
+1. Insights and Details
+
+    - [go.mod](go.mod)
+      > Go module file defining the module path and dependencies.
+
+    - [go.sum](go.sum)
+      > Go checksum file containing expected cryptographic checksums of module dependencies.
+
+2. Usage and Instructions
+
+    - Tasks
+
+      ```bash
+      make go-mod-tidy
+      ```
+
+      ```bash
+      make go-mod-vendor
+      ```
+
+### 2.5. Software Testing
+
+#### 2.5.1. Unit Testing
+
+[Go testing](https://pkg.go.dev/testing) is the standard library package for unit testing in Go.
+
+1. Insights and Details
+
+    - [AGENTS.md](./AGENTS.md)
+      > Automate unit test generation using Large Language Models (LLMs) Agents.
+
+2. Usage and Instructions
+
+    - CI/CD
+
+      ```yaml
+      uses: sentenz/actions/go-tests@latest
+      ```
+
+    - Tasks
+
+      ```bash
+      make go-test-unit
+      ```
+
+#### 2.5.2. Code Coverage
+
+[go test -cover](https://go.dev/blog/cover) provides code coverage analysis for Go tests.
+
+1. Insights and Details
+
+    - Code coverage reports are generated in HTML and XML formats.
+
+2. Usage and Instructions
+
+    - CI/CD
+
+      ```yaml
+      uses: sentenz/actions/go-tests@latest
+      ```
+
+    - Tasks
+
+      ```bash
+      make go-test-coverage
+      ```
+
+#### 2.5.3. Benchmarks
+
+[Go benchmarks](https://pkg.go.dev/testing#hdr-Benchmarks) measure the performance of code and track performance regressions.
+
+1. Insights and Details
+
+    - Benchmarks use the standard Go testing package with `testing.B`.
+
+2. Usage and Instructions
+
+    - Tasks
+
+      ```bash
+      make go-test-bench
+      ```
+
+#### 2.5.4. Fuzz Testing
+
+[Go fuzzing](https://go.dev/security/fuzz/) is a testing technique that uses randomized inputs to find bugs and security vulnerabilities.
+
+1. Insights and Details
+
+    - Fuzz tests use the standard Go testing package with `testing.F`.
+
+2. Usage and Instructions
+
+    - Tasks
+
+      ```bash
+      make go-test-fuzz
+      ```
+
+### 2.6. Release Manager
+
+#### 2.6.1. Semantic-Release
 
 [Semantic-Release](https://github.com/semantic-release/semantic-release) automates the release process by analyzing commit messages to determine the next version number, generating changelog and release notes, and publishing the release.
 
@@ -204,9 +316,9 @@ Contribution guidelines and project management tools.
       uses: sentenz/actions/semantic-release@latest
       ```
 
-### 2.5. Update Manager
+### 2.7. Update Manager
 
-#### 2.5.1. Renovate
+#### 2.7.1. Renovate
 
 [Renovate](https://github.com/renovatebot/renovate) automates dependency updates by creating merge requests for outdated dependencies, ensuring that projects stay up-to-date with the latest versions of libraries and packages.
 
@@ -223,9 +335,9 @@ Contribution guidelines and project management tools.
       uses: sentenz/actions/renovate@latest
       ```
 
-### 2.6. Policy Manager
+### 2.8. Policy Manager
 
-#### 2.6.1. Conftest
+#### 2.8.1. Conftest
 
 [Conftest](https://www.conftest.dev/) is a **Policy as Code (PaC)** tool to streamline policy management for improved development, security and audit capability.
 
