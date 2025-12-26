@@ -5,8 +5,8 @@
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/sentenz/percent/actions/workflows/go-tests.yml)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Semantic Release](https://img.shields.io/badge/semantic--release-enabled-brightgreen.svg)](https://semantic-release.gitbook.io/semantic-release/)
-[![Renovate Enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
-[![Conftest Enabled](https://img.shields.io/badge/conftest-enabled-brightgreen.svg)](https://www.conftest.dev/)
+[![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
+[![Conftest](https://img.shields.io/badge/conftest-enabled-brightgreen.svg)](https://www.conftest.dev/)
 
 Percent is a Go package that provides utility functions for calculating percentages and performing related operations.
 
