@@ -142,8 +142,7 @@ policy-lint-regal:
 
 # ── SBOM Management ──────────────────────────────────────────────────────────────────────────────
 
-SYFT_VERSION ?= v1.20.0
-GRYPE_VERSION ?= v0.104.3
+TRIVY_VERSION ?= 0.58.2
 LOCAL_BIN ?= $(PWD)/.local/bin
 
 ## Generate Software Bill of Materials (SBOM) in CycloneDX format
@@ -151,20 +150,20 @@ sbom-generate:
 	@echo "Generating SBOM..."
 	@mkdir -p sbom $(LOCAL_BIN)
 
-	@if ! command -v syft &> /dev/null; then \
-		echo "Installing Syft $(SYFT_VERSION) to $(LOCAL_BIN)..."; \
-		curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b $(LOCAL_BIN) $(SYFT_VERSION); \
+	@if ! command -v trivy &> /dev/null; then \
+		echo "Installing Trivy $(TRIVY_VERSION) to $(LOCAL_BIN)..."; \
+		curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b $(LOCAL_BIN) v$(TRIVY_VERSION); \
 		export PATH="$(LOCAL_BIN):$$PATH"; \
 	fi
 
-	@if command -v syft &> /dev/null; then \
-		syft scan . --output cyclonedx-json=sbom/sbom-cyclonedx.json --quiet; \
-		syft scan . --output spdx-json=sbom/sbom-spdx.json --quiet; \
-	elif [ -x "$(LOCAL_BIN)/syft" ]; then \
-		$(LOCAL_BIN)/syft scan . --output cyclonedx-json=sbom/sbom-cyclonedx.json --quiet; \
-		$(LOCAL_BIN)/syft scan . --output spdx-json=sbom/sbom-spdx.json --quiet; \
+	@if command -v trivy &> /dev/null; then \
+		trivy fs --format cyclonedx --output sbom/sbom-cyclonedx.json .; \
+		trivy fs --format spdx-json --output sbom/sbom-spdx.json .; \
+	elif [ -x "$(LOCAL_BIN)/trivy" ]; then \
+		$(LOCAL_BIN)/trivy fs --format cyclonedx --output sbom/sbom-cyclonedx.json .; \
+		$(LOCAL_BIN)/trivy fs --format spdx-json --output sbom/sbom-spdx.json .; \
 	else \
-		echo "❌ Failed to install or find syft"; \
+		echo "❌ Failed to install or find trivy"; \
 		exit 1; \
 	fi
 
@@ -183,20 +182,20 @@ sbom-scan:
 		exit 1; \
 	fi
 
-	@if ! command -v grype &> /dev/null; then \
-		echo "Installing Grype $(GRYPE_VERSION) to $(LOCAL_BIN)..."; \
-		curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b $(LOCAL_BIN) $(GRYPE_VERSION); \
+	@if ! command -v trivy &> /dev/null; then \
+		echo "Installing Trivy $(TRIVY_VERSION) to $(LOCAL_BIN)..."; \
+		curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b $(LOCAL_BIN) v$(TRIVY_VERSION); \
 		export PATH="$(LOCAL_BIN):$$PATH"; \
 	fi
 
-	@if command -v grype &> /dev/null; then \
-		grype sbom:sbom/sbom-cyclonedx.json --output table --file reports/vulnerability-report.txt; \
-		grype sbom:sbom/sbom-cyclonedx.json --output json --file reports/vulnerability-report.json; \
-	elif [ -x "$(LOCAL_BIN)/grype" ]; then \
-		$(LOCAL_BIN)/grype sbom:sbom/sbom-cyclonedx.json --output table --file reports/vulnerability-report.txt; \
-		$(LOCAL_BIN)/grype sbom:sbom/sbom-cyclonedx.json --output json --file reports/vulnerability-report.json; \
+	@if command -v trivy &> /dev/null; then \
+		trivy sbom --format table --output reports/vulnerability-report.txt sbom/sbom-cyclonedx.json; \
+		trivy sbom --format json --output reports/vulnerability-report.json sbom/sbom-cyclonedx.json; \
+	elif [ -x "$(LOCAL_BIN)/trivy" ]; then \
+		$(LOCAL_BIN)/trivy sbom --format table --output reports/vulnerability-report.txt sbom/sbom-cyclonedx.json; \
+		$(LOCAL_BIN)/trivy sbom --format json --output reports/vulnerability-report.json sbom/sbom-cyclonedx.json; \
 	else \
-		echo "❌ Failed to install or find grype"; \
+		echo "❌ Failed to install or find trivy"; \
 		exit 1; \
 	fi
 

@@ -36,27 +36,41 @@ jobs:
         run: go mod download
 
       - name: Generate SBOM (CycloneDX)
-        uses: ./.github/actions/sbom-generate
+        uses: aquasecurity/trivy-action@0.30.0
         with:
-          source: '.'
-          format: 'cyclonedx-json'
-          output-file: 'sbom-cyclonedx.json'
-          artifact-name: 'sbom-cyclonedx'
-          upload-artifact: 'true'
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'cyclonedx'
+          output: 'sbom-cyclonedx.json'
+
+      - name: Upload SBOM (CycloneDX)
+        uses: actions/upload-artifact@v6.0.0
+        with:
+          name: sbom-cyclonedx
+          path: sbom-cyclonedx.json
+          retention-days: 90
+          if-no-files-found: error
 
       - name: Generate SBOM (SPDX)
-        uses: ./.github/actions/sbom-generate
+        uses: aquasecurity/trivy-action@0.30.0
         with:
-          source: '.'
+          scan-type: 'fs'
+          scan-ref: '.'
           format: 'spdx-json'
-          output-file: 'sbom-spdx.json'
-          artifact-name: 'sbom-spdx'
-          upload-artifact: 'true'
+          output: 'sbom-spdx.json'
+
+      - name: Upload SBOM (SPDX)
+        uses: actions/upload-artifact@v6.0.0
+        with:
+          name: sbom-spdx
+          path: sbom-spdx.json
+          retention-days: 90
+          if-no-files-found: error
 
       - name: Save baseline SBOM for monitoring
         uses: actions/upload-artifact@v6.0.0
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
           name: sbom-baseline
-          path: sbom/sbom-cyclonedx.json
+          path: sbom-cyclonedx.json
           retention-days: 90

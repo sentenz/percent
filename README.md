@@ -384,47 +384,47 @@ SBOM provides comprehensive dependency management and supply chain security by g
 
 1. Insights and Details
 
-    - [.github/actions/sbom-generate/](.github/actions/sbom-generate/)
-      > Composite action for generating SBOM using [Syft](https://github.com/anchore/syft) in multiple formats (CycloneDX, SPDX).
-
-    - [.github/actions/sbom-scan/](.github/actions/sbom-scan/)
-      > Composite action for scanning SBOM for known vulnerabilities using [Grype](https://github.com/anchore/grype) (Software Composition Analysis).
+    - [Trivy Action](https://github.com/aquasecurity/trivy-action)
+      > GitHub Action for generating SBOM and scanning for vulnerabilities using [Trivy](https://github.com/aquasecurity/trivy) in multiple formats (CycloneDX, SPDX, SARIF).
 
     - [.github/actions/sbom-monitor/](.github/actions/sbom-monitor/)
       > Composite action for monitoring SBOM changes and tracking dependency updates for supply chain security.
 
     - [.github/workflows/sbom-generate.yml](.github/workflows/sbom-generate.yml)
-      > Workflow for generating SBOM in CycloneDX and SPDX formats.
+      > Workflow for generating SBOM in CycloneDX and SPDX formats using Trivy Action.
 
     - [.github/workflows/sbom-scan.yml](.github/workflows/sbom-scan.yml)
-      > Workflow for scanning SBOM for vulnerabilities and monitoring dependency changes.
+      > Workflow for scanning SBOM for vulnerabilities and monitoring dependency changes using Trivy Action.
 
 2. Usage and Instructions
 
     - CI/CD
 
       ```yaml
-      # Generate SBOM
-      uses: ./.github/actions/sbom-generate
-      with:
-        source: '.'
-        format: 'cyclonedx-json'
-        output-file: 'sbom.json'
+      # Generate SBOM with Trivy
+      - uses: aquasecurity/trivy-action@0.30.0
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'cyclonedx'
+          output: 'sbom.json'
       ```
 
       ```yaml
       # Scan SBOM for vulnerabilities
-      uses: ./.github/actions/sbom-scan
-      with:
-        sbom-file: 'sbom/sbom.json'
-        fail-on-severity: 'high'
+      - uses: aquasecurity/trivy-action@0.30.0
+        with:
+          scan-type: 'sbom'
+          scan-ref: 'sbom.json'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
       ```
 
       ```yaml
       # Monitor SBOM changes
-      uses: ./.github/actions/sbom-monitor
-      with:
-        current-sbom: 'sbom/sbom.json'
+      - uses: ./.github/actions/sbom-monitor
+        with:
+          current-sbom: 'sbom.json'
       ```
 
     - Tasks

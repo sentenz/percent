@@ -36,59 +36,71 @@ jobs:
       - name: Download Go dependencies
         run: go mod download
 
-      - name: Generate SBOM
-        uses: ./.github/actions/sbom-generate
+      - name: Generate SBOM with Trivy
+        uses: aquasecurity/trivy-action@0.30.0
         with:
-          source: '.'
-          format: 'cyclonedx-json'
-          output-file: 'sbom.json'
-          artifact-name: 'sbom-for-scan'
-          upload-artifact: 'true'
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'cyclonedx'
+          output: 'sbom.json'
 
-      - name: Scan SBOM for Vulnerabilities
-        uses: ./.github/actions/sbom-scan
+      - name: Scan for Vulnerabilities (Table Output)
+        uses: aquasecurity/trivy-action@0.30.0
         with:
-          sbom-file: 'sbom/sbom.json'
-          fail-on-severity: 'high'
-          output-format: 'table'
-          output-file: 'vulnerability-report.txt'
-          upload-artifact: 'true'
+          scan-type: 'sbom'
+          scan-ref: 'sbom.json'
+          format: 'table'
+          output: 'vulnerability-report.txt'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
 
-      - name: Generate SARIF Report
-        if: always()
-        continue-on-error: true
-        run: |
-          # Install Grype if not already installed
-          if ! command -v grype &> /dev/null; then
-            INSTALL_URL="https://raw.githubusercontent.com/anchore/grype/main/install.sh"
-            curl -sSfL "$INSTALL_URL" | sh -s -- -b /usr/local/bin v0.104.3
-          fi
+      - name: Scan for Vulnerabilities (SARIF Output)
+        uses: aquasecurity/trivy-action@0.30.0
+        with:
+          scan-type: 'sbom'
+          scan-ref: 'sbom.json'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
 
-          mkdir -p reports
-          grype sbom:sbom/sbom.json \
-            --output sarif \
-            --file reports/vulnerability-report.sarif || true
-
-      - name: Upload SARIF Report
+      - name: Upload SARIF Report to GitHub Security
         if: always()
         uses: github/codeql-action/upload-sarif@v3
         continue-on-error: true
         with:
-          sarif_file: reports/vulnerability-report.sarif
+          sarif_file: trivy-results.sarif
           category: sbom-vulnerability-scan
+
+      - name: Upload Vulnerability Reports
+        if: always()
+        uses: actions/upload-artifact@v6.0.0
+        with:
+          name: vulnerability-report
+          path: |
+            vulnerability-report.txt
+            trivy-results.sarif
+          retention-days: 90
+          if-no-files-found: warn
+
+      - name: Upload SBOM for Monitoring
+        uses: actions/upload-artifact@v6.0.0
+        with:
+          name: sbom-for-scan
+          path: sbom.json
+          retention-days: 90
+          if-no-files-found: error
 
       - name: Monitor SBOM Changes
         if: github.event_name == 'pull_request' || github.event_name == 'push'
         uses: ./.github/actions/sbom-monitor
         continue-on-error: true
         with:
-          current-sbom: 'sbom/sbom.json'
+          current-sbom: 'sbom.json'
           artifact-name: 'sbom-baseline'
           report-format: 'markdown'
           output-file: 'sbom-monitor-report.md'
           upload-artifact: 'true'
 
-      - name: Comment PR with Vulnerability Report
+      - name: Comment PR with Monitoring Report
         if: github.event_name == 'pull_request' && always()
         uses: marocchino/sticky-pull-request-comment@v2.9.4
         continue-on-error: true
