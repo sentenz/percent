@@ -90,18 +90,42 @@ agents-generate-test-fuzz:
 	@echo "AI Agent: Generate Fuzz Tests"
 	@echo "================================================"
 	@echo ""
-	@echo "Instructions: Read and apply the fuzz testing guidelines from AGENTS.md Section 2"
+	@echo "Invoking GitHub Copilot CLI with AGENTS.md context..."
 	@echo ""
-	@echo "Prompt:"
-	@echo "--------"
-	@cat AGENTS.md | sed -n '/^## 2\. Fuzz Testing/,/^## [0-9]\./p' | head -n -1
-	@echo ""
-	@echo "================================================"
-	@echo "Next Steps:"
-	@echo "1. Identify functions in pkg/ or internal/ to fuzz test"
-	@echo "2. Create fuzz tests following the template above"
-	@echo "3. Run: make go-test-fuzz"
-	@echo "================================================"
+	@if command -v gh >/dev/null 2>&1 && gh copilot --version >/dev/null 2>&1; then \
+		CONTEXT=$$(cat AGENTS.md | sed -n '/^## 2\. Fuzz Testing/,/^## [0-9]\./p' | head -n -1); \
+		echo "Context: AGENTS.md Section 2 - Fuzz Testing Guidelines"; \
+		echo ""; \
+		echo "Intent: Generate property-based fuzz tests for Go functions"; \
+		echo ""; \
+		echo "Task Prompt:"; \
+		echo "-------------"; \
+		echo "Generate fuzz tests for Go functions in pkg/ or internal/ following these requirements:"; \
+		echo "1. Identify functions that accept external inputs or perform calculations"; \
+		echo "2. Create fuzz tests using testing.F with comprehensive seed corpus"; \
+		echo "3. Implement property-based assertions to verify invariants"; \
+		echo "4. Follow the template pattern from AGENTS.md Section 2.5"; \
+		echo "5. Ensure tests validate error handling and boundary conditions"; \
+		echo ""; \
+		echo "Calling: gh copilot suggest -t shell"; \
+		echo "$$CONTEXT" | gh copilot suggest -t shell "Generate fuzz tests for Go functions following AGENTS.md Section 2 guidelines. Focus on property-based testing with seed corpus and invariant validation."; \
+	else \
+		echo "GitHub Copilot CLI not available. Displaying AGENTS.md Section 2 context:"; \
+		echo ""; \
+		echo "Context: AGENTS.md Section 2 - Fuzz Testing"; \
+		echo "============================================"; \
+		cat AGENTS.md | sed -n '/^## 2\. Fuzz Testing/,/^## [0-9]\./p' | head -n -1; \
+		echo ""; \
+		echo "================================================"; \
+		echo "Manual Steps:"; \
+		echo "1. Review the fuzz testing guidelines above"; \
+		echo "2. Identify functions in pkg/ or internal/ to fuzz test"; \
+		echo "3. Create fuzz tests following the template in Section 2.5"; \
+		echo "4. Add seed corpus with f.Add() for edge cases"; \
+		echo "5. Implement property-based assertions"; \
+		echo "6. Run: make go-test-fuzz"; \
+		echo "================================================"; \
+	fi
 .PHONY: agents-generate-test-fuzz
 
 ## Format Go code according to Go standards
