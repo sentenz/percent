@@ -149,8 +149,10 @@ sbom-generate:
 	@echo "Generating SBOM..."
 	@mkdir -p sbom
 
-	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(TRIVY_IMAGE)" fs --format cyclonedx --output sbom/sbom-cyclonedx.json .
-	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(TRIVY_IMAGE)" fs --format spdx-json --output sbom/sbom-spdx.json .
+	docker run --rm -v "${PWD}:/workspace" -w /workspace --entrypoint sh "$(TRIVY_IMAGE)" -c '\
+		trivy fs --scanners license --format cyclonedx --output sbom/sbom-cyclonedx.json . && \
+		trivy fs --scanners license --format spdx-json --output sbom/sbom-spdx.json . \
+	'
 
 	@echo "✅ SBOM generated:"
 	@echo "  - sbom/sbom-cyclonedx.json (CycloneDX format)"
@@ -167,8 +169,10 @@ sbom-scan:
 		exit 1; \
 	fi
 
-	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(TRIVY_IMAGE)" sbom --format table --output reports/vulnerability-report.txt sbom/sbom-cyclonedx.json
-	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(TRIVY_IMAGE)" sbom --format json --output reports/vulnerability-report.json sbom/sbom-cyclonedx.json
+	docker run --rm -v "${PWD}:/workspace" -w /workspace --entrypoint sh "$(TRIVY_IMAGE)" -c '\
+		trivy sbom --format table --output reports/vulnerability-report.txt sbom/sbom-cyclonedx.json && \
+		trivy sbom --format json --output reports/vulnerability-report.json sbom/sbom-cyclonedx.json \
+	'
 
 	@echo "✅ Vulnerability report generated:"
 	@echo "  - reports/vulnerability-report.txt (human-readable)"

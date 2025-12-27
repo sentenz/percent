@@ -154,13 +154,6 @@ image:
 # Vulnerability Options
 # Available with vulnerability scanning
 
-# pkg:
-#   # Same as '--pkg-types'
-#   # Default is 'os,library'
-#   types:
-#     - os
-#     - library
-
 vulnerability:
   # Same as '--ignore-unfixed'
   # Default is false
