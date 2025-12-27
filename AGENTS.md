@@ -6,6 +6,12 @@
   - [1.3. Test Commands](#13-test-commands)
   - [1.4. Test Style](#14-test-style)
   - [1.5. Test Template](#15-test-template)
+- [2. Fuzz Testing](#2-fuzz-testing)
+  - [2.1. Fuzz Testing Patterns](#21-fuzz-testing-patterns)
+  - [2.2. Fuzz Test Workflow](#22-fuzz-test-workflow)
+  - [2.3. Fuzz Test Commands](#23-fuzz-test-commands)
+  - [2.4. Fuzz Test Style](#24-fuzz-test-style)
+  - [2.5. Fuzz Test Template](#25-fuzz-test-template)
 
 ## 1. Unit Testing
 
@@ -179,5 +185,208 @@ func Test<FunctionName>(t *testing.T) {
    }
   })
  }
+}
+```
+
+## 2. Fuzz Testing
+
+Instructions for AI coding agents on automating fuzz test creation using consistent software testing patterns in this Go project.
+
+1. Features and Benefits
+
+    - Automated Input Generation
+      > Fuzz testing automatically generates random inputs to discover edge cases and unexpected behaviors that manual testing might miss.
+
+    - Security Vulnerability Discovery
+      > Helps identify security vulnerabilities, crashes, and undefined behaviors by testing with malformed, unexpected, or extreme inputs.
+
+    - Continuous Testing
+      > Fuzz tests can run continuously to explore the input space over time, discovering new edge cases as the corpus grows.
+
+    - Regression Prevention
+      > Once a crash or bug is found, the input is saved in the corpus to prevent regression in future test runs.
+
+### 2.1. Fuzz Testing Patterns
+
+- Corpus-Driven Fuzzing
+  > Corpus-Driven Fuzzing is a software testing technique that uses a collection of seed inputs (corpus) as the starting point for generating new test inputs through mutation.
+
+- Property-Based Testing
+  > Property-Based Testing is a testing approach that verifies invariants and properties that should hold true for all inputs, rather than testing specific input-output pairs.
+
+- Boundary Value Fuzzing
+  > Boundary Value Fuzzing focuses on testing edge cases and boundary conditions with randomly generated inputs around critical thresholds.
+
+- Crash Detection
+  > Crash Detection is the process of identifying inputs that cause panics, runtime errors, or undefined behavior in the code under test.
+
+### 2.2. Fuzz Test Workflow
+
+1. Identify
+
+    Identify functions in `pkg/` or `internal/` that accept external inputs, perform calculations, or have edge cases worth fuzzing (e.g., `pkg/<package>/<file>.go`).
+
+2. Add/Create
+
+    Create fuzz tests in the same package (e.g., `pkg/<package>/<file>_test.go`).
+
+3. Fuzz Test Coverage Requirements
+
+    Focus on functions that:
+    - Accept numeric inputs (integers, floats)
+    - Perform mathematical operations (division, multiplication)
+    - Have boundary conditions (min/max values, zero checks)
+    - Return errors for invalid inputs
+    - Use generics or type constraints
+
+4. Apply Templates
+
+    Structure all fuzz tests using this [template](#25-fuzz-test-template) pattern.
+
+5. Seed Corpus
+
+    Optionally provide seed inputs in `testdata/fuzz/<FuzzTestName>/` directory to guide fuzzing toward interesting inputs.
+
+### 2.3. Fuzz Test Commands
+
+- Run Fuzz Tests
+  > Execute fuzz tests for a specified duration.
+
+  ```bash
+  make go-test-fuzz
+  ```
+
+- Run Specific Fuzz Test
+  > Execute a specific fuzz test with custom duration.
+
+  ```bash
+  go test -fuzz=FuzzPercent -fuzztime=30s ./pkg/percent
+  ```
+
+- Run Fuzz Tests Until Failure
+  > Run fuzz tests continuously until a failure is found.
+
+  ```bash
+  go test -fuzz=FuzzPercent ./pkg/percent
+  ```
+
+- View Fuzz Corpus
+  > Inspect the seed corpus and generated inputs.
+
+  ```bash
+  ls -la testdata/fuzz/<FuzzTestName>/
+  ```
+
+### 2.4. Fuzz Test Style
+
+- Test Framework
+  > Use the standard Go `testing` package with `testing.F` for fuzz tests.
+
+- Include Imports
+  > Include `testing` and any packages needed for the function under test.
+
+- Fuzz Function Naming
+  > Name fuzz functions with the `Fuzz` prefix followed by the function name (e.g., `FuzzPercent` for testing `Percent()`).
+
+- Seed Corpus
+  > Use `f.Add()` to provide seed inputs that cover important edge cases and known valid/invalid inputs.
+
+- Fuzz Target
+  > The fuzz target function receives `*testing.T` and randomly generated inputs. It should:
+  > - Validate inputs before calling the function under test (skip invalid inputs with `t.Skip()` if necessary)
+  > - Call the function with fuzzed inputs
+  > - Assert invariants and properties that must always hold true
+  > - Not crash or panic for any input
+
+- Error Handling
+  > Fuzz tests should verify that functions handle errors gracefully without panicking.
+
+- Assertions
+  > Use explicit checks with `t.Errorf()` or `t.Fatalf()` to report violations of expected properties.
+
+### 2.5. Fuzz Test Template
+
+Use this template for new fuzz test functions. Replace placeholders with actual values and adjust as needed for the use case.
+
+```go
+func Fuzz<FunctionName>(f *testing.F) {
+ // Seed corpus with edge cases and representative inputs
+ f.Add(/* seed input 1 */)
+ f.Add(/* seed input 2 */)
+ f.Add(/* seed input 3 */)
+ // Add more seeds as needed for edge cases
+
+ f.Fuzz(func(t *testing.T, /* fuzzed parameters */) {
+  // Arrange
+  // Optional: skip invalid inputs or prepare test conditions
+  // Example: if input < 0 { t.Skip("negative inputs not interesting") }
+
+  // Act
+  got, err := <Function>(/* fuzzed parameters */)
+
+  // Assert
+  // Verify properties that should always hold true
+  // Example 1: Function should never panic
+  // Example 2: If no error, result should meet certain properties
+  // Example 3: If error, result should be in expected error state
+
+  if err != nil {
+   // Verify error cases
+   // Example: if got != 0 { t.Errorf("expected zero result on error, got %v", got) }
+  } else {
+   // Verify success cases and invariants
+   // Example: if got < 0 { t.Errorf("result should be non-negative, got %v", got) }
+  }
+ })
+}
+```
+
+#### 2.5.1. Fuzz Test Example
+
+Example fuzz test for the `Percent` function demonstrating the template in practice:
+
+```go
+func FuzzPercent(f *testing.F) {
+ // Seed corpus with edge cases
+ f.Add(0.0, 100.0)      // zero percent
+ f.Add(100.0, 100.0)    // hundred percent
+ f.Add(50.0, 200.0)     // typical case
+ f.Add(25.0, -100.0)    // negative value
+ f.Add(-10.0, 100.0)    // negative percent (should error)
+ f.Add(150.0, 100.0)    // over 100 percent (should error)
+
+ f.Fuzz(func(t *testing.T, pct float64, value float64) {
+  // Arrange
+  // No special arrangement needed
+
+  // Act
+  got, err := percent.Percent(pct, value)
+
+  // Assert
+  // Property 1: Function should never panic
+  // Property 2: If percent is out of range [0, 100], should return error
+  // Property 3: If no error, result should be mathematically correct
+
+  if pct < 0 || pct > 100 {
+   // Invalid range - should return error
+   if err == nil {
+    t.Errorf("Percent(%v, %v) should return error for out of range percent", pct, value)
+   }
+   // Result should be zero on error
+   if got != 0 {
+    t.Errorf("Percent(%v, %v) = %v, want 0 on error", pct, value, got)
+   }
+  } else {
+   // Valid range - should not return error
+   if err != nil {
+    t.Errorf("Percent(%v, %v) returned unexpected error: %v", pct, value, err)
+   }
+   // Verify mathematical correctness (within floating point precision)
+   expected := value * (pct / 100.0)
+   if math.Abs(got-expected) > 1e-10 {
+    t.Errorf("Percent(%v, %v) = %v, want %v", pct, value, got, expected)
+   }
+  }
+ })
 }
 ```
