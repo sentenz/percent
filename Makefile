@@ -144,20 +144,30 @@ policy-lint-regal:
 
 SYFT_VERSION ?= v1.20.0
 GRYPE_VERSION ?= v0.104.3
+LOCAL_BIN ?= $(PWD)/.local/bin
 
 ## Generate Software Bill of Materials (SBOM) in CycloneDX format
 sbom-generate:
 	@echo "Generating SBOM..."
-	@mkdir -p sbom
-	
+	@mkdir -p sbom $(LOCAL_BIN)
+
 	@if ! command -v syft &> /dev/null; then \
-		echo "Installing Syft $(SYFT_VERSION)..."; \
-		curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin $(SYFT_VERSION); \
+		echo "Installing Syft $(SYFT_VERSION) to $(LOCAL_BIN)..."; \
+		curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b $(LOCAL_BIN) $(SYFT_VERSION); \
+		export PATH="$(LOCAL_BIN):$$PATH"; \
 	fi
-	
-	syft scan . --output cyclonedx-json=sbom/sbom-cyclonedx.json --quiet
-	syft scan . --output spdx-json=sbom/sbom-spdx.json --quiet
-	
+
+	@if command -v syft &> /dev/null; then \
+		syft scan . --output cyclonedx-json=sbom/sbom-cyclonedx.json --quiet; \
+		syft scan . --output spdx-json=sbom/sbom-spdx.json --quiet; \
+	elif [ -x "$(LOCAL_BIN)/syft" ]; then \
+		$(LOCAL_BIN)/syft scan . --output cyclonedx-json=sbom/sbom-cyclonedx.json --quiet; \
+		$(LOCAL_BIN)/syft scan . --output spdx-json=sbom/sbom-spdx.json --quiet; \
+	else \
+		echo "❌ Failed to install or find syft"; \
+		exit 1; \
+	fi
+
 	@echo "✅ SBOM generated:"
 	@echo "  - sbom/sbom-cyclonedx.json (CycloneDX format)"
 	@echo "  - sbom/sbom-spdx.json (SPDX format)"
@@ -166,21 +176,30 @@ sbom-generate:
 ## Scan SBOM for known vulnerabilities using Software Composition Analysis (SCA)
 sbom-scan:
 	@echo "Scanning SBOM for vulnerabilities..."
-	@mkdir -p reports
-	
+	@mkdir -p reports $(LOCAL_BIN)
+
 	@if [ ! -f "sbom/sbom-cyclonedx.json" ]; then \
 		echo "❌ SBOM not found. Run 'make sbom-generate' first."; \
 		exit 1; \
 	fi
-	
+
 	@if ! command -v grype &> /dev/null; then \
-		echo "Installing Grype $(GRYPE_VERSION)..."; \
-		curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin $(GRYPE_VERSION); \
+		echo "Installing Grype $(GRYPE_VERSION) to $(LOCAL_BIN)..."; \
+		curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b $(LOCAL_BIN) $(GRYPE_VERSION); \
+		export PATH="$(LOCAL_BIN):$$PATH"; \
 	fi
-	
-	grype sbom:sbom/sbom-cyclonedx.json --output table --file reports/vulnerability-report.txt
-	grype sbom:sbom/sbom-cyclonedx.json --output json --file reports/vulnerability-report.json
-	
+
+	@if command -v grype &> /dev/null; then \
+		grype sbom:sbom/sbom-cyclonedx.json --output table --file reports/vulnerability-report.txt; \
+		grype sbom:sbom/sbom-cyclonedx.json --output json --file reports/vulnerability-report.json; \
+	elif [ -x "$(LOCAL_BIN)/grype" ]; then \
+		$(LOCAL_BIN)/grype sbom:sbom/sbom-cyclonedx.json --output table --file reports/vulnerability-report.txt; \
+		$(LOCAL_BIN)/grype sbom:sbom/sbom-cyclonedx.json --output json --file reports/vulnerability-report.json; \
+	else \
+		echo "❌ Failed to install or find grype"; \
+		exit 1; \
+	fi
+
 	@echo "✅ Vulnerability report generated:"
 	@echo "  - reports/vulnerability-report.txt (human-readable)"
 	@echo "  - reports/vulnerability-report.json (machine-readable)"

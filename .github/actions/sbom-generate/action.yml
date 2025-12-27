@@ -73,8 +73,13 @@ runs:
           echo "📦 SBOM Summary:"
           echo "  Format: ${{ inputs.format }}"
           echo "  Size: $(du -h "$SBOM_FILE" | cut -f1)"
-          COMPONENT_COUNT=$(syft scan "${{ inputs.source }}" -o json -q | \
-            jq '.artifacts | length' 2>/dev/null || echo 'N/A')
+          # Extract component count from generated SBOM if it's JSON format
+          if [[ "${{ inputs.format }}" == *"json"* ]]; then
+            COMPONENT_COUNT=$(jq '.components | length' "$SBOM_FILE" 2>/dev/null || \
+              jq '.artifacts | length' "$SBOM_FILE" 2>/dev/null || echo 'N/A')
+          else
+            COMPONENT_COUNT="N/A (non-JSON format)"
+          fi
           echo "  Components: $COMPONENT_COUNT"
         else
           echo "❌ Failed to generate SBOM"

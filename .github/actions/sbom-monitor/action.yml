@@ -66,6 +66,8 @@ runs:
         # Determine baseline SBOM path
         if [ -n "${{ inputs.baseline-sbom }}" ]; then
           BASELINE_SBOM="${{ inputs.baseline-sbom }}"
+        elif [ -f "baseline-sbom/sbom-cyclonedx.json" ]; then
+          BASELINE_SBOM="baseline-sbom/sbom-cyclonedx.json"
         elif [ -f "baseline-sbom/sbom.json" ]; then
           BASELINE_SBOM="baseline-sbom/sbom.json"
         else
