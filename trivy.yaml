@@ -95,7 +95,9 @@ scan:
 
   # Same as '--scanners'
   # Default depends on subcommand
-  # Note: When scanning SBOM files, only 'vuln' and 'license' scanners are supported
+  # Note: This is overridden by CLI flags in Makefile targets
+  # - SBOM generation uses '--scanners license' (no vuln DB required)
+  # - SBOM scanning uses default 'vuln' scanner
   scanners:
     - vuln
 
