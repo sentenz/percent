@@ -75,7 +75,13 @@ go-test-bench:
 
 ## Run fuzz tests
 go-test-fuzz:
-	go test -fuzz=Fuzz -fuzztime=10s ./pkg/percent
+	@echo "Running fuzz tests..."
+	go test -fuzz=FuzzPercent -fuzztime=10s ./pkg/percent
+	go test -fuzz=FuzzOf -fuzztime=10s ./pkg/percent
+	go test -fuzz=FuzzChange -fuzztime=10s ./pkg/percent
+	go test -fuzz=FuzzRemain -fuzztime=10s ./pkg/percent
+	go test -fuzz=FuzzFromRatio -fuzztime=10s ./pkg/percent
+	go test -fuzz=FuzzToRatio -fuzztime=10s ./pkg/percent
 .PHONY: go-test-fuzz
 
 ## Format Go code according to Go standards
