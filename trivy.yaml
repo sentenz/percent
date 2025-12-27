@@ -45,7 +45,7 @@ list-all-pkgs: false
 
 # Same as '--ignorefile'
 # Default is '.trivyignore'
-ignorefile: .trivyignore
+# ignorefile: .trivyignore
 
 # Same as '--ignore-policy'
 # Default is empty
@@ -93,12 +93,11 @@ scan:
   # Default is false
   offline-scan: false
 
-  # Same as '--security-checks'
+  # Same as '--scanners'
   # Default depends on subcommand
-  security-checks:
+  # Note: When scanning SBOM files, only 'vuln' and 'license' scanners are supported
+  scanners:
     - vuln
-    - config
-    - secret
 
 # Cache Options
 
@@ -155,13 +154,14 @@ image:
 # Vulnerability Options
 # Available with vulnerability scanning
 
-vulnerability:
-  # Same as '--vuln-type'
-  # Default is 'os,library'
-  type:
-    - os
-    - library
+# pkg:
+#   # Same as '--pkg-types'
+#   # Default is 'os,library'
+#   types:
+#     - os
+#     - library
 
+vulnerability:
   # Same as '--ignore-unfixed'
   # Default is false
   ignore-unfixed: false

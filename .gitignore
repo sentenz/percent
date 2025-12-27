@@ -11,6 +11,3 @@ reports/
 *.sbom.json
 *sbom*.json
 vulnerability-report.*
-
-# Local binaries
-.local/

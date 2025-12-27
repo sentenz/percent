@@ -429,6 +429,9 @@ SBOM provides comprehensive dependency management and supply chain security by g
 
     - Tasks
 
+      > [!NOTE]
+      > Local SBOM tasks require [Docker](https://www.docker.com/) to run Trivy in a container.
+
       ```bash
       # Generate SBOM
       make sbom-generate

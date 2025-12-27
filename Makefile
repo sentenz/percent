@@ -142,30 +142,15 @@ policy-lint-regal:
 
 # ── SBOM Management ──────────────────────────────────────────────────────────────────────────────
 
-TRIVY_VERSION ?= 0.58.2
-LOCAL_BIN ?= $(PWD)/.local/bin
+TRIVY_IMAGE ?= aquasec/trivy:0.58.2
 
 ## Generate Software Bill of Materials (SBOM) in CycloneDX format
 sbom-generate:
 	@echo "Generating SBOM..."
-	@mkdir -p sbom $(LOCAL_BIN)
+	@mkdir -p sbom
 
-	@if ! command -v trivy &> /dev/null; then \
-		echo "Installing Trivy $(TRIVY_VERSION) to $(LOCAL_BIN)..."; \
-		curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b $(LOCAL_BIN) v$(TRIVY_VERSION); \
-		export PATH="$(LOCAL_BIN):$$PATH"; \
-	fi
-
-	@if command -v trivy &> /dev/null; then \
-		trivy fs --format cyclonedx --output sbom/sbom-cyclonedx.json .; \
-		trivy fs --format spdx-json --output sbom/sbom-spdx.json .; \
-	elif [ -x "$(LOCAL_BIN)/trivy" ]; then \
-		$(LOCAL_BIN)/trivy fs --format cyclonedx --output sbom/sbom-cyclonedx.json .; \
-		$(LOCAL_BIN)/trivy fs --format spdx-json --output sbom/sbom-spdx.json .; \
-	else \
-		echo "❌ Failed to install or find trivy"; \
-		exit 1; \
-	fi
+	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(TRIVY_IMAGE)" fs --format cyclonedx --output sbom/sbom-cyclonedx.json .
+	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(TRIVY_IMAGE)" fs --format spdx-json --output sbom/sbom-spdx.json .
 
 	@echo "✅ SBOM generated:"
 	@echo "  - sbom/sbom-cyclonedx.json (CycloneDX format)"
@@ -175,29 +160,15 @@ sbom-generate:
 ## Scan SBOM for known vulnerabilities using Software Composition Analysis (SCA)
 sbom-scan:
 	@echo "Scanning SBOM for vulnerabilities..."
-	@mkdir -p reports $(LOCAL_BIN)
+	@mkdir -p reports
 
 	@if [ ! -f "sbom/sbom-cyclonedx.json" ]; then \
 		echo "❌ SBOM not found. Run 'make sbom-generate' first."; \
 		exit 1; \
 	fi
 
-	@if ! command -v trivy &> /dev/null; then \
-		echo "Installing Trivy $(TRIVY_VERSION) to $(LOCAL_BIN)..."; \
-		curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b $(LOCAL_BIN) v$(TRIVY_VERSION); \
-		export PATH="$(LOCAL_BIN):$$PATH"; \
-	fi
-
-	@if command -v trivy &> /dev/null; then \
-		trivy sbom --format table --output reports/vulnerability-report.txt sbom/sbom-cyclonedx.json; \
-		trivy sbom --format json --output reports/vulnerability-report.json sbom/sbom-cyclonedx.json; \
-	elif [ -x "$(LOCAL_BIN)/trivy" ]; then \
-		$(LOCAL_BIN)/trivy sbom --format table --output reports/vulnerability-report.txt sbom/sbom-cyclonedx.json; \
-		$(LOCAL_BIN)/trivy sbom --format json --output reports/vulnerability-report.json sbom/sbom-cyclonedx.json; \
-	else \
-		echo "❌ Failed to install or find trivy"; \
-		exit 1; \
-	fi
+	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(TRIVY_IMAGE)" sbom --format table --output reports/vulnerability-report.txt sbom/sbom-cyclonedx.json
+	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(TRIVY_IMAGE)" sbom --format json --output reports/vulnerability-report.json sbom/sbom-cyclonedx.json
 
 	@echo "✅ Vulnerability report generated:"
 	@echo "  - reports/vulnerability-report.txt (human-readable)"
