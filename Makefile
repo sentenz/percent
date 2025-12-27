@@ -84,37 +84,25 @@ go-test-fuzz:
 	go test -fuzz=FuzzToRatio -fuzztime=10s ./pkg/percent
 .PHONY: go-test-fuzz
 
-## Generate fuzz tests for Go functions (AI Agent helper)
-go-test-fuzz-generate:
+## Generate fuzz tests for Go functions using AI agents
+agents-generate-test-fuzz:
 	@echo "================================================"
-	@echo "Fuzz Test Generation Helper for AI Agents"
+	@echo "AI Agent: Generate Fuzz Tests"
 	@echo "================================================"
 	@echo ""
-	@echo "This task guides AI agents through fuzz test generation."
-	@echo "Refer to AGENTS.md Section 2 for detailed instructions."
+	@echo "Instructions: Read and apply the fuzz testing guidelines from AGENTS.md Section 2"
 	@echo ""
-	@echo "Steps:"
-	@echo "1. Identify functions to fuzz test in pkg/ or internal/"
-	@echo "2. Create fuzz tests in the same package (*_test.go)"
-	@echo "3. Follow the template in AGENTS.md Section 2.5"
-	@echo "4. Add seed corpus with f.Add() for edge cases"
-	@echo "5. Implement property-based assertions"
-	@echo "6. Run: make go-test-fuzz"
+	@echo "Prompt:"
+	@echo "--------"
+	@cat AGENTS.md | sed -n '/^## 2\. Fuzz Testing/,/^## [0-9]\./p' | head -n -1
 	@echo ""
-	@echo "Template structure:"
-	@echo "  func Fuzz<FunctionName>(f *testing.F) {"
-	@echo "    f.Add(/* seed inputs */)"
-	@echo "    f.Fuzz(func(t *testing.T, /* params */) {"
-	@echo "      got, err := <Function>(/* params */)"
-	@echo "      // Assert properties and invariants"
-	@echo "    })"
-	@echo "  }"
-	@echo ""
-	@echo "For complete examples, see:"
-	@echo "  - AGENTS.md Section 2.5.1 (FuzzPercent example)"
-	@echo "  - pkg/percent/percent_test.go (all fuzz tests)"
-	@echo ""
-.PHONY: go-test-fuzz-generate
+	@echo "================================================"
+	@echo "Next Steps:"
+	@echo "1. Identify functions in pkg/ or internal/ to fuzz test"
+	@echo "2. Create fuzz tests following the template above"
+	@echo "3. Run: make go-test-fuzz"
+	@echo "================================================"
+.PHONY: agents-generate-test-fuzz
 
 ## Format Go code according to Go standards
 go-fmt:
