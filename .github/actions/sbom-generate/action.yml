@@ -1,0 +1,89 @@
+# SPDX-License-Identifier: Apache-2.0
+
+name: 'SBOM Generate'
+description: 'Generate Software Bill of Materials (SBOM) for dependency management and supply chain security'
+
+inputs:
+  source:
+    description: 'Source path or directory to scan for SBOM generation'
+    required: false
+    default: '.'
+  format:
+    description: 'SBOM output format (cyclonedx-json, spdx-json, syft-json)'
+    required: false
+    default: 'cyclonedx-json'
+  output-file:
+    description: 'Output file name for the SBOM'
+    required: false
+    default: 'sbom.json'
+  artifact-name:
+    description: 'Name of the artifact to upload'
+    required: false
+    default: 'sbom'
+  upload-artifact:
+    description: 'Whether to upload the SBOM as a GitHub artifact'
+    required: false
+    default: 'true'
+  syft-version:
+    description: 'Version of Syft to use'
+    required: false
+    default: 'v1.20.0'
+
+outputs:
+  sbom-path:
+    description: 'Path to the generated SBOM file'
+    value: ${{ steps.generate.outputs.sbom-path }}
+  sbom-format:
+    description: 'Format of the generated SBOM'
+    value: ${{ steps.generate.outputs.sbom-format }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Syft
+      shell: bash
+      run: |
+        echo "::group::Installing Syft ${{ inputs.syft-version }}"
+        curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin ${{ inputs.syft-version }}
+        syft version
+        echo "::endgroup::"
+
+    - name: Generate SBOM
+      id: generate
+      shell: bash
+      run: |
+        echo "::group::Generating SBOM"
+        mkdir -p sbom
+        
+        SBOM_FILE="sbom/${{ inputs.output-file }}"
+        echo "Generating SBOM in ${{ inputs.format }} format..."
+        
+        syft scan "${{ inputs.source }}" \
+          --output "${{ inputs.format }}=$SBOM_FILE" \
+          --quiet
+        
+        if [ -f "$SBOM_FILE" ]; then
+          echo "✅ SBOM generated successfully: $SBOM_FILE"
+          echo "sbom-path=$SBOM_FILE" >> $GITHUB_OUTPUT
+          echo "sbom-format=${{ inputs.format }}" >> $GITHUB_OUTPUT
+          
+          # Display SBOM summary
+          echo ""
+          echo "📦 SBOM Summary:"
+          echo "  Format: ${{ inputs.format }}"
+          echo "  Size: $(du -h "$SBOM_FILE" | cut -f1)"
+          echo "  Components: $(syft scan "${{ inputs.source }}" -o json -q | jq '.artifacts | length' 2>/dev/null || echo 'N/A')"
+        else
+          echo "❌ Failed to generate SBOM"
+          exit 1
+        fi
+        echo "::endgroup::"
+
+    - name: Upload SBOM Artifact
+      if: inputs.upload-artifact == 'true'
+      uses: actions/upload-artifact@v6.0.0
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: sbom/${{ inputs.output-file }}
+        retention-days: 90
+        if-no-files-found: error

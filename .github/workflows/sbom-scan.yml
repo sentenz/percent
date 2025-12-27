@@ -1,0 +1,94 @@
+# SPDX-License-Identifier: Apache-2.0
+
+name: SBOM Scan
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  schedule:
+    # Run daily at 06:00 UTC to check for new vulnerabilities
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+  security-events: write
+  pull-requests: write
+
+jobs:
+  scan:
+    name: Scan SBOM for Vulnerabilities
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.1
+
+      - name: Set up Go
+        uses: actions/setup-go@v6.1.0
+        with:
+          go-version-file: 'go.mod'
+
+      - name: Download Go dependencies
+        run: go mod download
+
+      - name: Generate SBOM
+        uses: ./.github/actions/sbom-generate
+        with:
+          source: '.'
+          format: 'cyclonedx-json'
+          output-file: 'sbom.json'
+          artifact-name: 'sbom-for-scan'
+          upload-artifact: 'true'
+
+      - name: Scan SBOM for Vulnerabilities
+        uses: ./.github/actions/sbom-scan
+        with:
+          sbom-file: 'sbom/sbom.json'
+          fail-on-severity: 'high'
+          output-format: 'table'
+          output-file: 'vulnerability-report.txt'
+          upload-artifact: 'true'
+
+      - name: Generate SARIF Report
+        if: always()
+        continue-on-error: true
+        run: |
+          # Install Grype if not already installed
+          if ! command -v grype &> /dev/null; then
+            curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin v0.104.3
+          fi
+          
+          mkdir -p reports
+          grype sbom:sbom/sbom.json --output sarif --file reports/vulnerability-report.sarif || true
+
+      - name: Upload SARIF Report
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        continue-on-error: true
+        with:
+          sarif_file: reports/vulnerability-report.sarif
+          category: sbom-vulnerability-scan
+
+      - name: Monitor SBOM Changes
+        if: github.event_name == 'pull_request' || github.event_name == 'push'
+        uses: ./.github/actions/sbom-monitor
+        continue-on-error: true
+        with:
+          current-sbom: 'sbom/sbom.json'
+          artifact-name: 'sbom-baseline'
+          report-format: 'markdown'
+          output-file: 'sbom-monitor-report.md'
+          upload-artifact: 'true'
+
+      - name: Comment PR with Vulnerability Report
+        if: github.event_name == 'pull_request' && always()
+        uses: marocchino/sticky-pull-request-comment@v2.9.4
+        continue-on-error: true
+        with:
+          header: sbom-vulnerability-scan
+          path: reports/sbom-monitor-report.md

@@ -1,0 +1,62 @@
+# SPDX-License-Identifier: Apache-2.0
+
+name: SBOM Generate
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  release:
+    types:
+      - published
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+  security-events: write
+
+jobs:
+  generate:
+    name: Generate SBOM
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.1
+
+      - name: Set up Go
+        uses: actions/setup-go@v6.1.0
+        with:
+          go-version-file: 'go.mod'
+
+      - name: Download Go dependencies
+        run: go mod download
+
+      - name: Generate SBOM (CycloneDX)
+        uses: ./.github/actions/sbom-generate
+        with:
+          source: '.'
+          format: 'cyclonedx-json'
+          output-file: 'sbom-cyclonedx.json'
+          artifact-name: 'sbom-cyclonedx'
+          upload-artifact: 'true'
+
+      - name: Generate SBOM (SPDX)
+        uses: ./.github/actions/sbom-generate
+        with:
+          source: '.'
+          format: 'spdx-json'
+          output-file: 'sbom-spdx.json'
+          artifact-name: 'sbom-spdx'
+          upload-artifact: 'true'
+
+      - name: Save baseline SBOM for monitoring
+        uses: actions/upload-artifact@v6.0.0
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        with:
+          name: sbom-baseline
+          path: sbom/sbom-cyclonedx.json
+          retention-days: 90

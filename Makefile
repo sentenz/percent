@@ -139,3 +139,106 @@ policy-lint-regal:
 	docker pull "$(POLICY_IMAGE_REGAL)"
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(POLICY_IMAGE_REGAL)" regal lint "$(filter-out $@,$(MAKECMDGOALS))" --format json > logs/analysis/regal.json 2>&1
 .PHONY: policy-lint-regal
+
+# ── SBOM Management ──────────────────────────────────────────────────────────────────────────────
+
+SYFT_VERSION ?= v1.20.0
+GRYPE_VERSION ?= v0.104.3
+
+## Generate Software Bill of Materials (SBOM) in CycloneDX format
+sbom-generate:
+	@echo "Generating SBOM..."
+	@mkdir -p sbom
+	
+	@if ! command -v syft &> /dev/null; then \
+		echo "Installing Syft $(SYFT_VERSION)..."; \
+		curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin $(SYFT_VERSION); \
+	fi
+	
+	syft scan . --output cyclonedx-json=sbom/sbom-cyclonedx.json --quiet
+	syft scan . --output spdx-json=sbom/sbom-spdx.json --quiet
+	
+	@echo "✅ SBOM generated:"
+	@echo "  - sbom/sbom-cyclonedx.json (CycloneDX format)"
+	@echo "  - sbom/sbom-spdx.json (SPDX format)"
+.PHONY: sbom-generate
+
+## Scan SBOM for known vulnerabilities using Software Composition Analysis (SCA)
+sbom-scan:
+	@echo "Scanning SBOM for vulnerabilities..."
+	@mkdir -p reports
+	
+	@if [ ! -f "sbom/sbom-cyclonedx.json" ]; then \
+		echo "❌ SBOM not found. Run 'make sbom-generate' first."; \
+		exit 1; \
+	fi
+	
+	@if ! command -v grype &> /dev/null; then \
+		echo "Installing Grype $(GRYPE_VERSION)..."; \
+		curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin $(GRYPE_VERSION); \
+	fi
+	
+	grype sbom:sbom/sbom-cyclonedx.json --output table --file reports/vulnerability-report.txt
+	grype sbom:sbom/sbom-cyclonedx.json --output json --file reports/vulnerability-report.json
+	
+	@echo "✅ Vulnerability report generated:"
+	@echo "  - reports/vulnerability-report.txt (human-readable)"
+	@echo "  - reports/vulnerability-report.json (machine-readable)"
+.PHONY: sbom-scan
+
+## Compare current SBOM with baseline to detect dependency changes
+sbom-compare:
+	@echo "Comparing SBOM with baseline..."
+	@mkdir -p reports
+	
+	@if [ ! -f "sbom/sbom-cyclonedx.json" ]; then \
+		echo "❌ Current SBOM not found. Run 'make sbom-generate' first."; \
+		exit 1; \
+	fi
+	
+	@if [ ! -f "sbom/sbom-baseline.json" ]; then \
+		echo "ℹ️ No baseline SBOM found. Creating initial baseline."; \
+		cp sbom/sbom-cyclonedx.json sbom/sbom-baseline.json; \
+		echo "✅ Baseline SBOM created: sbom/sbom-baseline.json"; \
+		exit 0; \
+	fi
+	
+	@echo "Analyzing dependency changes..."
+	@jq -r '.components[]? | "\(.name)@\(.version // "unknown")"' sbom/sbom-cyclonedx.json | sort > /tmp/current-deps.txt
+	@jq -r '.components[]? | "\(.name)@\(.version // "unknown")"' sbom/sbom-baseline.json | sort > /tmp/baseline-deps.txt
+	
+	@echo "## SBOM Comparison Report" > reports/sbom-comparison.txt
+	@echo "" >> reports/sbom-comparison.txt
+	@echo "Generated: $$(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> reports/sbom-comparison.txt
+	@echo "" >> reports/sbom-comparison.txt
+	
+	@NEW_DEPS=$$(comm -13 /tmp/baseline-deps.txt /tmp/current-deps.txt | wc -l); \
+	REMOVED_DEPS=$$(comm -23 /tmp/baseline-deps.txt /tmp/current-deps.txt | wc -l); \
+	echo "### Summary" >> reports/sbom-comparison.txt; \
+	echo "" >> reports/sbom-comparison.txt; \
+	echo "- New Dependencies: $$NEW_DEPS" >> reports/sbom-comparison.txt; \
+	echo "- Removed Dependencies: $$REMOVED_DEPS" >> reports/sbom-comparison.txt; \
+	echo "" >> reports/sbom-comparison.txt; \
+	if [ $$NEW_DEPS -gt 0 ]; then \
+		echo "### New Dependencies" >> reports/sbom-comparison.txt; \
+		echo "" >> reports/sbom-comparison.txt; \
+		comm -13 /tmp/baseline-deps.txt /tmp/current-deps.txt >> reports/sbom-comparison.txt; \
+		echo "" >> reports/sbom-comparison.txt; \
+	fi; \
+	if [ $$REMOVED_DEPS -gt 0 ]; then \
+		echo "### Removed Dependencies" >> reports/sbom-comparison.txt; \
+		echo "" >> reports/sbom-comparison.txt; \
+		comm -23 /tmp/baseline-deps.txt /tmp/current-deps.txt >> reports/sbom-comparison.txt; \
+		echo "" >> reports/sbom-comparison.txt; \
+	fi
+	
+	@echo "✅ Comparison report generated: reports/sbom-comparison.txt"
+	@cat reports/sbom-comparison.txt
+.PHONY: sbom-compare
+
+## Run all SBOM operations (generate, scan, compare)
+sbom-all:
+	$(MAKE) sbom-generate
+	$(MAKE) sbom-scan
+	$(MAKE) sbom-compare
+.PHONY: sbom-all

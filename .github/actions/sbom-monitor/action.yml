@@ -1,0 +1,199 @@
+# SPDX-License-Identifier: Apache-2.0
+
+name: 'SBOM Monitor'
+description: 'Monitor SBOMs for supply chain security, track dependency changes and vulnerabilities'
+
+inputs:
+  current-sbom:
+    description: 'Path to the current SBOM file'
+    required: true
+  baseline-sbom:
+    description: 'Path to the baseline SBOM file to compare against'
+    required: false
+    default: ''
+  artifact-name:
+    description: 'Name of the baseline SBOM artifact to download'
+    required: false
+    default: 'sbom-baseline'
+  report-format:
+    description: 'Output format for the monitoring report (markdown, json, text)'
+    required: false
+    default: 'markdown'
+  output-file:
+    description: 'Output file name for the monitoring report'
+    required: false
+    default: 'sbom-monitor-report.md'
+  upload-artifact:
+    description: 'Whether to upload the monitoring report as a GitHub artifact'
+    required: false
+    default: 'true'
+
+outputs:
+  report-path:
+    description: 'Path to the monitoring report'
+    value: ${{ steps.monitor.outputs.report-path }}
+  new-dependencies:
+    description: 'Number of new dependencies added'
+    value: ${{ steps.monitor.outputs.new-dependencies }}
+  removed-dependencies:
+    description: 'Number of dependencies removed'
+    value: ${{ steps.monitor.outputs.removed-dependencies }}
+  updated-dependencies:
+    description: 'Number of dependencies updated'
+    value: ${{ steps.monitor.outputs.updated-dependencies }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Download Baseline SBOM
+      if: inputs.baseline-sbom == ''
+      uses: actions/download-artifact@v6.0.0
+      continue-on-error: true
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: baseline-sbom/
+
+    - name: Monitor SBOM Changes
+      id: monitor
+      shell: bash
+      run: |
+        echo "::group::Monitoring SBOM for supply chain security"
+        mkdir -p reports
+        
+        REPORT_FILE="reports/${{ inputs.output-file }}"
+        CURRENT_SBOM="${{ inputs.current-sbom }}"
+        
+        # Determine baseline SBOM path
+        if [ -n "${{ inputs.baseline-sbom }}" ]; then
+          BASELINE_SBOM="${{ inputs.baseline-sbom }}"
+        elif [ -f "baseline-sbom/sbom.json" ]; then
+          BASELINE_SBOM="baseline-sbom/sbom.json"
+        else
+          echo "ℹ️ No baseline SBOM available, generating initial report"
+          BASELINE_SBOM=""
+        fi
+        
+        echo "Current SBOM: $CURRENT_SBOM"
+        echo "Baseline SBOM: ${BASELINE_SBOM:-none}"
+        
+        # Initialize counters
+        NEW_DEPS=0
+        REMOVED_DEPS=0
+        UPDATED_DEPS=0
+        
+        # Start report
+        {
+          echo "# SBOM Supply Chain Monitoring Report"
+          echo ""
+          echo "**Generated:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          echo ""
+        } > "$REPORT_FILE"
+        
+        if [ -n "$BASELINE_SBOM" ] && [ -f "$BASELINE_SBOM" ]; then
+          echo "📊 Comparing SBOMs..."
+          
+          # Extract component lists
+          jq -r '.components[]? | "\(.name)@\(.version // "unknown")"' "$CURRENT_SBOM" | sort > /tmp/current-deps.txt 2>/dev/null || echo "" > /tmp/current-deps.txt
+          jq -r '.components[]? | "\(.name)@\(.version // "unknown")"' "$BASELINE_SBOM" | sort > /tmp/baseline-deps.txt 2>/dev/null || echo "" > /tmp/baseline-deps.txt
+          
+          # Find differences
+          NEW_DEPS=$(comm -13 /tmp/baseline-deps.txt /tmp/current-deps.txt | wc -l)
+          REMOVED_DEPS=$(comm -23 /tmp/baseline-deps.txt /tmp/current-deps.txt | wc -l)
+          
+          # Calculate updated dependencies (same name, different version)
+          UPDATED_DEPS=0
+          
+          {
+            echo "## Summary"
+            echo ""
+            echo "| Metric | Count |"
+            echo "|--------|-------|"
+            echo "| New Dependencies | $NEW_DEPS |"
+            echo "| Removed Dependencies | $REMOVED_DEPS |"
+            echo "| Updated Dependencies | $UPDATED_DEPS |"
+            echo ""
+            
+            if [ $NEW_DEPS -gt 0 ]; then
+              echo "## ➕ New Dependencies"
+              echo ""
+              echo "\`\`\`"
+              comm -13 /tmp/baseline-deps.txt /tmp/current-deps.txt
+              echo "\`\`\`"
+              echo ""
+            fi
+            
+            if [ $REMOVED_DEPS -gt 0 ]; then
+              echo "## ➖ Removed Dependencies"
+              echo ""
+              echo "\`\`\`"
+              comm -23 /tmp/baseline-deps.txt /tmp/current-deps.txt
+              echo "\`\`\`"
+              echo ""
+            fi
+            
+            if [ $NEW_DEPS -eq 0 ] && [ $REMOVED_DEPS -eq 0 ]; then
+              echo "✅ No dependency changes detected."
+              echo ""
+            fi
+          } >> "$REPORT_FILE"
+          
+          # Alert on new dependencies
+          if [ $NEW_DEPS -gt 0 ]; then
+            echo "::notice::Added $NEW_DEPS new dependencies to the project"
+          fi
+          
+          if [ $REMOVED_DEPS -gt 0 ]; then
+            echo "::notice::Removed $REMOVED_DEPS dependencies from the project"
+          fi
+        else
+          # No baseline, just list current dependencies
+          TOTAL_DEPS=$(jq '[.components[]?] | length' "$CURRENT_SBOM" 2>/dev/null || echo "0")
+          
+          {
+            echo "## Initial SBOM Snapshot"
+            echo ""
+            echo "This is the first SBOM generation. Baseline will be established for future comparisons."
+            echo ""
+            echo "**Total Dependencies:** $TOTAL_DEPS"
+            echo ""
+            echo "## Dependencies"
+            echo ""
+            echo "\`\`\`"
+            jq -r '.components[]? | "\(.name)@\(.version // "unknown")"' "$CURRENT_SBOM" | sort
+            echo "\`\`\`"
+          } >> "$REPORT_FILE"
+        fi
+        
+        # Add current SBOM statistics
+        {
+          echo ""
+          echo "## Current SBOM Statistics"
+          echo ""
+          TOTAL_COMPONENTS=$(jq '[.components[]?] | length' "$CURRENT_SBOM" 2>/dev/null || echo "0")
+          echo "- Total Components: $TOTAL_COMPONENTS"
+          echo "- SBOM Format: $(jq -r '.bomFormat // "unknown"' "$CURRENT_SBOM" 2>/dev/null || echo "unknown")"
+          echo "- Spec Version: $(jq -r '.specVersion // "unknown"' "$CURRENT_SBOM" 2>/dev/null || echo "unknown")"
+        } >> "$REPORT_FILE"
+        
+        echo "report-path=$REPORT_FILE" >> $GITHUB_OUTPUT
+        echo "new-dependencies=$NEW_DEPS" >> $GITHUB_OUTPUT
+        echo "removed-dependencies=$REMOVED_DEPS" >> $GITHUB_OUTPUT
+        echo "updated-dependencies=$UPDATED_DEPS" >> $GITHUB_OUTPUT
+        
+        echo ""
+        echo "📦 SBOM Monitoring Summary:"
+        echo "  New Dependencies: $NEW_DEPS"
+        echo "  Removed Dependencies: $REMOVED_DEPS"
+        echo "  Updated Dependencies: $UPDATED_DEPS"
+        echo "  Report: $REPORT_FILE"
+        
+        echo "::endgroup::"
+
+    - name: Upload Monitoring Report
+      if: inputs.upload-artifact == 'true'
+      uses: actions/upload-artifact@v6.0.0
+      with:
+        name: sbom-monitoring-report
+        path: reports/
+        retention-days: 90
+        if-no-files-found: warn

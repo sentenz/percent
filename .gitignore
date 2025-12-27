@@ -4,3 +4,10 @@ build/
 logs/
 *.log
 .env
+
+# SBOM and vulnerability reports
+sbom/
+reports/
+*.sbom.json
+*sbom*.json
+vulnerability-report.*
