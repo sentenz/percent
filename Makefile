@@ -139,3 +139,99 @@ policy-lint-regal:
 	docker pull "$(POLICY_IMAGE_REGAL)"
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(POLICY_IMAGE_REGAL)" regal lint "$(filter-out $@,$(MAKECMDGOALS))" --format json > logs/analysis/regal.json 2>&1
 .PHONY: policy-lint-regal
+
+# ── SBOM Management ──────────────────────────────────────────────────────────────────────────────
+
+TRIVY_IMAGE ?= aquasec/trivy:0.58.2
+
+## Generate Software Bill of Materials (SBOM) in CycloneDX format
+sbom-generate:
+	@echo "Generating SBOM..."
+	@mkdir -p sbom
+
+	docker run --rm -v "${PWD}:/workspace" -w /workspace --entrypoint sh "$(TRIVY_IMAGE)" -c '\
+		trivy fs --scanners license --format cyclonedx --output sbom/sbom-cyclonedx.json . && \
+		trivy fs --scanners license --format spdx-json --output sbom/sbom-spdx.json . \
+	'
+
+	@echo "✅ SBOM generated:"
+	@echo "  - sbom/sbom-cyclonedx.json (CycloneDX format)"
+	@echo "  - sbom/sbom-spdx.json (SPDX format)"
+.PHONY: sbom-generate
+
+## Scan SBOM for known vulnerabilities using Software Composition Analysis (SCA)
+sbom-scan:
+	@echo "Scanning SBOM for vulnerabilities..."
+	@mkdir -p reports
+
+	@if [ ! -f "sbom/sbom-cyclonedx.json" ]; then \
+		echo "❌ SBOM not found. Run 'make sbom-generate' first."; \
+		exit 1; \
+	fi
+
+	docker run --rm -v "${PWD}:/workspace" -w /workspace --entrypoint sh "$(TRIVY_IMAGE)" -c '\
+		trivy sbom --format table --output reports/vulnerability-report.txt sbom/sbom-cyclonedx.json && \
+		trivy sbom --format json --output reports/vulnerability-report.json sbom/sbom-cyclonedx.json \
+	'
+
+	@echo "✅ Vulnerability report generated:"
+	@echo "  - reports/vulnerability-report.txt (human-readable)"
+	@echo "  - reports/vulnerability-report.json (machine-readable)"
+.PHONY: sbom-scan
+
+## Compare current SBOM with baseline to detect dependency changes
+sbom-compare:
+	@echo "Comparing SBOM with baseline..."
+	@mkdir -p reports
+	
+	@if [ ! -f "sbom/sbom-cyclonedx.json" ]; then \
+		echo "❌ Current SBOM not found. Run 'make sbom-generate' first."; \
+		exit 1; \
+	fi
+	
+	@if [ ! -f "sbom/sbom-baseline.json" ]; then \
+		echo "ℹ️ No baseline SBOM found. Creating initial baseline."; \
+		cp sbom/sbom-cyclonedx.json sbom/sbom-baseline.json; \
+		echo "✅ Baseline SBOM created: sbom/sbom-baseline.json"; \
+		exit 0; \
+	fi
+	
+	@echo "Analyzing dependency changes..."
+	@jq -r '.components[]? | "\(.name)@\(.version // "unknown")"' sbom/sbom-cyclonedx.json | sort > /tmp/current-deps.txt
+	@jq -r '.components[]? | "\(.name)@\(.version // "unknown")"' sbom/sbom-baseline.json | sort > /tmp/baseline-deps.txt
+	
+	@echo "## SBOM Comparison Report" > reports/sbom-comparison.txt
+	@echo "" >> reports/sbom-comparison.txt
+	@echo "Generated: $$(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> reports/sbom-comparison.txt
+	@echo "" >> reports/sbom-comparison.txt
+	
+	@NEW_DEPS=$$(comm -13 /tmp/baseline-deps.txt /tmp/current-deps.txt | wc -l); \
+	REMOVED_DEPS=$$(comm -23 /tmp/baseline-deps.txt /tmp/current-deps.txt | wc -l); \
+	echo "### Summary" >> reports/sbom-comparison.txt; \
+	echo "" >> reports/sbom-comparison.txt; \
+	echo "- New Dependencies: $$NEW_DEPS" >> reports/sbom-comparison.txt; \
+	echo "- Removed Dependencies: $$REMOVED_DEPS" >> reports/sbom-comparison.txt; \
+	echo "" >> reports/sbom-comparison.txt; \
+	if [ $$NEW_DEPS -gt 0 ]; then \
+		echo "### New Dependencies" >> reports/sbom-comparison.txt; \
+		echo "" >> reports/sbom-comparison.txt; \
+		comm -13 /tmp/baseline-deps.txt /tmp/current-deps.txt >> reports/sbom-comparison.txt; \
+		echo "" >> reports/sbom-comparison.txt; \
+	fi; \
+	if [ $$REMOVED_DEPS -gt 0 ]; then \
+		echo "### Removed Dependencies" >> reports/sbom-comparison.txt; \
+		echo "" >> reports/sbom-comparison.txt; \
+		comm -23 /tmp/baseline-deps.txt /tmp/current-deps.txt >> reports/sbom-comparison.txt; \
+		echo "" >> reports/sbom-comparison.txt; \
+	fi
+	
+	@echo "✅ Comparison report generated: reports/sbom-comparison.txt"
+	@cat reports/sbom-comparison.txt
+.PHONY: sbom-compare
+
+## Run all SBOM operations (generate, scan, compare)
+sbom-all:
+	$(MAKE) sbom-generate
+	$(MAKE) sbom-scan
+	$(MAKE) sbom-compare
+.PHONY: sbom-all

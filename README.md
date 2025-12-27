@@ -376,6 +376,82 @@ Contribution guidelines and project management tools.
       make policy-analysis-conftest <filepath>
       ```
 
+### 2.9. Supply Chain Security
+
+#### 2.9.1. SBOM (Software Bill of Materials)
+
+SBOM provides comprehensive dependency management and supply chain security by generating machine-readable inventories of software components and their dependencies.
+
+1. Insights and Details
+
+    - [Trivy Action](https://github.com/aquasecurity/trivy-action)
+      > GitHub Action for generating SBOM and scanning for vulnerabilities using [Trivy](https://github.com/aquasecurity/trivy) in multiple formats (CycloneDX, SPDX, SARIF).
+
+    - [.github/actions/sbom-monitor/](.github/actions/sbom-monitor/)
+      > Composite action for monitoring SBOM changes and tracking dependency updates for supply chain security.
+
+    - [.github/workflows/sbom-generate.yml](.github/workflows/sbom-generate.yml)
+      > Workflow for generating SBOM in CycloneDX and SPDX formats using Trivy Action.
+
+    - [.github/workflows/sbom-scan.yml](.github/workflows/sbom-scan.yml)
+      > Workflow for scanning SBOM for vulnerabilities and monitoring dependency changes using Trivy Action.
+
+2. Usage and Instructions
+
+    - CI/CD
+
+      ```yaml
+      # Generate SBOM with Trivy
+      - uses: aquasecurity/trivy-action@0.30.0
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'cyclonedx'
+          output: 'sbom.json'
+      ```
+
+      ```yaml
+      # Scan SBOM for vulnerabilities
+      - uses: aquasecurity/trivy-action@0.30.0
+        with:
+          scan-type: 'sbom'
+          scan-ref: 'sbom.json'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+      ```
+
+      ```yaml
+      # Monitor SBOM changes
+      - uses: ./.github/actions/sbom-monitor
+        with:
+          current-sbom: 'sbom.json'
+      ```
+
+    - Tasks
+
+      > [!NOTE]
+      > Local SBOM tasks require [Docker](https://www.docker.com/) to run Trivy in a container.
+
+      ```bash
+      # Generate SBOM
+      make sbom-generate
+      ```
+
+      ```bash
+      # Scan SBOM for vulnerabilities
+      make sbom-scan
+      ```
+
+      ```bash
+      # Compare SBOM with baseline
+      make sbom-compare
+      ```
+
+      ```bash
+      # Run all SBOM operations
+      make sbom-all
+      ```
+
 ## 3. References
 
 - GitHub [Template DX](https://github.com/sentenz/template-dx) repository.

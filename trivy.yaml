@@ -45,7 +45,7 @@ list-all-pkgs: false
 
 # Same as '--ignorefile'
 # Default is '.trivyignore'
-ignorefile: .trivyignore
+# ignorefile: .trivyignore
 
 # Same as '--ignore-policy'
 # Default is empty
@@ -93,12 +93,13 @@ scan:
   # Default is false
   offline-scan: false
 
-  # Same as '--security-checks'
+  # Same as '--scanners'
   # Default depends on subcommand
-  security-checks:
+  # Note: This is overridden by CLI flags in Makefile targets
+  # - SBOM generation uses '--scanners license' (no vuln DB required)
+  # - SBOM scanning uses default 'vuln' scanner
+  scanners:
     - vuln
-    - config
-    - secret
 
 # Cache Options
 
@@ -156,12 +157,6 @@ image:
 # Available with vulnerability scanning
 
 vulnerability:
-  # Same as '--vuln-type'
-  # Default is 'os,library'
-  type:
-    - os
-    - library
-
   # Same as '--ignore-unfixed'
   # Default is false
   ignore-unfixed: false

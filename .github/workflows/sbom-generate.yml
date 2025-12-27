@@ -1,0 +1,76 @@
+# SPDX-License-Identifier: Apache-2.0
+
+name: SBOM Generate
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  release:
+    types:
+      - published
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+  security-events: write
+
+jobs:
+  generate:
+    name: Generate SBOM
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.1
+
+      - name: Set up Go
+        uses: actions/setup-go@v6.1.0
+        with:
+          go-version-file: 'go.mod'
+
+      - name: Download Go dependencies
+        run: go mod download
+
+      - name: Generate SBOM (CycloneDX)
+        uses: aquasecurity/trivy-action@0.30.0
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'cyclonedx'
+          output: 'sbom-cyclonedx.json'
+
+      - name: Upload SBOM (CycloneDX)
+        uses: actions/upload-artifact@v6.0.0
+        with:
+          name: sbom-cyclonedx
+          path: sbom-cyclonedx.json
+          retention-days: 90
+          if-no-files-found: error
+
+      - name: Generate SBOM (SPDX)
+        uses: aquasecurity/trivy-action@0.30.0
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'spdx-json'
+          output: 'sbom-spdx.json'
+
+      - name: Upload SBOM (SPDX)
+        uses: actions/upload-artifact@v6.0.0
+        with:
+          name: sbom-spdx
+          path: sbom-spdx.json
+          retention-days: 90
+          if-no-files-found: error
+
+      - name: Save baseline SBOM for monitoring
+        uses: actions/upload-artifact@v6.0.0
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        with:
+          name: sbom-baseline
+          path: sbom-cyclonedx.json
+          retention-days: 90
