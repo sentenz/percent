@@ -44,7 +44,8 @@ runs:
       shell: bash
       run: |
         echo "::group::Installing Syft ${{ inputs.syft-version }}"
-        curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin ${{ inputs.syft-version }}
+        INSTALL_URL="https://raw.githubusercontent.com/anchore/syft/main/install.sh"
+        curl -sSfL "$INSTALL_URL" | sh -s -- -b /usr/local/bin ${{ inputs.syft-version }}
         syft version
         echo "::endgroup::"
 
@@ -54,25 +55,27 @@ runs:
       run: |
         echo "::group::Generating SBOM"
         mkdir -p sbom
-        
+
         SBOM_FILE="sbom/${{ inputs.output-file }}"
         echo "Generating SBOM in ${{ inputs.format }} format..."
-        
+
         syft scan "${{ inputs.source }}" \
           --output "${{ inputs.format }}=$SBOM_FILE" \
           --quiet
-        
+
         if [ -f "$SBOM_FILE" ]; then
           echo "✅ SBOM generated successfully: $SBOM_FILE"
           echo "sbom-path=$SBOM_FILE" >> $GITHUB_OUTPUT
           echo "sbom-format=${{ inputs.format }}" >> $GITHUB_OUTPUT
-          
+
           # Display SBOM summary
           echo ""
           echo "📦 SBOM Summary:"
           echo "  Format: ${{ inputs.format }}"
           echo "  Size: $(du -h "$SBOM_FILE" | cut -f1)"
-          echo "  Components: $(syft scan "${{ inputs.source }}" -o json -q | jq '.artifacts | length' 2>/dev/null || echo 'N/A')"
+          COMPONENT_COUNT=$(syft scan "${{ inputs.source }}" -o json -q | \
+            jq '.artifacts | length' 2>/dev/null || echo 'N/A')
+          echo "  Components: $COMPONENT_COUNT"
         else
           echo "❌ Failed to generate SBOM"
           exit 1

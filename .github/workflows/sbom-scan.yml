@@ -60,11 +60,14 @@ jobs:
         run: |
           # Install Grype if not already installed
           if ! command -v grype &> /dev/null; then
-            curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin v0.104.3
+            INSTALL_URL="https://raw.githubusercontent.com/anchore/grype/main/install.sh"
+            curl -sSfL "$INSTALL_URL" | sh -s -- -b /usr/local/bin v0.104.3
           fi
-          
+
           mkdir -p reports
-          grype sbom:sbom/sbom.json --output sarif --file reports/vulnerability-report.sarif || true
+          grype sbom:sbom/sbom.json \
+            --output sarif \
+            --file reports/vulnerability-report.sarif || true
 
       - name: Upload SARIF Report
         if: always()

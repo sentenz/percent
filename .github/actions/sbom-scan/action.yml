@@ -49,7 +49,8 @@ runs:
       shell: bash
       run: |
         echo "::group::Installing Grype ${{ inputs.grype-version }}"
-        curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin ${{ inputs.grype-version }}
+        INSTALL_URL="https://raw.githubusercontent.com/anchore/grype/main/install.sh"
+        curl -sSfL "$INSTALL_URL" | sh -s -- -b /usr/local/bin ${{ inputs.grype-version }}
         grype version
         echo "::endgroup::"
 
@@ -59,18 +60,18 @@ runs:
       run: |
         echo "::group::Scanning SBOM for vulnerabilities"
         mkdir -p reports
-        
+
         REPORT_FILE="reports/${{ inputs.output-file }}"
-        
+
         if [ ! -f "${{ inputs.sbom-file }}" ]; then
           echo "❌ SBOM file not found: ${{ inputs.sbom-file }}"
           exit 1
         fi
-        
+
         echo "Scanning SBOM for vulnerabilities..."
         echo "SBOM file: ${{ inputs.sbom-file }}"
         echo "Fail on severity: ${{ inputs.fail-on-severity }}"
-        
+
         # Run Grype scan
         set +e
         grype sbom:"${{ inputs.sbom-file }}" \
@@ -79,17 +80,24 @@ runs:
           --fail-on "${{ inputs.fail-on-severity }}"
         SCAN_EXIT_CODE=$?
         set -e
-        
+
         # Generate JSON report for parsing
-        grype sbom:"${{ inputs.sbom-file }}" --output json --file "reports/vulnerability-report.json" || true
-        
+        grype sbom:"${{ inputs.sbom-file }}" \
+          --output json \
+          --file "reports/vulnerability-report.json" || true
+
         # Parse vulnerability counts
-        if [ -f "reports/vulnerability-report.json" ]; then
-          VULN_COUNT=$(jq '[.matches[]] | length' reports/vulnerability-report.json 2>/dev/null || echo "0")
-          CRITICAL_COUNT=$(jq '[.matches[] | select(.vulnerability.severity == "Critical")] | length' reports/vulnerability-report.json 2>/dev/null || echo "0")
-          HIGH_COUNT=$(jq '[.matches[] | select(.vulnerability.severity == "High")] | length' reports/vulnerability-report.json 2>/dev/null || echo "0")
-          MEDIUM_COUNT=$(jq '[.matches[] | select(.vulnerability.severity == "Medium")] | length' reports/vulnerability-report.json 2>/dev/null || echo "0")
-          LOW_COUNT=$(jq '[.matches[] | select(.vulnerability.severity == "Low")] | length' reports/vulnerability-report.json 2>/dev/null || echo "0")
+        JSON_REPORT="reports/vulnerability-report.json"
+        if [ -f "$JSON_REPORT" ]; then
+          VULN_COUNT=$(jq '[.matches[]] | length' "$JSON_REPORT" 2>/dev/null || echo "0")
+          CRITICAL_COUNT=$(jq '[.matches[] | select(.vulnerability.severity == "Critical")] | \
+            length' "$JSON_REPORT" 2>/dev/null || echo "0")
+          HIGH_COUNT=$(jq '[.matches[] | select(.vulnerability.severity == "High")] | \
+            length' "$JSON_REPORT" 2>/dev/null || echo "0")
+          MEDIUM_COUNT=$(jq '[.matches[] | select(.vulnerability.severity == "Medium")] | \
+            length' "$JSON_REPORT" 2>/dev/null || echo "0")
+          LOW_COUNT=$(jq '[.matches[] | select(.vulnerability.severity == "Low")] | \
+            length' "$JSON_REPORT" 2>/dev/null || echo "0")
         else
           VULN_COUNT=0
           CRITICAL_COUNT=0
@@ -97,12 +105,12 @@ runs:
           MEDIUM_COUNT=0
           LOW_COUNT=0
         fi
-        
+
         echo "report-path=$REPORT_FILE" >> $GITHUB_OUTPUT
         echo "vulnerabilities-found=$VULN_COUNT" >> $GITHUB_OUTPUT
         echo "critical-count=$CRITICAL_COUNT" >> $GITHUB_OUTPUT
         echo "high-count=$HIGH_COUNT" >> $GITHUB_OUTPUT
-        
+
         echo ""
         echo "🔍 Vulnerability Scan Summary:"
         echo "  Total Vulnerabilities: $VULN_COUNT"
@@ -110,13 +118,13 @@ runs:
         echo "  High: $HIGH_COUNT"
         echo "  Medium: $MEDIUM_COUNT"
         echo "  Low: $LOW_COUNT"
-        
+
         if [ $CRITICAL_COUNT -gt 0 ] || [ $HIGH_COUNT -gt 0 ]; then
           echo "::warning::Found $CRITICAL_COUNT critical and $HIGH_COUNT high severity vulnerabilities"
         fi
-        
+
         echo "::endgroup::"
-        
+
         # Exit with the original Grype exit code
         exit $SCAN_EXIT_CODE
 
