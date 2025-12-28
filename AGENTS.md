@@ -262,20 +262,6 @@ Instructions for AI coding agents on automating fuzz test creation using consist
   make go-test-fuzz
   ```
 
-- Run Specific Fuzz Test
-  > Execute a specific fuzz test with custom duration.
-
-  ```bash
-  go test -fuzz=FuzzPercent -fuzztime=30s ./pkg/percent
-  ```
-
-- Run Fuzz Tests Until Failure
-  > Run fuzz tests continuously until a failure is found.
-
-  ```bash
-  go test -fuzz=FuzzPercent ./pkg/percent
-  ```
-
 - View Fuzz Corpus
   > Inspect the seed corpus and generated inputs.
 
@@ -317,77 +303,79 @@ Instructions for AI coding agents on automating fuzz test creation using consist
 
 Use this template for new fuzz test functions. Replace placeholders with actual values and adjust as needed for the use case.
 
-For **multi-parameter functions**, use a struct array:
+- Multi-Parameter Functions
+  > For functions with multiple parameters, use a struct array to define test cases.
 
-```go
-func Fuzz<FunctionName>(f *testing.F) {
-	// Seed corpus with edge cases using testcases array
-	testcases := []struct {
-		param1 <type>
-		param2 <type>
-		// Add more parameters as needed
-	}{
-		{<value1>, <value2>}, // description of test case
-		{<value1>, <value2>}, // description of test case
-		// Add more test cases
-	}
-	for _, tc := range testcases {
-		f.Add(tc.param1, tc.param2) // Use f.Add to provide a seed corpus
-	}
+  ```go
+  func Fuzz<FunctionName>(f *testing.F) {
+  // Seed corpus with edge cases using testcases array
+  testcases := []struct {
+    param1 <type>
+    param2 <type>
+    // Add more parameters as needed
+  }{
+    {<value1>, <value2>}, // description of test case
+    {<value1>, <value2>}, // description of test case
+    // Add more test cases
+  }
+  for _, tc := range testcases {
+    f.Add(tc.param1, tc.param2) // Use f.Add to provide a seed corpus
+  }
 
-	f.Fuzz(func(t *testing.T, param1 <type>, param2 <type>) {
-		// Arrange
-		// Optional: skip invalid inputs or prepare test conditions
-		// Example: if input < 0 { t.Skip("negative inputs not interesting") }
+  f.Fuzz(func(t *testing.T, param1 <type>, param2 <type>) {
+    // Arrange
+    // Optional: skip invalid inputs or prepare test conditions
+    // Example: if input < 0 { t.Skip("negative inputs not interesting") }
 
-		// Act
-		got, err := <Function>(param1, param2)
+    // Act
+    got, err := <Function>(param1, param2)
 
-		// Assert
-		// Verify properties that should always hold true
-		// Example 1: Function should never panic
-		// Example 2: If no error, result should meet certain properties
-		// Example 3: If error, result should be in expected error state
+    // Assert
+    // Verify properties that should always hold true
+    // Example 1: Function should never panic
+    // Example 2: If no error, result should meet certain properties
+    // Example 3: If error, result should be in expected error state
 
-		if err != nil {
-			// Verify error cases
-			// Example: if got != 0 { t.Errorf("expected zero result on error, got %v", got) }
-		} else {
-			// Verify success cases and invariants
-			// Example: if got < 0 { t.Errorf("result should be non-negative, got %v", got) }
-		}
-	})
-}
-```
+    if err != nil {
+    // Verify error cases
+    // Example: if got != 0 { t.Errorf("expected zero result on error, got %v", got) }
+    } else {
+    // Verify success cases and invariants
+    // Example: if got < 0 { t.Errorf("result should be non-negative, got %v", got) }
+    }
+  })
+  }
+  ```
 
-For **single-parameter functions**, use a slice array:
+- Single-Parameter Functions
+  > For functions with a single parameter, use a slice array to define test cases.
 
-```go
-func Fuzz<FunctionName>(f *testing.F) {
-	// Seed corpus with edge cases using testcases array
-	testcases := []<type>{
-		<value1>, // description
-		<value2>, // description
-		// Add more test cases
-	}
-	for _, tc := range testcases {
-		f.Add(tc) // Use f.Add to provide a seed corpus
-	}
+  ```go
+  func Fuzz<FunctionName>(f *testing.F) {
+  // Seed corpus with edge cases using testcases array
+  testcases := []<type>{
+    <value1>, // description
+    <value2>, // description
+    // Add more test cases
+  }
+  for _, tc := range testcases {
+    f.Add(tc) // Use f.Add to provide a seed corpus
+  }
 
-	f.Fuzz(func(t *testing.T, param <type>) {
-		// Arrange
-		// Optional: skip invalid inputs or prepare test conditions
+  f.Fuzz(func(t *testing.T, param <type>) {
+    // Arrange
+    // Optional: skip invalid inputs or prepare test conditions
 
-		// Act
-		got, err := <Function>(param)
+    // Act
+    got, err := <Function>(param)
 
-		// Assert
-		// Verify properties and invariants
-		if err != nil {
-			// Verify error cases
-		} else {
-			// Verify success cases
-		}
-	})
-}
-```
+    // Assert
+    // Verify properties and invariants
+    if err != nil {
+    // Verify error cases
+    } else {
+    // Verify success cases
+    }
+  })
+  }
+  ```
