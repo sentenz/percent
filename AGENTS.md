@@ -194,6 +194,9 @@ Instructions for AI coding agents on automating fuzz test creation using consist
 
 1. Features and Benefits
 
+    - Coverage-Guided Exploration
+      > Go's native fuzzing engine uses code coverage instrumentation to automatically guide input generation toward unexplored code paths, maximizing bug discovery without manual intervention.
+
     - Automated Input Generation
       > Fuzz testing automatically generates random inputs to discover edge cases and unexpected behaviors that manual testing might miss.
 
@@ -207,6 +210,9 @@ Instructions for AI coding agents on automating fuzz test creation using consist
       > Once a crash or bug is found, the input is saved in the corpus to prevent regression in future test runs.
 
 ### 2.1. Fuzz Testing Patterns
+
+- Coverage-Guided Fuzzing
+  > Coverage-Guided Fuzzing is the primary fuzzing technique used by Go's native fuzzing engine. It automatically instruments code to track coverage and guides input generation toward unexplored code paths, maximizing code exploration and bug discovery.
 
 - Corpus-Driven Fuzzing
   > Corpus-Driven Fuzzing is a software testing technique that uses a collection of seed inputs (corpus) as the starting point for generating new test inputs through mutation.
@@ -280,7 +286,10 @@ Instructions for AI coding agents on automating fuzz test creation using consist
 ### 2.4. Fuzz Test Style
 
 - Test Framework
-  > Use the standard Go `testing` package with `testing.F` for fuzz tests.
+  > Use the standard Go `testing` package with `testing.F` for fuzz tests. Go's fuzzing engine automatically uses coverage-guided fuzzing to explore code paths.
+
+- Coverage-Guided Behavior
+  > The fuzzing engine tracks code coverage during execution and prioritizes inputs that explore new code paths. No manual configuration is required - coverage guidance is automatic.
 
 - Include Imports
   > Include `testing` and any packages needed for the function under test.
@@ -289,7 +298,7 @@ Instructions for AI coding agents on automating fuzz test creation using consist
   > Name fuzz functions with the `Fuzz` prefix followed by the function name (e.g., `FuzzPercent` for testing `Percent()`).
 
 - Seed Corpus
-  > Use `f.Add()` to provide seed inputs that cover important edge cases and known valid/invalid inputs.
+  > Use `f.Add()` to provide seed inputs that cover important edge cases and known valid/invalid inputs. The fuzzer will mutate these seeds while maximizing coverage.
 
 - Fuzz Target
   > The fuzz target function receives `*testing.T` and randomly generated inputs. It should:
