@@ -56,7 +56,7 @@ updates:
           - major
 
   - package-ecosystem: docker
-    directory: /.devcontainer/go
+    directory: /
     schedule:
       interval: weekly
       day: monday
