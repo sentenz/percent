@@ -317,85 +317,77 @@ Instructions for AI coding agents on automating fuzz test creation using consist
 
 Use this template for new fuzz test functions. Replace placeholders with actual values and adjust as needed for the use case.
 
+For **multi-parameter functions**, use a struct array:
+
 ```go
 func Fuzz<FunctionName>(f *testing.F) {
- // Seed corpus with edge cases and representative inputs
- f.Add(/* seed input 1 */)
- f.Add(/* seed input 2 */)
- f.Add(/* seed input 3 */)
- // Add more seeds as needed for edge cases
+	// Seed corpus with edge cases using testcases array
+	testcases := []struct {
+		param1 <type>
+		param2 <type>
+		// Add more parameters as needed
+	}{
+		{<value1>, <value2>}, // description of test case
+		{<value1>, <value2>}, // description of test case
+		// Add more test cases
+	}
+	for _, tc := range testcases {
+		f.Add(tc.param1, tc.param2) // Use f.Add to provide a seed corpus
+	}
 
- f.Fuzz(func(t *testing.T, /* fuzzed parameters */) {
-  // Arrange
-  // Optional: skip invalid inputs or prepare test conditions
-  // Example: if input < 0 { t.Skip("negative inputs not interesting") }
+	f.Fuzz(func(t *testing.T, param1 <type>, param2 <type>) {
+		// Arrange
+		// Optional: skip invalid inputs or prepare test conditions
+		// Example: if input < 0 { t.Skip("negative inputs not interesting") }
 
-  // Act
-  got, err := <Function>(/* fuzzed parameters */)
+		// Act
+		got, err := <Function>(param1, param2)
 
-  // Assert
-  // Verify properties that should always hold true
-  // Example 1: Function should never panic
-  // Example 2: If no error, result should meet certain properties
-  // Example 3: If error, result should be in expected error state
+		// Assert
+		// Verify properties that should always hold true
+		// Example 1: Function should never panic
+		// Example 2: If no error, result should meet certain properties
+		// Example 3: If error, result should be in expected error state
 
-  if err != nil {
-   // Verify error cases
-   // Example: if got != 0 { t.Errorf("expected zero result on error, got %v", got) }
-  } else {
-   // Verify success cases and invariants
-   // Example: if got < 0 { t.Errorf("result should be non-negative, got %v", got) }
-  }
- })
+		if err != nil {
+			// Verify error cases
+			// Example: if got != 0 { t.Errorf("expected zero result on error, got %v", got) }
+		} else {
+			// Verify success cases and invariants
+			// Example: if got < 0 { t.Errorf("result should be non-negative, got %v", got) }
+		}
+	})
 }
 ```
 
-#### 2.5.1. Fuzz Test Example
-
-Example fuzz test for the `Percent` function demonstrating the template in practice:
+For **single-parameter functions**, use a slice array:
 
 ```go
-func FuzzPercent(f *testing.F) {
- // Seed corpus with edge cases
- f.Add(0.0, 100.0)      // zero percent
- f.Add(100.0, 100.0)    // hundred percent
- f.Add(50.0, 200.0)     // typical case
- f.Add(25.0, -100.0)    // negative value
- f.Add(-10.0, 100.0)    // negative percent (should error)
- f.Add(150.0, 100.0)    // over 100 percent (should error)
+func Fuzz<FunctionName>(f *testing.F) {
+	// Seed corpus with edge cases using testcases array
+	testcases := []<type>{
+		<value1>, // description
+		<value2>, // description
+		// Add more test cases
+	}
+	for _, tc := range testcases {
+		f.Add(tc) // Use f.Add to provide a seed corpus
+	}
 
- f.Fuzz(func(t *testing.T, pct float64, value float64) {
-  // Arrange
-  // No special arrangement needed
+	f.Fuzz(func(t *testing.T, param <type>) {
+		// Arrange
+		// Optional: skip invalid inputs or prepare test conditions
 
-  // Act
-  got, err := percent.Percent(pct, value)
+		// Act
+		got, err := <Function>(param)
 
-  // Assert
-  // Property 1: Function should never panic
-  // Property 2: If percent is out of range [0, 100], should return error
-  // Property 3: If no error, result should be mathematically correct
-
-  if pct < 0 || pct > 100 {
-   // Invalid range - should return error
-   if err == nil {
-    t.Errorf("Percent(%v, %v) should return error for out of range percent", pct, value)
-   }
-   // Result should be zero on error
-   if got != 0 {
-    t.Errorf("Percent(%v, %v) = %v, want 0 on error", pct, value, got)
-   }
-  } else {
-   // Valid range - should not return error
-   if err != nil {
-    t.Errorf("Percent(%v, %v) returned unexpected error: %v", pct, value, err)
-   }
-   // Verify mathematical correctness (within floating point precision)
-   expected := value * (pct / 100.0)
-   if math.Abs(got-expected) > 1e-10 {
-    t.Errorf("Percent(%v, %v) = %v, want %v", pct, value, got, expected)
-   }
-  }
- })
+		// Assert
+		// Verify properties and invariants
+		if err != nil {
+			// Verify error cases
+		} else {
+			// Verify success cases
+		}
+	})
 }
 ```
