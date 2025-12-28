@@ -182,6 +182,20 @@ sast-trivy-image:
 	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" image --output logs/sast/trivy-image.json "$(filter-out $@,$(MAKECMDGOALS))" 2>&1
 .PHONY: sast-trivy-image
 
+# Usage: make sast-trivy-image-license <image_name>
+#
+## Scan a container image for license compliance using Trivy
+sast-trivy-image-license:
+	@mkdir -p logs/sast
+
+	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
+		echo "usage: make sast-trivy-image-license <image_name>"; \
+		exit 1; \
+	fi
+
+	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" image --scanners license --format table --output logs/sast/trivy-image-license.txt "$(filter-out $@,$(MAKECMDGOALS))" 2>&1
+.PHONY: sast-trivy-image-license
+
 # Usage: make sast-trivy-repository <repo_url>
 #
 ## Scan a remote repository for vulnerabilities using Trivy
@@ -224,31 +238,6 @@ sast-trivy-sbom:
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" sbom --output logs/sast/trivy-sbom.json "$(filter-out $@,$(MAKECMDGOALS))" 2>&1
 .PHONY: sast-trivy-sbom
 
-# Usage: make sast-trivy-vm <vm_image_path>
-#
-## [EXPERIMENTAL] Scan a virtual machine image using Trivy
-sast-trivy-vm:
-	@mkdir -p logs/sast
-
-	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
-		echo "usage: make sast-trivy-vm <vm_image_path>"; \
-		exit 1; \
-	fi
-
-	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" vm --output logs/sast/trivy-vm.json "$(filter-out $@,$(MAKECMDGOALS))" 2>&1
-.PHONY: sast-trivy-vm
-
-# Usage: make sast-trivy-kubernetes [target]
-#
-## [EXPERIMENTAL] Scan kubernetes cluster using Trivy (default: cluster)
-sast-trivy-kubernetes:
-	@mkdir -p logs/sast
-
-	@echo "Note: This requires KUBECONFIG to be mounted or available to the container. Assuming ~/.kube/config is mounted to /root/.kube/config"
-
-	docker run --rm -v "${HOME}/.kube/config:/root/.kube/config" -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" kubernetes --output logs/sast/trivy-kubernetes.json $(if $(filter-out $@,$(MAKECMDGOALS)),$(filter-out $@,$(MAKECMDGOALS)),cluster) 2>&1
-.PHONY: sast-trivy-kubernetes
-
 # Usage: make sast-trivy-sbom-cyclonedx-image <image_name>
 #
 ## Generate SBOM in CycloneDX format for a container image using Trivy
@@ -276,6 +265,45 @@ sast-trivy-sbom-cyclonedx-fs:
 
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" filesystem --format cyclonedx --output logs/sbom/sbom-fs.cdx.json "$(filter-out $@,$(MAKECMDGOALS))" 2>&1
 .PHONY: sast-trivy-sbom-cyclonedx-fs
+
+# Usage: make sast-trivy-sbom-license <sbom_path>
+#
+## Scan SBOM for license compliance using Trivy
+sast-trivy-sbom-license:
+	@mkdir -p logs/sast
+
+	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
+		echo "usage: make sast-trivy-sbom-license <sbom_path>"; \
+		exit 1; \
+	fi
+
+	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" sbom --scanners license --format table --output logs/sast/trivy-sbom-license.txt "$(filter-out $@,$(MAKECMDGOALS))" 2>&1
+.PHONY: sast-trivy-sbom-license
+
+# Usage: make sast-trivy-vm <vm_image_path>
+#
+## [EXPERIMENTAL] Scan a virtual machine image using Trivy
+sast-trivy-vm:
+	@mkdir -p logs/sast
+
+	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
+		echo "usage: make sast-trivy-vm <vm_image_path>"; \
+		exit 1; \
+	fi
+
+	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" vm --output logs/sast/trivy-vm.json "$(filter-out $@,$(MAKECMDGOALS))" 2>&1
+.PHONY: sast-trivy-vm
+
+# Usage: make sast-trivy-kubernetes [target]
+#
+## [EXPERIMENTAL] Scan kubernetes cluster using Trivy (default: cluster)
+sast-trivy-kubernetes:
+	@mkdir -p logs/sast
+
+	@echo "Note: This requires KUBECONFIG to be mounted or available to the container. Assuming ~/.kube/config is mounted to /root/.kube/config"
+
+	docker run --rm -v "${HOME}/.kube/config:/root/.kube/config" -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" kubernetes --output logs/sast/trivy-kubernetes.json $(if $(filter-out $@,$(MAKECMDGOALS)),$(filter-out $@,$(MAKECMDGOALS)),cluster) 2>&1
+.PHONY: sast-trivy-kubernetes
 
 ## Generate Cosign key pair
 sast-cosign-generate-key-pair:

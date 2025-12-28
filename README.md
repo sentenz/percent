@@ -424,6 +424,10 @@ Contribution guidelines and project management tools.
       make sast-trivy-sbom <sbom_path>
       ```
 
+      ```bash
+      make sast-trivy-sbom-license <sbom_path>
+      ```
+
 ## 3. References
 
 - GitHub [Template DX](https://github.com/sentenz/template-dx) repository.
