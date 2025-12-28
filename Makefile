@@ -75,8 +75,17 @@ go-test-bench:
 
 ## Run fuzz tests
 go-test-fuzz:
-	go test -fuzz=Fuzz -fuzztime=10s ./pkg/percent
+	@for fuzz in Percent Of Change Remain FromRatio ToRatio; do \
+		echo "Fuzzing: Fuzz$${fuzz}"; \
+		go test -fuzz=Fuzz"$${fuzz}" -fuzztime=10s ./pkg/percent || exit 1; \
+	done
 .PHONY: go-test-fuzz
+
+## Generate fuzz tests for Go functions using AI agents-based with AGENTS.md
+copilot-agents-test-fuzz:
+	# TODO: Implement AI agents-based fuzz test generation
+	@echo "AI agents-based fuzz test generation is not yet implemented."
+.PHONY: copilot-agents-test-fuzz
 
 ## Format Go code according to Go standards
 go-fmt:

@@ -4,6 +4,7 @@ package percent_test
 
 import (
 	"errors"
+	"math"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -578,4 +579,317 @@ func TestToRatio(t *testing.T) {
 			}
 		})
 	}
+}
+
+func FuzzPercent(f *testing.F) {
+	// Seed corpus with edge cases using testcases array
+	testcases := []struct {
+		percent float64
+		value   float64
+	}{
+		{0.0, 100.0},    // zero percent
+		{100.0, 100.0},  // hundred percent
+		{50.0, 200.0},   // typical case
+		{25.0, -100.0},  // negative value
+		{-10.0, 100.0},  // negative percent (should error)
+		{150.0, 100.0},  // over 100 percent (should error)
+	}
+	for _, tc := range testcases {
+		f.Add(tc.percent, tc.value) // Use f.Add to provide a seed corpus
+	}
+
+	f.Fuzz(func(t *testing.T, pct float64, value float64) {
+		// Arrange
+		// No special arrangement needed
+
+		// Act
+		got, err := percent.Percent(pct, value)
+
+		// Assert
+		// Property 1: Function should never panic
+		// Property 2: If percent is out of range [0, 100], should return error
+		// Property 3: If no error, result should be mathematically correct
+
+		if pct < 0 || pct > 100 {
+			// Invalid range - should return error
+			if err == nil {
+				t.Errorf("Percent(%v, %v) should return error for out of range percent", pct, value)
+			}
+			// Result should be zero on error
+			if got != 0 {
+				t.Errorf("Percent(%v, %v) = %v, want 0 on error", pct, value, got)
+			}
+		} else {
+			// Valid range - should not return error
+			if err != nil {
+				t.Errorf("Percent(%v, %v) returned unexpected error: %v", pct, value, err)
+			}
+			// Verify mathematical correctness (within floating point precision)
+			expected := value * (pct / 100.0)
+			if math.Abs(got-expected) > 1e-10 {
+				t.Errorf("Percent(%v, %v) = %v, want %v", pct, value, got, expected)
+			}
+		}
+	})
+}
+
+func FuzzOf(f *testing.F) {
+	// Seed corpus with edge cases using testcases array
+	testcases := []struct {
+		part  float64
+		total float64
+	}{
+		{25.0, 100.0},   // typical case
+		{100.0, 100.0},  // part equals total
+		{0.0, 100.0},    // zero part
+		{150.0, 100.0},  // part greater than total (should error)
+		{150.0, 0.0},    // zero total (should error)
+		{-200.0, -50.0}, // negative values
+	}
+	for _, tc := range testcases {
+		f.Add(tc.part, tc.total) // Use f.Add to provide a seed corpus
+	}
+
+	f.Fuzz(func(t *testing.T, part float64, total float64) {
+		// Arrange
+		// No special arrangement needed
+
+		// Act
+		got, err := percent.Of(part, total)
+
+		// Assert
+		// Property 1: Function should never panic
+		// Property 2: If total is zero, should return error
+		// Property 3: If part > total, should return error
+		// Property 4: If no error, result should be mathematically correct
+
+		if total == 0 {
+			// Zero total - should return error
+			if err == nil {
+				t.Errorf("Of(%v, %v) should return error for zero total", part, total)
+			}
+			// Result should be zero on error
+			if got != 0 {
+				t.Errorf("Of(%v, %v) = %v, want 0 on error", part, total, got)
+			}
+		} else if part > total {
+			// Part greater than total - should return error
+			if err == nil {
+				t.Errorf("Of(%v, %v) should return error for part > total", part, total)
+			}
+			// Result should be zero on error
+			if got != 0 {
+				t.Errorf("Of(%v, %v) = %v, want 0 on error", part, total, got)
+			}
+		} else {
+			// Valid input - should not return error
+			if err != nil {
+				t.Errorf("Of(%v, %v) returned unexpected error: %v", part, total, err)
+			}
+			// Verify result is mathematically correct
+			expected := (part / total) * 100.0
+			if math.Abs(got-expected) > 1e-10 {
+				t.Errorf("Of(%v, %v) = %v, want %v", part, total, got, expected)
+			}
+		}
+	})
+}
+
+func FuzzChange(f *testing.F) {
+	// Seed corpus with edge cases using testcases array
+	testcases := []struct {
+		oldValue float64
+		newValue float64
+	}{
+		{25.0, 100.0},   // increase
+		{-50.0, -200.0}, // decrease with negative values
+		{100.0, 100.0},  // no change
+		{0.0, 100.0},    // zero old value (should error)
+		{50.0, 75.0},    // typical increase
+	}
+	for _, tc := range testcases {
+		f.Add(tc.oldValue, tc.newValue) // Use f.Add to provide a seed corpus
+	}
+
+	f.Fuzz(func(t *testing.T, oldValue float64, newValue float64) {
+		// Arrange
+		// No special arrangement needed
+
+		// Act
+		got, err := percent.Change(oldValue, newValue)
+
+		// Assert
+		// Property 1: Function should never panic
+		// Property 2: If oldValue is zero, should return error
+		// Property 3: If no error, result should be mathematically correct
+
+		if oldValue == 0 {
+			// Zero old value - should return error
+			if err == nil {
+				t.Errorf("Change(%v, %v) should return error for zero old value", oldValue, newValue)
+			}
+			// Result should be zero on error
+			if got != 0 {
+				t.Errorf("Change(%v, %v) = %v, want 0 on error", oldValue, newValue, got)
+			}
+		} else {
+			// Valid input - should not return error
+			if err != nil {
+				t.Errorf("Change(%v, %v) returned unexpected error: %v", oldValue, newValue, err)
+			}
+			// Verify mathematical correctness
+			expected := ((newValue - oldValue) / math.Abs(oldValue)) * 100.0
+			if math.Abs(got-expected) > 1e-10 {
+				t.Errorf("Change(%v, %v) = %v, want %v", oldValue, newValue, got, expected)
+			}
+		}
+	})
+}
+
+func FuzzRemain(f *testing.F) {
+	// Seed corpus with edge cases using testcases array
+	testcases := []struct {
+		percent float64
+		value   float64
+	}{
+		{25.0, 100.0},  // typical case
+		{0.0, 100.0},   // zero percent
+		{100.0, 50.0},  // hundred percent
+		{50.0, -200.0}, // negative value
+		{-10.0, 100.0}, // negative percent (should error)
+		{150.0, 100.0}, // over 100 percent (should error)
+	}
+	for _, tc := range testcases {
+		f.Add(tc.percent, tc.value) // Use f.Add to provide a seed corpus
+	}
+
+	f.Fuzz(func(t *testing.T, pct float64, value float64) {
+		// Arrange
+		// No special arrangement needed
+
+		// Act
+		got, err := percent.Remain(pct, value)
+
+		// Assert
+		// Property 1: Function should never panic
+		// Property 2: If percent is out of range [0, 100], should return error
+		// Property 3: If no error, result should be mathematically correct
+
+		if pct < 0 || pct > 100 {
+			// Invalid range - should return error
+			if err == nil {
+				t.Errorf("Remain(%v, %v) should return error for out of range percent", pct, value)
+			}
+			// Result should be zero on error
+			if got != 0 {
+				t.Errorf("Remain(%v, %v) = %v, want 0 on error", pct, value, got)
+			}
+		} else {
+			// Valid range - should not return error
+			if err != nil {
+				t.Errorf("Remain(%v, %v) returned unexpected error: %v", pct, value, err)
+			}
+			// Verify mathematical correctness
+			expected := value * ((100.0 - pct) / 100.0)
+			if math.Abs(got-expected) > 1e-10 {
+				t.Errorf("Remain(%v, %v) = %v, want %v", pct, value, got, expected)
+			}
+		}
+	})
+}
+
+func FuzzFromRatio(f *testing.F) {
+	// Seed corpus with edge cases using testcases array
+	testcases := []float64{
+		0.25, // typical ratio
+		0.0,  // zero ratio
+		1.0,  // one ratio
+		-0.1, // negative ratio (should error)
+		2.0,  // ratio over 1 (should error)
+	}
+	for _, tc := range testcases {
+		f.Add(tc) // Use f.Add to provide a seed corpus
+	}
+
+	f.Fuzz(func(t *testing.T, ratio float64) {
+		// Arrange
+		// No special arrangement needed
+
+		// Act
+		got, err := percent.FromRatio(ratio)
+
+		// Assert
+		// Property 1: Function should never panic
+		// Property 2: If ratio is out of range [0, 1], should return error
+		// Property 3: If no error, result should be mathematically correct
+
+		if ratio < 0 || ratio > 1 {
+			// Invalid range - should return error
+			if err == nil {
+				t.Errorf("FromRatio(%v) should return error for out of range ratio", ratio)
+			}
+			// Result should be zero on error
+			if got != 0 {
+				t.Errorf("FromRatio(%v) = %v, want 0 on error", ratio, got)
+			}
+		} else {
+			// Valid range - should not return error
+			if err != nil {
+				t.Errorf("FromRatio(%v) returned unexpected error: %v", ratio, err)
+			}
+			// Verify mathematical correctness
+			expected := ratio * 100.0
+			if math.Abs(got-expected) > 1e-10 {
+				t.Errorf("FromRatio(%v) = %v, want %v", ratio, got, expected)
+			}
+		}
+	})
+}
+
+func FuzzToRatio(f *testing.F) {
+	// Seed corpus with edge cases using testcases array
+	testcases := []float64{
+		50.0,  // typical percent
+		0.0,   // zero percent
+		100.0, // hundred percent
+		-10.0, // negative percent (should error)
+		150.0, // percent over 100 (should error)
+	}
+	for _, tc := range testcases {
+		f.Add(tc) // Use f.Add to provide a seed corpus
+	}
+
+	f.Fuzz(func(t *testing.T, pct float64) {
+		// Arrange
+		// No special arrangement needed
+
+		// Act
+		got, err := percent.ToRatio(pct)
+
+		// Assert
+		// Property 1: Function should never panic
+		// Property 2: If percent is out of range [0, 100], should return error
+		// Property 3: If no error, result should be mathematically correct
+
+		if pct < 0 || pct > 100 {
+			// Invalid range - should return error
+			if err == nil {
+				t.Errorf("ToRatio(%v) should return error for out of range percent", pct)
+			}
+			// Result should be zero on error
+			if got != 0 {
+				t.Errorf("ToRatio(%v) = %v, want 0 on error", pct, got)
+			}
+		} else {
+			// Valid range - should not return error
+			if err != nil {
+				t.Errorf("ToRatio(%v) returned unexpected error: %v", pct, err)
+			}
+			// Verify mathematical correctness
+			expected := pct / 100.0
+			if math.Abs(got-expected) > 1e-10 {
+				t.Errorf("ToRatio(%v) = %v, want %v", pct, got, expected)
+			}
+		}
+	})
 }

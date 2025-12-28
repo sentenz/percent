@@ -71,3 +71,6 @@ jobs:
           name: test-report
           path: logs/unit/
           retention-days: 30
+
+      - name: Run Fuzz Tests
+        run: make go-test-fuzz
