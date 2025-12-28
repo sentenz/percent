@@ -54,29 +54,3 @@ updates:
       gomod-major:
         update-types:
           - major
-
-  - package-ecosystem: docker
-    directory: /
-    schedule:
-      interval: weekly
-      day: monday
-      time: "03:00"
-    labels:
-      - dependencies
-      - docker
-    commit-message:
-      prefix: chore
-      include: scope
-    open-pull-requests-limit: 10
-
-    # Group updates by semantic version type
-    groups:
-      docker-patch:
-        update-types:
-          - patch
-      docker-minor:
-        update-types:
-          - minor
-      docker-major:
-        update-types:
-          - major
