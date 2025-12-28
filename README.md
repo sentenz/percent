@@ -28,8 +28,11 @@ Percent is a Go package that provides utility functions for calculating percenta
     - [2.6.1. Semantic-Release](#261-semantic-release)
   - [2.7. Update Manager](#27-update-manager)
     - [2.7.1. Renovate](#271-renovate)
+    - [2.7.2. Dependabot](#272-dependabot)
   - [2.8. Policy Manager](#28-policy-manager)
     - [2.8.1. Conftest](#281-conftest)
+  - [2.9. Supply Chain Security Manager](#29-supply-chain-security-manager)
+    - [2.9.1. Trivy](#291-trivy)
 - [3. References](#3-references)
 
 ## 1. Details
@@ -325,7 +328,7 @@ Contribution guidelines and project management tools.
 
 #### 2.7.1. Renovate
 
-[Renovate](https://github.com/renovatebot/renovate) automates dependency updates by creating merge requests for outdated dependencies, ensuring that projects stay up-to-date with the latest versions of libraries and packages.
+[Renovate](https://github.com/renovatebot/renovate) automates dependency updates by creating merge requests for outdated dependencies, libraries and packages.
 
 1. Insights and Details
 
@@ -339,6 +342,15 @@ Contribution guidelines and project management tools.
       ```yaml
       uses: sentenz/actions/renovate@latest
       ```
+
+#### 2.7.2. Dependabot
+
+[Dependabot](https://github.com/dependabot/dependabot-core) automates dependency updates by creating pull requests for outdated dependencies, libraries and packages.
+
+1. Insights and Details
+
+    - [.github/dependabot.yml](.github/dependabot.yml)
+      > Configuration file for Dependabot specifying update rules and schedules.
 
 ### 2.8. Policy Manager
 
@@ -374,6 +386,42 @@ Contribution guidelines and project management tools.
 
       ```bash
       make policy-analysis-conftest <filepath>
+      ```
+
+### 2.9. Supply Chain Security Manager
+
+#### 2.9.1. Trivy
+
+[Trivy](https://github.com/aquasecurity/trivy) is a comprehensive security scanner for vulnerabilities, misconfigurations, and compliance issues in container images, filesystems, and source code.
+
+1. Insights and Details
+
+    - [trivy.yaml](trivy.yaml)
+      > Configuration file for Trivy specifying scan settings and options.
+
+    - [.trivyignore](.trivyignore)
+      > File specifying vulnerabilities to ignore during Trivy scans.
+
+2. Usage and Instructions
+
+    - CI/CD
+
+      ```yaml
+      uses: sentenz/actions/trivy@latest
+      ```
+
+    - Tasks
+
+      ```bash
+      make sast-trivy-fs <path>
+      ```
+
+      ```bash
+      make sast-trivy-sbom-cyclonedx-fs <path>
+      ```
+
+      ```bash
+      make sast-trivy-sbom <sbom_path>
       ```
 
 ## 3. References
