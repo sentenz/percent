@@ -89,6 +89,13 @@ Instructions for AI coding agents on automating unit test creation using consist
   make go-test-bench
   ```
 
+- Run Fuzz Tests
+  > Execute fuzz tests.
+
+  ```bash
+  make go-test-fuzz
+  ```
+
 ### 1.4. Test Style
 
 - Test Framework
