@@ -28,3 +28,55 @@ updates:
       github-actions-major:
         update-types:
           - major
+
+  - package-ecosystem: gomod
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "03:00"
+    labels:
+      - dependencies
+      - go
+    commit-message:
+      prefix: chore
+      include: scope
+    open-pull-requests-limit: 10
+
+    # Group updates by semantic version type
+    groups:
+      gomod-patch:
+        update-types:
+          - patch
+      gomod-minor:
+        update-types:
+          - minor
+      gomod-major:
+        update-types:
+          - major
+
+  - package-ecosystem: docker
+    directory: /.devcontainer/go
+    schedule:
+      interval: weekly
+      day: monday
+      time: "03:00"
+    labels:
+      - dependencies
+      - docker
+    commit-message:
+      prefix: chore
+      include: scope
+    open-pull-requests-limit: 10
+
+    # Group updates by semantic version type
+    groups:
+      docker-patch:
+        update-types:
+          - patch
+      docker-minor:
+        update-types:
+          - minor
+      docker-major:
+        update-types:
+          - major
