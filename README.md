@@ -7,7 +7,7 @@
 
 Percent is a Go package that provides utility functions for calculating percentages and performing related operations.
 
-- [1. Details](#1-details)
+- [1. Module](#1-module)
   - [1.1. Prerequisites](#11-prerequisites)
   - [1.2. Installation](#12-installation)
   - [1.3. Usage](#13-usage)
@@ -35,7 +35,7 @@ Percent is a Go package that provides utility functions for calculating percenta
     - [2.9.1. Trivy](#291-trivy)
 - [3. References](#3-references)
 
-## 1. Details
+## 1. Module
 
 ### 1.1. Prerequisites
 
