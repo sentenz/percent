@@ -76,12 +76,10 @@ go-test-bench:
 ## Run fuzz tests
 go-test-fuzz:
 	@echo "Running fuzz tests..."
-	go test -fuzz=FuzzPercent -fuzztime=10s ./pkg/percent
-	go test -fuzz=FuzzOf -fuzztime=10s ./pkg/percent
-	go test -fuzz=FuzzChange -fuzztime=10s ./pkg/percent
-	go test -fuzz=FuzzRemain -fuzztime=10s ./pkg/percent
-	go test -fuzz=FuzzFromRatio -fuzztime=10s ./pkg/percent
-	go test -fuzz=FuzzToRatio -fuzztime=10s ./pkg/percent
+	@for fuzz in Percent Of Change Remain FromRatio ToRatio; do \
+		echo "Fuzzing: Fuzz$$fuzz"; \
+		go test -fuzz=Fuzz$$fuzz -fuzztime=10s ./pkg/percent || exit 1; \
+	done
 .PHONY: go-test-fuzz
 
 ## Generate fuzz tests for Go functions using AI agents

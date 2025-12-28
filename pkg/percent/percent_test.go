@@ -582,13 +582,21 @@ func TestToRatio(t *testing.T) {
 }
 
 func FuzzPercent(f *testing.F) {
-	// Seed corpus with edge cases
-	f.Add(0.0, 100.0)   // zero percent
-	f.Add(100.0, 100.0) // hundred percent
-	f.Add(50.0, 200.0)  // typical case
-	f.Add(25.0, -100.0) // negative value
-	f.Add(-10.0, 100.0) // negative percent (should error)
-	f.Add(150.0, 100.0) // over 100 percent (should error)
+	// Seed corpus with edge cases using testcases array
+	testcases := []struct {
+		percent float64
+		value   float64
+	}{
+		{0.0, 100.0},    // zero percent
+		{100.0, 100.0},  // hundred percent
+		{50.0, 200.0},   // typical case
+		{25.0, -100.0},  // negative value
+		{-10.0, 100.0},  // negative percent (should error)
+		{150.0, 100.0},  // over 100 percent (should error)
+	}
+	for _, tc := range testcases {
+		f.Add(tc.percent, tc.value) // Use f.Add to provide a seed corpus
+	}
 
 	f.Fuzz(func(t *testing.T, pct float64, value float64) {
 		// Arrange
@@ -626,13 +634,21 @@ func FuzzPercent(f *testing.F) {
 }
 
 func FuzzOf(f *testing.F) {
-	// Seed corpus with edge cases
-	f.Add(25.0, 100.0)   // typical case
-	f.Add(100.0, 100.0)  // part equals total
-	f.Add(0.0, 100.0)    // zero part
-	f.Add(150.0, 100.0)  // part greater than total (should error)
-	f.Add(150.0, 0.0)    // zero total (should error)
-	f.Add(-200.0, -50.0) // negative values
+	// Seed corpus with edge cases using testcases array
+	testcases := []struct {
+		part  float64
+		total float64
+	}{
+		{25.0, 100.0},   // typical case
+		{100.0, 100.0},  // part equals total
+		{0.0, 100.0},    // zero part
+		{150.0, 100.0},  // part greater than total (should error)
+		{150.0, 0.0},    // zero total (should error)
+		{-200.0, -50.0}, // negative values
+	}
+	for _, tc := range testcases {
+		f.Add(tc.part, tc.total) // Use f.Add to provide a seed corpus
+	}
 
 	f.Fuzz(func(t *testing.T, part float64, total float64) {
 		// Arrange
@@ -644,8 +660,8 @@ func FuzzOf(f *testing.F) {
 		// Assert
 		// Property 1: Function should never panic
 		// Property 2: If total is zero, should return error
-		// Property 3: If part > total (both positive), should return error
-		// Property 4: If no error, result should be in range [0, 100] for valid inputs
+		// Property 3: If part > total, should return error
+		// Property 4: If no error, result should be mathematically correct
 
 		if total == 0 {
 			// Zero total - should return error
@@ -680,12 +696,20 @@ func FuzzOf(f *testing.F) {
 }
 
 func FuzzChange(f *testing.F) {
-	// Seed corpus with edge cases
-	f.Add(25.0, 100.0)   // increase
-	f.Add(-50.0, -200.0) // decrease with negative values
-	f.Add(100.0, 100.0)  // no change
-	f.Add(0.0, 100.0)    // zero old value (should error)
-	f.Add(50.0, 75.0)    // typical increase
+	// Seed corpus with edge cases using testcases array
+	testcases := []struct {
+		oldValue float64
+		newValue float64
+	}{
+		{25.0, 100.0},   // increase
+		{-50.0, -200.0}, // decrease with negative values
+		{100.0, 100.0},  // no change
+		{0.0, 100.0},    // zero old value (should error)
+		{50.0, 75.0},    // typical increase
+	}
+	for _, tc := range testcases {
+		f.Add(tc.oldValue, tc.newValue) // Use f.Add to provide a seed corpus
+	}
 
 	f.Fuzz(func(t *testing.T, oldValue float64, newValue float64) {
 		// Arrange
@@ -723,13 +747,21 @@ func FuzzChange(f *testing.F) {
 }
 
 func FuzzRemain(f *testing.F) {
-	// Seed corpus with edge cases
-	f.Add(25.0, 100.0)  // typical case
-	f.Add(0.0, 100.0)   // zero percent
-	f.Add(100.0, 50.0)  // hundred percent
-	f.Add(50.0, -200.0) // negative value
-	f.Add(-10.0, 100.0) // negative percent (should error)
-	f.Add(150.0, 100.0) // over 100 percent (should error)
+	// Seed corpus with edge cases using testcases array
+	testcases := []struct {
+		percent float64
+		value   float64
+	}{
+		{25.0, 100.0},  // typical case
+		{0.0, 100.0},   // zero percent
+		{100.0, 50.0},  // hundred percent
+		{50.0, -200.0}, // negative value
+		{-10.0, 100.0}, // negative percent (should error)
+		{150.0, 100.0}, // over 100 percent (should error)
+	}
+	for _, tc := range testcases {
+		f.Add(tc.percent, tc.value) // Use f.Add to provide a seed corpus
+	}
 
 	f.Fuzz(func(t *testing.T, pct float64, value float64) {
 		// Arrange
@@ -767,12 +799,17 @@ func FuzzRemain(f *testing.F) {
 }
 
 func FuzzFromRatio(f *testing.F) {
-	// Seed corpus with edge cases
-	f.Add(0.25) // typical ratio
-	f.Add(0.0)  // zero ratio
-	f.Add(1.0)  // one ratio
-	f.Add(-0.1) // negative ratio (should error)
-	f.Add(2.0)  // ratio over 1 (should error)
+	// Seed corpus with edge cases using testcases array
+	testcases := []float64{
+		0.25, // typical ratio
+		0.0,  // zero ratio
+		1.0,  // one ratio
+		-0.1, // negative ratio (should error)
+		2.0,  // ratio over 1 (should error)
+	}
+	for _, tc := range testcases {
+		f.Add(tc) // Use f.Add to provide a seed corpus
+	}
 
 	f.Fuzz(func(t *testing.T, ratio float64) {
 		// Arrange
@@ -810,12 +847,17 @@ func FuzzFromRatio(f *testing.F) {
 }
 
 func FuzzToRatio(f *testing.F) {
-	// Seed corpus with edge cases
-	f.Add(50.0)  // typical percent
-	f.Add(0.0)   // zero percent
-	f.Add(100.0) // hundred percent
-	f.Add(-10.0) // negative percent (should error)
-	f.Add(150.0) // percent over 100 (should error)
+	// Seed corpus with edge cases using testcases array
+	testcases := []float64{
+		50.0,  // typical percent
+		0.0,   // zero percent
+		100.0, // hundred percent
+		-10.0, // negative percent (should error)
+		150.0, // percent over 100 (should error)
+	}
+	for _, tc := range testcases {
+		f.Add(tc) // Use f.Add to provide a seed corpus
+	}
 
 	f.Fuzz(func(t *testing.T, pct float64) {
 		// Arrange
