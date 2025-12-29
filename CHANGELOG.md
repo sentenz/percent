@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.3](https://github.com/sentenz/percent/compare/2.1.2...2.1.3) (2025-12-29)
+
+
+### Bug Fixes
+
+* update release trigger type from 'created' to 'published' in Trivy workflow ([cfe9bc6](https://github.com/sentenz/percent/commit/cfe9bc66da70e502f27551a5d8e1ee3b7aeaede1))
+
 ## [2.1.2](https://github.com/sentenz/percent/compare/2.1.1...2.1.2) (2025-12-29)
 
 
