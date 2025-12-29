@@ -34,7 +34,6 @@ jobs:
           semantic-version: "latest"
 
   trivy-sbom-generation:
-    if: github.event_name == 'release'
     name: Trivy Action - SBOM Generation
     runs-on: ubuntu-latest
     permissions:
