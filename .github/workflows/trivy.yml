@@ -9,9 +9,6 @@ on:
   pull_request:
     branches:
       - main
-  release:
-    types:
-      - published
 
 jobs:
   trivy-fs-scan:
@@ -97,16 +94,6 @@ jobs:
           path: |
             sbom.cdx.json
             sbom.spdx.json
-
-      - name: Publish SBOM to release
-        if: github.event_name == 'release'
-        uses: softprops/action-gh-release@v2.5.0
-        with:
-          files: |
-            sbom.cdx.json
-            sbom.spdx.json
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   trivy-sbom-scan:
     name: Trivy Action - SBOM Scan
