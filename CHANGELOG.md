@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.6](https://github.com/sentenz/percent/compare/2.1.5...2.1.6) (2025-12-29)
+
+
+### Bug Fixes
+
+* update semantic-release workflow to remove release trigger and adjust SBOM publishing ([b1c0ddc](https://github.com/sentenz/percent/commit/b1c0ddc94046465354deb1835d2a3a7738bb6086))
+
 ## [2.1.5](https://github.com/sentenz/percent/compare/2.1.4...2.1.5) (2025-12-29)
 
 
