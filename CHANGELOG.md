@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.2](https://github.com/sentenz/percent/compare/2.1.1...2.1.2) (2025-12-29)
+
+
+### Bug Fixes
+
+* add Trivy action for SBOM generation and publishing to releases ([dbf7968](https://github.com/sentenz/percent/commit/dbf796851627daaa649cd414e14885f27e757f84))
+
 ## [2.1.1](https://github.com/sentenz/percent/compare/2.1.0...2.1.1) (2025-12-29)
 
 
