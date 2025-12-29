@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.5](https://github.com/sentenz/percent/compare/2.1.4...2.1.5) (2025-12-29)
+
+
+### Bug Fixes
+
+* publish SBOM to release notes ([170527c](https://github.com/sentenz/percent/commit/170527c339c7d7f68eff151e76fb47772d83500a))
+
 ## [2.1.4](https://github.com/sentenz/percent/compare/2.1.3...2.1.4) (2025-12-29)
 
 
