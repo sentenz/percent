@@ -9,13 +9,9 @@ on:
       - next
       - beta
       - alpha
-  release:
-    types:
-      - published
 
 jobs:
   semantic-release:
-    if: github.event_name != 'release'
     name: Semantic-Release Action
     runs-on: ubuntu-latest
     permissions:
@@ -56,8 +52,11 @@ jobs:
           output: sbom.cdx.json
 
       - name: Publish SBOM to release
-        uses: softprops/action-gh-release@v2.5.0
+        # uses: softprops/action-gh-release@v2.5.0
+        # with:
+        #   files: sbom.cdx.json
+        # env:
+        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: anchore/sbom-action/publish-sbom@v0
         with:
-          files: sbom.cdx.json
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          sbom-artifact-match: ".*\\.cdx$"
