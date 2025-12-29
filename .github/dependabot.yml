@@ -19,15 +19,25 @@ updates:
 
     # Group updates by semantic version type
     groups:
+      # Group sentenz/actions composite actions separately
+      sentenz-actions:
+        patterns:
+          - "sentenz/actions*"
       github-actions-patch:
         update-types:
           - patch
+        exclude-patterns:
+          - "sentenz/actions*"
       github-actions-minor:
         update-types:
           - minor
+        exclude-patterns:
+          - "sentenz/actions*"
       github-actions-major:
         update-types:
           - major
+        exclude-patterns:
+          - "sentenz/actions*"
 
   - package-ecosystem: gomod
     directory: /
