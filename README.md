@@ -21,9 +21,9 @@ Percent is a Go package that provides utility functions for calculating percenta
     - [2.4.1. Go Modules](#241-go-modules)
   - [2.5. Software Testing](#25-software-testing)
     - [2.5.1. Unit Testing](#251-unit-testing)
-    - [2.5.2. Code Coverage](#252-code-coverage)
+    - [2.5.2. Fuzz Testing](#252-fuzz-testing)
     - [2.5.3. Benchmarks](#253-benchmarks)
-    - [2.5.4. Fuzz Testing](#254-fuzz-testing)
+    - [2.5.4. Code Coverage](#254-code-coverage)
   - [2.6. Release Manager](#26-release-manager)
     - [2.6.1. Semantic-Release](#261-semantic-release)
   - [2.7. Update Manager](#27-update-manager)
@@ -249,7 +249,53 @@ Contribution guidelines and project management tools.
       make go-test-unit
       ```
 
-#### 2.5.2. Code Coverage
+#### 2.5.2. Fuzz Testing
+
+[Go fuzzing](https://go.dev/security/fuzz/) is a testing technique that uses randomized inputs to find bugs and security vulnerabilities.
+
+1. Insights and Details
+
+    - `testing.F`
+      > Fuzz tests use the standard Go testing package with `testing.F`.
+
+1. Usage and Instructions
+
+    - CI/CD
+
+      ```yaml
+      uses: sentenz/actions/go-tests@latest
+      ```
+
+    - Tasks
+
+      ```bash
+      make go-test-fuzz
+      ```
+
+#### 2.5.3. Benchmarks
+
+[Go benchmarks](https://pkg.go.dev/testing#hdr-Benchmarks) measure the performance of code and track performance regressions.
+
+1. Insights and Details
+
+    - `testing.B`
+      > Benchmark tests use the standard Go testing package with `testing.B`.
+
+1. Usage and Instructions
+
+    - CI/CD
+
+      ```yaml
+      uses: sentenz/actions/go-tests@latest
+      ```
+
+    - Tasks
+
+      ```bash
+      make go-test-bench
+      ```
+
+#### 2.5.4. Code Coverage
 
 [go tool cover](https://pkg.go.dev/cmd/cover) provides code coverage analysis for Go tests.
 
@@ -269,40 +315,6 @@ Contribution guidelines and project management tools.
 
       ```bash
       make go-test-coverage
-      ```
-
-#### 2.5.3. Benchmarks
-
-[Go benchmarks](https://pkg.go.dev/testing#hdr-Benchmarks) measure the performance of code and track performance regressions.
-
-1. Insights and Details
-
-    - `testing.B`
-      > Benchmark tests use the standard Go testing package with `testing.B`.
-
-1. Usage and Instructions
-
-    - Tasks
-
-      ```bash
-      make go-test-bench
-      ```
-
-#### 2.5.4. Fuzz Testing
-
-[Go fuzzing](https://go.dev/security/fuzz/) is a testing technique that uses randomized inputs to find bugs and security vulnerabilities.
-
-1. Insights and Details
-
-    - `testing.F`
-      > Fuzz tests use the standard Go testing package with `testing.F`.
-
-1. Usage and Instructions
-
-    - Tasks
-
-      ```bash
-      make go-test-fuzz
       ```
 
 ### 2.6. Release Manager
