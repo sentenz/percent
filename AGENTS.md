@@ -513,7 +513,7 @@ Instructions for AI coding agents on automating benchmark test creation using co
   > Name benchmark functions with the `Benchmark` prefix followed by the function name (e.g., `BenchmarkPercent` for testing `Percent()`).
 
 - Benchmark Loop
-  > Use `b.N` to control the number of iterations. The testing framework automatically adjusts `b.N` to get reliable timing measurements.
+  > Use `b.Loop` to control the number of iterations. The testing framework automatically adjusts the loop iterations to get reliable timing measurements. `b.Loop` is preferred over `b.N` as it provides better integration with the testing framework and more accurate measurements.
 
 - Timer Control
   > Use `b.ResetTimer()` to exclude setup time from measurements. Use `b.StopTimer()` and `b.StartTimer()` to exclude specific operations.
@@ -565,7 +565,7 @@ Use this template for new benchmark test functions. Replace placeholders with ac
      b.ResetTimer()
 
      // Act
-     for i := 0; i < b.N; i++ {
+     for b.Loop() {
       _, _ = <Function>(bm.param1, bm.param2)
      }
     })
@@ -587,7 +587,7 @@ Use this template for new benchmark test functions. Replace placeholders with ac
    b.ResetTimer()
 
    // Act
-   for i := 0; i < b.N; i++ {
+   for b.Loop() {
     _, _ = <Function>(param1, param2)
    }
   }
@@ -611,7 +611,7 @@ Use this template for new benchmark test functions. Replace placeholders with ac
    b.ResetTimer()
 
    // Act
-   for i := 0; i < b.N; i++ {
+   for b.Loop() {
     benchResult, benchError = <Function>(param1, param2)
    }
   }

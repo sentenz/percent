@@ -937,7 +937,7 @@ func BenchmarkPercent(b *testing.B) {
 	for _, bm := range benchmarks {
 		b.Run(bm.name, func(b *testing.B) {
 			b.ResetTimer()
-			for i := 0; i < b.N; i++ {
+			for b.Loop() {
 				benchResult, benchError = percent.Percent(bm.percent, bm.value)
 			}
 		})
@@ -980,7 +980,7 @@ func BenchmarkOf(b *testing.B) {
 	for _, bm := range benchmarks {
 		b.Run(bm.name, func(b *testing.B) {
 			b.ResetTimer()
-			for i := 0; i < b.N; i++ {
+			for b.Loop() {
 				benchResult, benchError = percent.Of(bm.part, bm.total)
 			}
 		})
@@ -1023,7 +1023,7 @@ func BenchmarkChange(b *testing.B) {
 	for _, bm := range benchmarks {
 		b.Run(bm.name, func(b *testing.B) {
 			b.ResetTimer()
-			for i := 0; i < b.N; i++ {
+			for b.Loop() {
 				benchResult, benchError = percent.Change(bm.oldValue, bm.newValue)
 			}
 		})
@@ -1066,7 +1066,7 @@ func BenchmarkRemain(b *testing.B) {
 	for _, bm := range benchmarks {
 		b.Run(bm.name, func(b *testing.B) {
 			b.ResetTimer()
-			for i := 0; i < b.N; i++ {
+			for b.Loop() {
 				benchResult, benchError = percent.Remain(bm.percent, bm.value)
 			}
 		})
@@ -1103,7 +1103,7 @@ func BenchmarkFromRatio(b *testing.B) {
 	for _, bm := range benchmarks {
 		b.Run(bm.name, func(b *testing.B) {
 			b.ResetTimer()
-			for i := 0; i < b.N; i++ {
+			for b.Loop() {
 				benchResult, benchError = percent.FromRatio(bm.ratio)
 			}
 		})
@@ -1140,7 +1140,7 @@ func BenchmarkToRatio(b *testing.B) {
 	for _, bm := range benchmarks {
 		b.Run(bm.name, func(b *testing.B) {
 			b.ResetTimer()
-			for i := 0; i < b.N; i++ {
+			for b.Loop() {
 				benchResult, benchError = percent.ToRatio(bm.percent)
 			}
 		})
