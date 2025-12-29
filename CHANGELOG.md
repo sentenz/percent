@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.7](https://github.com/sentenz/percent/compare/2.1.6...2.1.7) (2025-12-29)
+
+
+### Bug Fixes
+
+* remove conditional trigger for SBOM generation on release events ([755d5a4](https://github.com/sentenz/percent/commit/755d5a4bcaac44a609fb3f350d8c0e78173f4d70))
+
 ## [2.1.6](https://github.com/sentenz/percent/compare/2.1.5...2.1.6) (2025-12-29)
 
 
