@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.4](https://github.com/sentenz/percent/compare/2.1.3...2.1.4) (2025-12-29)
+
+
+### Bug Fixes
+
+* add release trigger types for semantic-release workflow ([e141df3](https://github.com/sentenz/percent/commit/e141df3d99d2bb1c9a646ff398d3109b4c0ab2ff))
+
 ## [2.1.3](https://github.com/sentenz/percent/compare/2.1.2...2.1.3) (2025-12-29)
 
 
