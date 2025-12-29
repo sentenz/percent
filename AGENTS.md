@@ -495,7 +495,7 @@ Instructions for AI coding agents on automating benchmark test creation using co
   ```
 
 - Compare Benchmark Results
-  > Use benchstat to compare benchmark results before and after changes.
+  > Use `benchstat` to compare benchmark results before and after changes.
 
   ```bash
   go test -bench=. -benchmem -count=10 ./pkg/percent > old.txt

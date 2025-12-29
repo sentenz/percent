@@ -73,6 +73,21 @@ go-test-bench:
 	go test -bench=. -benchmem ./...
 .PHONY: go-test-bench
 
+# [EXPERIMENTAL] Compare Go benchmark results before and after changes
+go-test-bench-compare:
+	@mkdir -p logs/bench
+
+	go test -bench=. -benchmem -count=10 ./pkg/percent > logs/bench/bench1.txt
+	go test -bench=. -benchmem -count=10 ./pkg/percent > logs/bench/bench2.txt
+
+	@if [ ! -f logs/bench/bench1.txt ] || [ ! -f logs/bench/bench2.txt ]; then \
+		echo "Error: Both logs/bench/bench1.txt and logs/bench/bench2.txt must exist to compare benchmarks."; \
+		exit 1; \
+	fi
+
+	go run -mod=vendor golang.org/x/perf/cmd/benchstat logs/bench/bench1.txt logs/bench/bench2.txt
+.PHONY: go-test-bench-compare
+
 ## Run fuzz tests
 go-test-fuzz:
 	@for fuzz in FuzzPercent FuzzOf FuzzChange FuzzRemain FuzzFromRatio FuzzToRatio; do \
