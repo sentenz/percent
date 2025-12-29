@@ -32,3 +32,29 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           semantic-version: "latest"
+
+  trivy-sbom-generation:
+    if: github.event_name == 'release'
+    name: Trivy Action - SBOM Generation
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.1
+
+      - name: Generate CycloneDX SBOM
+
+        uses: sentenz/actions/trivy@1.1.0
+        with:
+          scan-type: sbom-generate
+          scan-target: "."
+          format: cyclonedx
+          output: sbom.cdx.json
+
+      - name: Publish SBOM to release
+        uses: softprops/action-gh-release@v2.5.0
+        with:
+          files: sbom.cdx.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
