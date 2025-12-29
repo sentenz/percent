@@ -36,6 +36,7 @@ jobs:
   trivy-sbom-generation:
     name: Trivy Action - SBOM Generation
     runs-on: ubuntu-latest
+    needs: semantic-release
     permissions:
       contents: write
     steps:
@@ -59,3 +60,4 @@ jobs:
         uses: anchore/sbom-action/publish-sbom@v0
         with:
           sbom-artifact-match: ".*\\.cdx$"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
