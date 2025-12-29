@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.1](https://github.com/sentenz/percent/compare/2.1.0...2.1.1) (2025-12-29)
+
+
+### Bug Fixes
+
+* add benchmark comparison task to Makefile and update AGENTS.md ([42707eb](https://github.com/sentenz/percent/commit/42707ebc643b03494d2e3dcacdde20d6282482dc))
+
 # [2.1.0](https://github.com/sentenz/percent/compare/2.0.2...2.1.0) (2025-12-20)
 
 
