@@ -115,8 +115,6 @@ jobs:
         with:
           scan-type: sbom
           scan-target: sbom.cdx.json
-          format: table
-          severity: HIGH,CRITICAL
         continue-on-error: false
 
   trivy-license-compliance:
