@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.8](https://github.com/sentenz/percent/compare/2.1.7...2.1.8) (2025-12-29)
+
+
+### Bug Fixes
+
+* ensure SBOM generation job depends on semantic-release completion ([6c57639](https://github.com/sentenz/percent/commit/6c57639f9cf4904578f2b7b03eba4d3a3c1182c2))
+
 ## [2.1.7](https://github.com/sentenz/percent/compare/2.1.6...2.1.7) (2025-12-29)
 
 
