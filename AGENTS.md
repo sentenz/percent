@@ -13,6 +13,12 @@
     - [1.2.3. Fuzz Test Commands](#123-fuzz-test-commands)
     - [1.2.4. Fuzz Test Style](#124-fuzz-test-style)
     - [1.2.5. Fuzz Test Template](#125-fuzz-test-template)
+  - [1.3. Benchmark Testing](#13-benchmark-testing)
+    - [1.3.1. Benchmark Testing Patterns](#131-benchmark-testing-patterns)
+    - [1.3.2. Benchmark Test Workflow](#132-benchmark-test-workflow)
+    - [1.3.3. Benchmark Test Commands](#133-benchmark-test-commands)
+    - [1.3.4. Benchmark Test Style](#134-benchmark-test-style)
+    - [1.3.5. Benchmark Test Template](#135-benchmark-test-template)
 
 ## 1. Software Testing
 
@@ -380,5 +386,233 @@ Use this template for new fuzz test functions. Replace placeholders with actual 
     // Verify success cases
     }
   })
+  }
+  ```
+
+### 1.3. Benchmark Testing
+
+Instructions for AI coding agents on automating benchmark test creation using consistent software testing patterns in this Go project.
+
+1. Features and Benefits
+
+    - Performance Measurement
+      > Benchmark tests measure the execution time and memory allocation of functions, providing quantifiable metrics for performance analysis.
+
+    - Regression Detection
+      > Continuous benchmarking helps identify performance regressions early in the development cycle before they reach production.
+
+    - Optimization Guidance
+      > Benchmark results guide optimization efforts by identifying bottlenecks and quantifying the impact of performance improvements.
+
+    - Comparative Analysis
+      > Benchmarks enable comparison of different implementations or algorithms to make informed decisions about performance trade-offs.
+
+    - Resource Profiling
+      > Memory allocation tracking helps identify unnecessary allocations and optimize memory usage patterns.
+
+#### 1.3.1. Benchmark Testing Patterns
+
+- Microbenchmarking
+  > Microbenchmarking is a software testing technique that measures the performance of small, isolated code units to identify performance characteristics and bottlenecks.
+
+- Comparative Benchmarking
+  > Comparative Benchmarking is a testing approach that compares the performance of different implementations or algorithms side-by-side using consistent workloads.
+
+- Memory Profiling
+  > Memory Profiling is the process of measuring memory allocations and usage patterns during benchmark execution using `-benchmem` flag.
+
+- Statistical Benchmarking
+  > Statistical Benchmarking uses multiple iterations to calculate statistical measures (mean, variance) to ensure reliable and reproducible results.
+
+- Sub-benchmarks
+  > Sub-benchmarks organize related benchmark cases using `b.Run()` to group variations of the same function with different input scenarios.
+
+#### 1.3.2. Benchmark Test Workflow
+
+1. Identify
+
+    Identify performance-critical functions in `pkg/` or `internal/` that benefit from performance tracking (e.g., `pkg/<package>/<file>.go`).
+
+2. Add/Create
+
+    Create benchmark tests in the same package (e.g., `pkg/<package>/<file>_test.go`).
+
+3. Benchmark Test Coverage Requirements
+
+    Focus on functions that:
+    - Are called frequently in hot paths
+    - Perform mathematical operations or calculations
+    - Process data structures or collections
+    - Have multiple implementation approaches to compare
+    - Are candidates for optimization
+
+4. Apply Templates
+
+    Structure all benchmark tests using this [template](#135-benchmark-test-template) pattern.
+
+5. Baseline Measurements
+
+    Establish performance baselines by running benchmarks on stable code before making changes.
+
+#### 1.3.3. Benchmark Test Commands
+
+- Run Benchmarks
+  > Execute all benchmarks with memory statistics.
+
+  ```bash
+  make go-test-bench
+  ```
+
+- Run Specific Benchmark
+  > Execute a specific benchmark function.
+
+  ```bash
+  go test -bench=BenchmarkPercent -benchmem ./pkg/percent
+  ```
+
+- Run with CPU Profiling
+  > Generate CPU profile for performance analysis.
+
+  ```bash
+  go test -bench=. -benchmem -cpuprofile=cpu.prof ./pkg/percent
+  ```
+
+- Run with Memory Profiling
+  > Generate memory profile for allocation analysis.
+
+  ```bash
+  go test -bench=. -benchmem -memprofile=mem.prof ./pkg/percent
+  ```
+
+- Benchmark Time Control
+  > Run benchmarks for a specific duration.
+
+  ```bash
+  go test -bench=. -benchtime=10s ./pkg/percent
+  ```
+
+- Compare Benchmark Results
+  > Use benchstat to compare benchmark results before and after changes.
+
+  ```bash
+  go test -bench=. -benchmem -count=10 ./pkg/percent > old.txt
+  # Make changes
+  go test -bench=. -benchmem -count=10 ./pkg/percent > new.txt
+  benchstat old.txt new.txt
+  ```
+
+#### 1.3.4. Benchmark Test Style
+
+- Test Framework
+  > Use the standard Go `testing` package with `testing.B` for benchmark tests.
+
+- Include Imports
+  > Include `testing` and any packages needed for the function under test.
+
+- Benchmark Function Naming
+  > Name benchmark functions with the `Benchmark` prefix followed by the function name (e.g., `BenchmarkPercent` for testing `Percent()`).
+
+- Benchmark Loop
+  > Use `b.N` to control the number of iterations. The testing framework automatically adjusts `b.N` to get reliable timing measurements.
+
+- Timer Control
+  > Use `b.ResetTimer()` to exclude setup time from measurements. Use `b.StopTimer()` and `b.StartTimer()` to exclude specific operations.
+
+- Sub-benchmarks
+  > Use `b.Run()` to organize related benchmark cases with different input scenarios. Each sub-benchmark runs independently with its own `b.N` iterations.
+
+- Memory Reporting
+  > Use `b.ReportAllocs()` to report memory allocations per operation when not using `-benchmem` flag.
+
+- Result Validation
+  > Optionally validate results in benchmarks to prevent compiler optimizations from eliminating dead code.
+
+#### 1.3.5. Benchmark Test Template
+
+Use this template for new benchmark test functions. Replace placeholders with actual values and adjust as needed for the use case.
+
+- Multi-Scenario Benchmarks
+  > For benchmarking multiple scenarios or input variations, use sub-benchmarks with table-driven approach.
+
+  ```go
+  func Benchmark<FunctionName>(b *testing.B) {
+   // Define benchmark cases with different scenarios
+   benchmarks := []struct {
+    name   string
+    param1 <type>
+    param2 <type>
+    // Add more parameters as needed
+   }{
+    {
+     name:   "scenario description 1",
+     param1: <value1>,
+     param2: <value2>,
+    },
+    {
+     name:   "scenario description 2",
+     param1: <value1>,
+     param2: <value2>,
+    },
+    // Add more benchmark cases
+   }
+
+   for _, bm := range benchmarks {
+    b.Run(bm.name, func(b *testing.B) {
+     // Arrange
+     // Setup code here (excluded from timing)
+
+     // Reset timer to exclude setup time
+     b.ResetTimer()
+
+     // Act
+     for i := 0; i < b.N; i++ {
+      _, _ = <Function>(bm.param1, bm.param2)
+     }
+    })
+   }
+  }
+  ```
+
+- Simple Benchmarks
+  > For benchmarking a single scenario, use a simple loop without sub-benchmarks.
+
+  ```go
+  func Benchmark<FunctionName>(b *testing.B) {
+   // Arrange
+   // Setup code here
+   param1 := <value1>
+   param2 := <value2>
+
+   // Reset timer to exclude setup time
+   b.ResetTimer()
+
+   // Act
+   for i := 0; i < b.N; i++ {
+    _, _ = <Function>(param1, param2)
+   }
+  }
+  ```
+
+- Benchmarks with Validation
+  > For benchmarks that need to prevent compiler optimizations, store results in package-level variables.
+
+  ```go
+  var (
+   benchResult <type>
+   benchError  error
+  )
+
+  func Benchmark<FunctionName>(b *testing.B) {
+   // Arrange
+   param1 := <value1>
+   param2 := <value2>
+
+   // Reset timer to exclude setup time
+   b.ResetTimer()
+
+   // Act
+   for i := 0; i < b.N; i++ {
+    benchResult, benchError = <Function>(param1, param2)
+   }
   }
   ```

@@ -587,12 +587,12 @@ func FuzzPercent(f *testing.F) {
 		percent float64
 		value   float64
 	}{
-		{0.0, 100.0},    // zero percent
-		{100.0, 100.0},  // hundred percent
-		{50.0, 200.0},   // typical case
-		{25.0, -100.0},  // negative value
-		{-10.0, 100.0},  // negative percent (should error)
-		{150.0, 100.0},  // over 100 percent (should error)
+		{0.0, 100.0},   // zero percent
+		{100.0, 100.0}, // hundred percent
+		{50.0, 200.0},  // typical case
+		{25.0, -100.0}, // negative value
+		{-10.0, 100.0}, // negative percent (should error)
+		{150.0, 100.0}, // over 100 percent (should error)
 	}
 	for _, tc := range testcases {
 		f.Add(tc.percent, tc.value) // Use f.Add to provide a seed corpus
@@ -892,4 +892,257 @@ func FuzzToRatio(f *testing.F) {
 			}
 		}
 	})
+}
+
+// Benchmark tests
+
+var (
+	benchResult float64
+	benchError  error
+)
+
+func BenchmarkPercent(b *testing.B) {
+	benchmarks := []struct {
+		name    string
+		percent float64
+		value   float64
+	}{
+		{
+			name:    "typical case",
+			percent: 25.0,
+			value:   100.0,
+		},
+		{
+			name:    "zero percent",
+			percent: 0.0,
+			value:   100.0,
+		},
+		{
+			name:    "hundred percent",
+			percent: 100.0,
+			value:   100.0,
+		},
+		{
+			name:    "negative value",
+			percent: 50.0,
+			value:   -200.0,
+		},
+		{
+			name:    "large value",
+			percent: 15.5,
+			value:   1000000.0,
+		},
+	}
+
+	for _, bm := range benchmarks {
+		b.Run(bm.name, func(b *testing.B) {
+			b.ResetTimer()
+			for i := 0; i < b.N; i++ {
+				benchResult, benchError = percent.Percent(bm.percent, bm.value)
+			}
+		})
+	}
+}
+
+func BenchmarkOf(b *testing.B) {
+	benchmarks := []struct {
+		name  string
+		part  float64
+		total float64
+	}{
+		{
+			name:  "typical case",
+			part:  25.0,
+			total: 100.0,
+		},
+		{
+			name:  "part equals total",
+			part:  100.0,
+			total: 100.0,
+		},
+		{
+			name:  "zero part",
+			part:  0.0,
+			total: 100.0,
+		},
+		{
+			name:  "negative values",
+			part:  -200.0,
+			total: -50.0,
+		},
+		{
+			name:  "large values",
+			part:  500000.0,
+			total: 1000000.0,
+		},
+	}
+
+	for _, bm := range benchmarks {
+		b.Run(bm.name, func(b *testing.B) {
+			b.ResetTimer()
+			for i := 0; i < b.N; i++ {
+				benchResult, benchError = percent.Of(bm.part, bm.total)
+			}
+		})
+	}
+}
+
+func BenchmarkChange(b *testing.B) {
+	benchmarks := []struct {
+		name     string
+		oldValue float64
+		newValue float64
+	}{
+		{
+			name:     "typical increase",
+			oldValue: 25.0,
+			newValue: 100.0,
+		},
+		{
+			name:     "typical decrease",
+			oldValue: 100.0,
+			newValue: 25.0,
+		},
+		{
+			name:     "no change",
+			oldValue: 100.0,
+			newValue: 100.0,
+		},
+		{
+			name:     "negative values decrease",
+			oldValue: -50.0,
+			newValue: -200.0,
+		},
+		{
+			name:     "large values",
+			oldValue: 500000.0,
+			newValue: 1000000.0,
+		},
+	}
+
+	for _, bm := range benchmarks {
+		b.Run(bm.name, func(b *testing.B) {
+			b.ResetTimer()
+			for i := 0; i < b.N; i++ {
+				benchResult, benchError = percent.Change(bm.oldValue, bm.newValue)
+			}
+		})
+	}
+}
+
+func BenchmarkRemain(b *testing.B) {
+	benchmarks := []struct {
+		name    string
+		percent float64
+		value   float64
+	}{
+		{
+			name:    "typical case",
+			percent: 25.0,
+			value:   100.0,
+		},
+		{
+			name:    "zero percent",
+			percent: 0.0,
+			value:   100.0,
+		},
+		{
+			name:    "hundred percent",
+			percent: 100.0,
+			value:   50.0,
+		},
+		{
+			name:    "negative value",
+			percent: 50.0,
+			value:   -200.0,
+		},
+		{
+			name:    "large value",
+			percent: 33.3,
+			value:   1000000.0,
+		},
+	}
+
+	for _, bm := range benchmarks {
+		b.Run(bm.name, func(b *testing.B) {
+			b.ResetTimer()
+			for i := 0; i < b.N; i++ {
+				benchResult, benchError = percent.Remain(bm.percent, bm.value)
+			}
+		})
+	}
+}
+
+func BenchmarkFromRatio(b *testing.B) {
+	benchmarks := []struct {
+		name  string
+		ratio float64
+	}{
+		{
+			name:  "typical ratio",
+			ratio: 0.25,
+		},
+		{
+			name:  "zero ratio",
+			ratio: 0.0,
+		},
+		{
+			name:  "one ratio",
+			ratio: 1.0,
+		},
+		{
+			name:  "half ratio",
+			ratio: 0.5,
+		},
+		{
+			name:  "small ratio",
+			ratio: 0.001,
+		},
+	}
+
+	for _, bm := range benchmarks {
+		b.Run(bm.name, func(b *testing.B) {
+			b.ResetTimer()
+			for i := 0; i < b.N; i++ {
+				benchResult, benchError = percent.FromRatio(bm.ratio)
+			}
+		})
+	}
+}
+
+func BenchmarkToRatio(b *testing.B) {
+	benchmarks := []struct {
+		name    string
+		percent float64
+	}{
+		{
+			name:    "typical percent",
+			percent: 50.0,
+		},
+		{
+			name:    "zero percent",
+			percent: 0.0,
+		},
+		{
+			name:    "hundred percent",
+			percent: 100.0,
+		},
+		{
+			name:    "quarter percent",
+			percent: 25.0,
+		},
+		{
+			name:    "small percent",
+			percent: 0.1,
+		},
+	}
+
+	for _, bm := range benchmarks {
+		b.Run(bm.name, func(b *testing.B) {
+			b.ResetTimer()
+			for i := 0; i < b.N; i++ {
+				benchResult, benchError = percent.ToRatio(bm.percent)
+			}
+		})
+	}
 }
