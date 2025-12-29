@@ -513,10 +513,10 @@ Instructions for AI coding agents on automating benchmark test creation using co
   > Name benchmark functions with the `Benchmark` prefix followed by the function name (e.g., `BenchmarkPercent` for testing `Percent()`).
 
 - Benchmark Loop
-  > Use `b.Loop` to control the number of iterations. The testing framework automatically adjusts the loop iterations to get reliable timing measurements. `b.Loop` is preferred over `b.N` as it provides better integration with the testing framework and more accurate measurements.
+  > Use `b.Loop()` to control the number of iterations. The testing framework automatically adjusts the loop iterations to get reliable timing measurements. `b.Loop()` is preferred over `b.N` as it provides better integration with the testing framework and more accurate measurements. Unlike `b.N`-style benchmarks, `b.Loop()` integrates timer management - it automatically handles `b.ResetTimer()` at the loop's start and `b.StopTimer()` at its end, eliminating the need to manually manage the benchmark timer for setup and cleanup code.
 
 - Timer Control
-  > Use `b.ResetTimer()` to exclude setup time from measurements. Use `b.StopTimer()` and `b.StartTimer()` to exclude specific operations.
+  > When using `b.Loop()`, timer management is automatic and no manual `b.ResetTimer()`, `b.StopTimer()`, or `b.StartTimer()` calls are needed for typical benchmarks. For advanced scenarios not using `b.Loop()`, use `b.ResetTimer()` to exclude setup time from measurements and `b.StopTimer()`/`b.StartTimer()` to exclude specific operations.
 
 - Sub-benchmarks
   > Use `b.Run()` to organize related benchmark cases with different input scenarios. Each sub-benchmark runs independently with its own `b.N` iterations.
@@ -559,10 +559,7 @@ Use this template for new benchmark test functions. Replace placeholders with ac
    for _, bm := range benchmarks {
     b.Run(bm.name, func(b *testing.B) {
      // Arrange
-     // Setup code here (excluded from timing)
-
-     // Reset timer to exclude setup time
-     b.ResetTimer()
+     // Setup code here (automatically excluded from timing by b.Loop)
 
      // Act
      for b.Loop() {
@@ -579,12 +576,9 @@ Use this template for new benchmark test functions. Replace placeholders with ac
   ```go
   func Benchmark<FunctionName>(b *testing.B) {
    // Arrange
-   // Setup code here
+   // Setup code here (automatically excluded from timing by b.Loop)
    param1 := <value1>
    param2 := <value2>
-
-   // Reset timer to exclude setup time
-   b.ResetTimer()
 
    // Act
    for b.Loop() {
@@ -604,11 +598,9 @@ Use this template for new benchmark test functions. Replace placeholders with ac
 
   func Benchmark<FunctionName>(b *testing.B) {
    // Arrange
+   // Setup code here (automatically excluded from timing by b.Loop)
    param1 := <value1>
    param2 := <value2>
-
-   // Reset timer to exclude setup time
-   b.ResetTimer()
 
    // Act
    for b.Loop() {
