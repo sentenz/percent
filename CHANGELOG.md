@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.12](https://github.com/sentenz/percent/compare/2.1.11...2.1.12) (2025-12-30)
+
+
+### Bug Fixes
+
+* update tag_name reference for SBOM artifact publishing ([1ec77e6](https://github.com/sentenz/percent/commit/1ec77e655bd6967cf4409701cf0bda1cdd96d61d))
+
 ## [2.1.11](https://github.com/sentenz/percent/compare/2.1.10...2.1.11) (2025-12-30)
 
 
