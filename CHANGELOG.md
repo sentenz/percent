@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.1.11](https://github.com/sentenz/percent/compare/2.1.10...2.1.11) (2025-12-30)
+
+
+### Bug Fixes
+
+* correct tag_name reference for SBOM artifact publishing ([49ef8ed](https://github.com/sentenz/percent/commit/49ef8ed1eed08228ad12090386aca74233ae83b8))
+* remove redundant SBOM generation job and correct tag_name reference ([2b77f3e](https://github.com/sentenz/percent/commit/2b77f3e69ced7032efd22eab66e1cc3e6182e97e))
+* standardize quotes for condition checks in SBOM generation steps ([eb753d4](https://github.com/sentenz/percent/commit/eb753d481a6326e792815c86d53ed6c5ca704fc7))
+
 ## [2.1.10](https://github.com/sentenz/percent/compare/2.1.9...2.1.10) (2025-12-30)
 
 
