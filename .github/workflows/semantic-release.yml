@@ -64,8 +64,8 @@ jobs:
       - name: Get latest tag
         id: get_tag
         run: |
-          git fetch --tags
-          latest_tag=$(git describe --tags --abbrev=0)
+          git fetch --tags --force
+          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || git tag --sort=-version:refname | head -n1)
           echo "tag=${latest_tag}" >> $GITHUB_OUTPUT
           echo "Latest tag: ${latest_tag}"
 
