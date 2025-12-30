@@ -14,8 +14,6 @@ jobs:
   semantic-release:
     name: Semantic-Release Action
     runs-on: ubuntu-latest
-    outputs:
-      tag_name: ${{ steps.release.outputs.tag_name }}
     permissions:
       contents: write
       issues: write
@@ -35,19 +33,8 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           semantic-version: "latest"
 
-  trivy-sbom-generation:
-    name: Trivy Action - SBOM Publish
-    runs-on: ubuntu-latest
-    needs: semantic-release
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6.0.1
-        with:
-          fetch-depth: 0
-
       - name: Run SBOM Generation (CycloneDX)
+        if: steps.release.outputs.new-release-published == "true"
         uses: sentenz/actions/trivy@1.1.3
         with:
           scan-type: sbom-generate
@@ -56,6 +43,7 @@ jobs:
           output: sbom.cdx.json
 
       - name: Run SBOM Generation (SPDX)
+        if: steps.release.outputs.new-release-published == "true"
         uses: sentenz/actions/trivy@1.1.3
         with:
           scan-type: sbom-generate
@@ -64,9 +52,10 @@ jobs:
           output: sbom.spdx.json
 
       - name: Publish SBOM artifacts
+        if: steps.release.outputs.new-release-published == "true"
         uses: softprops/action-gh-release@v2.5.0
         with:
-          tag_name: ${{ steps.release.outputs..tag_name }}
+          tag_name: ${{ steps.release.outputs.tag_name }}
           files: |
             sbom.cdx.json
             sbom.spdx.json
