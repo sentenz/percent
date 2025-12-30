@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.9](https://github.com/sentenz/percent/compare/2.1.8...2.1.9) (2025-12-30)
+
+
+### Bug Fixes
+
+* publish SBOM artifacts to GitHub releases ([#58](https://github.com/sentenz/percent/issues/58)) ([c96e509](https://github.com/sentenz/percent/commit/c96e509a561bf27c4dcb3bb3120d51f67cd25240)), closes [#57](https://github.com/sentenz/percent/issues/57)
+
 ## [2.1.8](https://github.com/sentenz/percent/compare/2.1.7...2.1.8) (2025-12-29)
 
 
