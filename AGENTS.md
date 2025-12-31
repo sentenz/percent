@@ -54,14 +54,14 @@ This document provides **prescriptive instructions** for AI coding agents on **h
 
 **This document does NOT cover:**
 
-- ❌ Project structure and organization (see [SKILLS.md](./SKILLS.md))
+- ❌ Project structure and organization (see [SKILLS.md](./.github/skills/SKILLS.md))
 - ❌ Build and deployment processes (see [README.md](./README.md))
 - ❌ Development environment setup (see [.github/copilot-instructions.md](./.github/copilot-instructions.md))
-- ❌ CI/CD workflow details (see [SKILLS.md](./SKILLS.md))
+- ❌ CI/CD workflow details (see [SKILLS.md](./.github/skills/SKILLS.md))
 
 ### 1.3. Complementary Documentation
 
-- **[SKILLS.md](./SKILLS.md)**: Describes WHAT capabilities, commands, and tools are available in the project
+- **[SKILLS.md](./.github/skills/SKILLS.md)**: Describes WHAT capabilities, commands, and tools are available in the project
 - **[README.md](./README.md)**: User-facing documentation for package usage and contribution
 - **[.github/copilot-instructions.md](./.github/copilot-instructions.md)**: GitHub Copilot-specific instructions
 - **[Makefile](./Makefile)**: Complete list of available commands and tasks
@@ -129,7 +129,7 @@ Instructions for AI coding agents on automating unit test creation using consist
 
 #### 2.1.3. Unit Test Commands
 
-See [SKILLS.md - Unit Testing](./SKILLS.md#41-unit-testing) for detailed command documentation.
+See [SKILLS.md - Unit Testing](./.github/skills/SKILLS.md#41-unit-testing) for detailed command documentation.
 
 **Quick Reference:**
 
@@ -472,7 +472,7 @@ Instructions for AI coding agents on **how to automate fuzz test creation** usin
 
 #### 2.2.3. Fuzz Test Commands
 
-See [SKILLS.md - Fuzz Testing](./SKILLS.md#42-fuzz-testing) for detailed command documentation.
+See [SKILLS.md - Fuzz Testing](./.github/skills/SKILLS.md#42-fuzz-testing) for detailed command documentation.
 
 **Quick Reference:**
 
@@ -771,7 +771,7 @@ Instructions for AI coding agents on **how to automate benchmark test creation**
 
 #### 2.3.3. Benchmark Test Commands
 
-See [SKILLS.md - Benchmark Testing](./SKILLS.md#43-benchmark-testing) for detailed command documentation.
+See [SKILLS.md - Benchmark Testing](./.github/skills/SKILLS.md#43-benchmark-testing) for detailed command documentation.
 
 **Quick Reference:**
 
@@ -1044,7 +1044,7 @@ func BenchmarkToRatio(b *testing.B) {
 
 ## References
 
-- **[SKILLS.md](./SKILLS.md)**: Project capabilities, commands, and tools documentation
+- **[SKILLS.md](./.github/skills/SKILLS.md)**: Project capabilities, commands, and tools documentation
 - **[README.md](./README.md)**: User-facing documentation and contribution guidelines
 - **[.github/copilot-instructions.md](./.github/copilot-instructions.md)**: GitHub Copilot instructions
 - **[Makefile](./Makefile)**: Complete list of available commands

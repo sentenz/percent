@@ -69,7 +69,9 @@ The project follows the **Standard Go Project Layout** with clear separation bet
 ├── logs/                     # Test and coverage reports
 ├── Makefile                  # Task automation
 ├── AGENTS.md                 # AI agent instructions
-├── SKILLS.md                 # Capability documentation
+├── .github/
+│   └── skills/
+│       └── SKILLS.md         # Capability documentation
 └── README.md                 # User documentation
 ```
 
@@ -398,7 +400,7 @@ The project follows the **Standard Go Project Layout** with clear separation bet
 
 ## References
 
-- [AGENTS.md](./AGENTS.md) - AI agent instructions for testing patterns
-- [README.md](./README.md) - User-facing documentation
-- [Makefile](./Makefile) - Complete list of available commands
-- [.github/copilot-instructions.md](./.github/copilot-instructions.md) - GitHub Copilot instructions
+- [AGENTS.md](../../AGENTS.md) - AI agent instructions for testing patterns
+- [README.md](../../README.md) - User-facing documentation
+- [Makefile](../../Makefile) - Complete list of available commands
+- [.github/copilot-instructions.md](../copilot-instructions.md) - GitHub Copilot instructions

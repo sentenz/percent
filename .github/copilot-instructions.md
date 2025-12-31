@@ -207,7 +207,7 @@ The repository uses GitHub Actions for CI/CD:
 ## References
 
 - **AI Agent Instructions**: See `AGENTS.md` for testing patterns and workflows (HOW to test)
-- **Project Capabilities**: See `SKILLS.md` for commands, tools, and features (WHAT is available)
+- **Project Capabilities**: See `.github/skills/SKILLS.md` for commands, tools, and features (WHAT is available)
 - **Task Automation**: See `Makefile` for all available commands
 - **Development Setup**: See `scripts/README.md` for bootstrap instructions
 - **Editor Config**: See `.editorconfig` for formatting rules

@@ -235,7 +235,7 @@ Contribution guidelines and project management tools.
     - [AGENTS.md](./AGENTS.md)
       > Automate unit test generation using Large Language Models (LLMs) Agents.
 
-    - [SKILLS.md](./SKILLS.md)
+    - [SKILLS.md](./.github/skills/SKILLS.md)
       > Project capabilities, commands, and tools documentation.
 
 2. Usage and Instructions
