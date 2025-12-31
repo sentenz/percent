@@ -15,7 +15,8 @@ This is a Go package that provides utility functions for calculating percentages
 ├── scripts/              # Bootstrap, setup, and teardown scripts
 ├── tests/policy/         # Rego policies for Conftest
 ├── .github/              # GitHub workflows and configuration
-├── AGENTS.md             # Detailed instructions for AI coding agents
+├── AGENTS.md             # AI agent instructions for testing patterns (HOW)
+├── SKILLS.md             # Project capabilities and commands (WHAT)
 └── Makefile              # Task automation
 ```
 
@@ -205,7 +206,8 @@ The repository uses GitHub Actions for CI/CD:
 
 ## References
 
-- **Detailed Testing Guidelines**: See `AGENTS.md` for comprehensive testing instructions
+- **AI Agent Instructions**: See `AGENTS.md` for testing patterns and workflows (HOW to test)
+- **Project Capabilities**: See `SKILLS.md` for commands, tools, and features (WHAT is available)
 - **Task Automation**: See `Makefile` for all available commands
 - **Development Setup**: See `scripts/README.md` for bootstrap instructions
 - **Editor Config**: See `.editorconfig` for formatting rules
