@@ -1,5 +1,6 @@
 # Percent
 
+[![Go Version](https://img.shields.io/badge/Go-1.24.0-00ADD8?logo=go)](https://go.dev/doc/install)
 [![GoDoc](https://godoc.org/github.com/sentenz/percent?status.svg)](https://godoc.org/github.com/sentenz/percent/pkg/percent)
 [![Go Report Card](https://goreportcard.com/badge/github.com/sentenz/percent)](https://goreportcard.com/report/github.com/sentenz/percent)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/sentenz/percent/actions/workflows/go-tests.yml)
