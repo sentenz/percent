@@ -7,6 +7,7 @@
     - [1.1.3. Unit Test Commands](#113-unit-test-commands)
     - [1.1.4. Unit Test Style](#114-unit-test-style)
     - [1.1.5. Unit Test Template](#115-unit-test-template)
+    - [1.1.6. Mocking in Unit Tests](#116-mocking-in-unit-tests)
   - [1.2. Fuzz Testing](#12-fuzz-testing)
     - [1.2.1. Fuzz Testing Patterns](#121-fuzz-testing-patterns)
     - [1.2.2. Fuzz Test Workflow](#122-fuzz-test-workflow)
@@ -196,6 +197,153 @@ func Test<FunctionName>(t *testing.T) {
  }
 }
 ```
+
+#### 1.1.6. Mocking in Unit Tests
+
+Use mocks to isolate units of code by replacing dependencies with controlled test doubles, enabling focused testing of specific behaviors without relying on external systems or complex setups.
+
+1. When to Use Mocks
+
+    - **Mocks vs Fakes vs Test Doubles**
+      > - **Mocks**: Verify behavior and interactions (e.g., method calls, call order, argument values). Use when testing how code interacts with dependencies.
+      > - **Fakes**: Working implementations with simplified behavior (e.g., in-memory database). Use for integration-like tests without external dependencies.
+      > - **Test Doubles**: Generic term for any test replacement. Use stubs for simple return values, spies for recording calls.
+
+    - **When to Mock**
+      > Mock external dependencies (databases, APIs, file systems), slow operations, or when testing error paths that are hard to trigger with real implementations.
+
+    - **When NOT to Mock**
+      > Avoid mocking simple data structures, value objects, or pure functions. Don't over-mock internal implementation details—test behavior, not implementation.
+
+2. Best Practices
+
+    - **Interface-Based Design**
+      > Design code to depend on interfaces, not concrete types. This enables easy mocking and follows Go's implicit interface satisfaction.
+
+    - **Minimal Mocks**
+      > Create mocks with only the methods needed for the test. Avoid large, complex mock objects.
+
+    - **Clear Naming**
+      > Name mocks descriptively: `MockUserRepository`, `FakeEmailService`. Place mocks in `_test.go` files or dedicated `mocks` package.
+
+    - **Behavior Over Implementation**
+      > Verify outcomes and side effects, not internal method call sequences. Avoid brittle tests that break on refactoring.
+
+    - **One Mock Per Test Concern**
+      > Keep tests focused. Each test should verify one behavior with minimal mock setup.
+
+3. Go Mocking Approaches
+
+    - **Manual Mocks**
+      > Implement interfaces manually in test files for simple cases. Provides full control without external dependencies.
+
+    - **gomock (golang/mock)**
+      > Generate mocks from interfaces using `mockgen`. Provides expectation-based verification similar to other mocking frameworks.
+
+    - **testify/mock**
+      > Lightweight mocking with method call assertions. Popular for its simplicity and integration with testify suite.
+
+4. Example: Manual Mock
+
+```go
+// Interface to mock
+type UserRepository interface {
+    GetUser(id int) (*User, error)
+    SaveUser(user *User) error
+}
+
+// Manual mock implementation
+type mockUserRepository struct {
+    getUserFunc  func(id int) (*User, error)
+    saveUserFunc func(user *User) error
+}
+
+func (m *mockUserRepository) GetUser(id int) (*User, error) {
+    if m.getUserFunc != nil {
+        return m.getUserFunc(id)
+    }
+    return nil, errors.New("not implemented")
+}
+
+func (m *mockUserRepository) SaveUser(user *User) error {
+    if m.saveUserFunc != nil {
+        return m.saveUserFunc(user)
+    }
+    return errors.New("not implemented")
+}
+
+// Test using the mock
+func TestUserService_GetUser(t *testing.T) {
+    t.Parallel()
+
+    // Arrange
+    mockRepo := &mockUserRepository{
+        getUserFunc: func(id int) (*User, error) {
+            return &User{ID: id, Name: "Test User"}, nil
+        },
+    }
+    service := NewUserService(mockRepo)
+
+    // Act
+    user, err := service.GetUser(123)
+
+    // Assert
+    if err != nil {
+        t.Errorf("unexpected error: %v", err)
+    }
+    if user.ID != 123 {
+        t.Errorf("got user ID %d, want 123", user.ID)
+    }
+}
+```
+
+5. Example: gomock
+
+```go
+// Generate mock: mockgen -source=repository.go -destination=mocks/mock_repository.go
+
+func TestUserService_GetUser_WithGomock(t *testing.T) {
+    t.Parallel()
+
+    // Arrange
+    ctrl := gomock.NewController(t)
+    defer ctrl.Finish()
+
+    mockRepo := mocks.NewMockUserRepository(ctrl)
+    mockRepo.EXPECT().
+        GetUser(123).
+        Return(&User{ID: 123, Name: "Test User"}, nil).
+        Times(1)
+
+    service := NewUserService(mockRepo)
+
+    // Act
+    user, err := service.GetUser(123)
+
+    // Assert
+    if err != nil {
+        t.Errorf("unexpected error: %v", err)
+    }
+    if user.ID != 123 {
+        t.Errorf("got user ID %d, want 123", user.ID)
+    }
+}
+```
+
+6. Mock Testing Checklist
+
+    - [ ] Mocks implement the correct interface
+    - [ ] Test focuses on behavior, not implementation details
+    - [ ] Mock setup is clear and minimal
+    - [ ] Assertions verify expected outcomes
+    - [ ] Tests compile and run successfully
+    - [ ] CI passes with mock tests included
+
+7. References
+
+    - [golang/mock Documentation](https://github.com/golang/mock)
+    - [testify/mock Documentation](https://pkg.go.dev/github.com/stretchr/testify/mock)
+    - [Go Interfaces and Testing](https://golang.org/doc/effective_go#interfaces)
 
 ### 1.2. Fuzz Testing
 
