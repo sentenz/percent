@@ -32,7 +32,7 @@ updates:
           - major
 
   - package-ecosystem: devcontainers
-    directory: /.devcontainer/go
+    directory: /
     schedule:
       interval: weekly
       day: monday
