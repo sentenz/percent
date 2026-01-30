@@ -1,6 +1,6 @@
 ---
 name: fuzz-testing
-description: Automates fuzz test creation for Go projects using native fuzzing engine with coverage-guided testing. Use when creating, modifying, or reviewing fuzz tests, or when the user mentions fuzz testing, fuzzing, or security testing.
+description: Automates fuzz test creation for Go projects using native fuzzing engine with coverage-guided testing.
 metadata:
   version: "1.0"
   activation:

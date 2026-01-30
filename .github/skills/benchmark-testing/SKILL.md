@@ -1,6 +1,6 @@
 ---
 name: benchmark-testing
-description: Automates benchmark test creation for Go projects to measure performance and memory usage. Use when creating, modifying, or reviewing benchmark tests, or when the user mentions benchmarking, performance testing, or optimization.
+description: Automates benchmark test creation for Go projects to measure performance and memory usage.
 metadata:
   version: "1.0"
   activation:
