@@ -328,7 +328,7 @@ const <IdentifierName> = <value>
 const (
 	// <ConstName1> <describes this specific constant>
 	<ConstName1> = <value1>
-	
+
 	// <ConstName2> <describes this specific constant>
 	<ConstName2> = <value2>
 )
