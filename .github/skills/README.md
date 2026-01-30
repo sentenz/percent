@@ -21,6 +21,9 @@ Skills are documented in individual `SKILL.md` files located in appropriate subd
 - [Benchmark Testing](benchmark-testing/SKILL.md)
   > Benchmark test creation for performance measurement and optimization.
 
+- [API Documentation](api-documentation/SKILL.md)
+  > API documentation creation using godoc conventions for Go projects.
+
 ## 2. References
 
 - [AGENTS.md](../../AGENTS.md) page.
