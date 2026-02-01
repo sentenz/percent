@@ -1,5 +1,12 @@
 # Changelog
 
+# [2.2.0](https://github.com/sentenz/percent/compare/2.1.12...2.2.0) (2026-02-01)
+
+
+### Features
+
+* add Agent Skills documentation for unit, benchmark, fuzz testing, and API documentation ([6017d90](https://github.com/sentenz/percent/commit/6017d902ca355ae1813c152016e6ddef5c7ae242))
+
 ## [2.1.12](https://github.com/sentenz/percent/compare/2.1.11...2.1.12) (2025-12-30)
 
 
