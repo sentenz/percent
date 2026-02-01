@@ -13,13 +13,13 @@ Agent skills are modular capabilities that AI agents can utilize to perform spec
 Skills are documented in individual `SKILL.md` files located in appropriate subdirectories following the [Agent Skills](https://agentskills.io/specification) specification, containing metadata and descriptions of their purpose, usage, and integration within the project.
 
 - [Unit Testing](unit-testing/SKILL.md)
-  > Unit test creation using Go's standard testing package.
+  > Unit test creation using consistent software testing patterns for Go projects.
 
 - [Fuzz Testing](fuzz-testing/SKILL.md)
-  > Fuzz test creation using Go's native fuzzing engine.
+  > Fuzz test creation using Go's native fuzzing engine with coverage-guided testing.
 
 - [Benchmark Testing](benchmark-testing/SKILL.md)
-  > Benchmark test creation using Go's testing package.
+  > Benchmark test creation for performance measurement and optimization.
 
 - [API Documentation](api-documentation/SKILL.md)
   > API documentation creation using godoc conventions.

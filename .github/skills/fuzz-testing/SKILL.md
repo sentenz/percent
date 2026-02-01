@@ -5,7 +5,7 @@ metadata:
   version: "1.0"
   activation:
     implicit: true
-    priority: 2
+    priority: 1
     triggers:
       - "fuzz"
       - "fuzzing"
@@ -13,10 +13,11 @@ metadata:
       - "mutation testing"
       - "coverage-guided"
       - "property-based"
+      - "security test"
     match:
       languages: ["go", "golang"]
-      paths: ["pkg/**/*_test.go", "internal/**/*_test.go"]
-      prompt_regex: "(?i)(fuzz|fuzzing|fuzz test|mutation test|coverage-guided|property-based)"
+      paths: ["pkg/**/*_test.go", "internal/**/*_test.go", "testdata/fuzz/**"]
+      prompt_regex: "(?i)(fuzz|fuzzing|fuzz test|mutation test|coverage-guided|property-based|fuzz test|security test)"
   usage:
     load_on_prompt: true
     autodispatch: true

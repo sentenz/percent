@@ -9,6 +9,7 @@ metadata:
     triggers:
       - "unit test"
       - "go test"
+      - "testing"
       - "create test"
       - "add test"
       - "write test"
@@ -16,7 +17,7 @@ metadata:
     match:
       languages: ["go", "golang"]
       paths: ["pkg/**/*_test.go", "internal/**/*_test.go"]
-      prompt_regex: "(?i)(unit test|go test|create test|add test|write test|test coverage|testing)"
+      prompt_regex: "(?i)(unit test|go test|testing|create test|add test|write test|test coverage)"
   usage:
     load_on_prompt: true
     autodispatch: true

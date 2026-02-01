@@ -13,10 +13,11 @@ metadata:
       - "profiling"
       - "microbenchmark"
       - "optimization"
+      - "performance"
     match:
       languages: ["go", "golang"]
       paths: ["pkg/**/*_test.go", "internal/**/*_test.go"]
-      prompt_regex: "(?i)(benchmark|benchmarking|performance test|profiling|microbenchmark|optimization)"
+      prompt_regex: "(?i)(benchmark|benchmarking|performance test|profiling|microbenchmark|optimization|performance)"
   usage:
     load_on_prompt: true
     autodispatch: true

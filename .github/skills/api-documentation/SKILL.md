@@ -9,14 +9,15 @@ metadata:
     triggers:
       - "godoc"
       - "documentation"
-      - "doc comment"
-      - "api doc"
+      - "API docs"
+      - "API documentation"
       - "package doc"
       - "document function"
+      - "package documentation"
     match:
       languages: ["go", "golang"]
       paths: ["pkg/**/*.go", "internal/**/*.go"]
-      prompt_regex: "(?i)(godoc|documentation|doc comment|api doc|package doc|document)"
+      prompt_regex: "(?i)(godoc|documentation|API docs|API documentation|doc comments|package documentation)"
   usage:
     load_on_prompt: true
     autodispatch: true
@@ -24,64 +25,64 @@ metadata:
 
 # API Documentation
 
-Instructions for AI coding agents on automating API documentation creation using godoc conventions and best practices in this Go project.
+Instructions for AI coding agents on adding godoc-compatible documentation comments to Go source files.
+
+> [!NOTE]
+> This skill is for documenting Go packages, types, functions, and methods following Go documentation conventions.
 
 - [1. Benefits](#1-benefits)
 - [2. Principles](#2-principles)
-- [3. Conventions](#3-conventions)
+- [3. Patterns](#3-patterns)
   - [3.1. Package Documentation](#31-package-documentation)
   - [3.2. Function Documentation](#32-function-documentation)
   - [3.3. Type Documentation](#33-type-documentation)
-  - [3.4. Constant and Variable Documentation](#34-constant-and-variable-documentation)
-  - [3.5. Example Functions](#35-example-functions)
+  - [3.4. Method Documentation](#34-method-documentation)
+  - [3.5. Constant and Variable Documentation](#35-constant-and-variable-documentation)
+  - [3.6. Examples](#36-examples)
 - [4. Workflow](#4-workflow)
 - [5. Commands](#5-commands)
 - [6. Style Guide](#6-style-guide)
-- [7. Template](#7-template)
-  - [7.1. Package Documentation Template](#71-package-documentation-template)
-  - [7.2. Function Documentation Template](#72-function-documentation-template)
-  - [7.3. Type Documentation Template](#73-type-documentation-template)
-  - [7.4. Example Function Template](#74-example-function-template)
+- [7. Templates](#7-templates)
+  - [7.1. Package Template](#71-package-template)
+  - [7.2. Type Template](#72-type-template)
+  - [7.3. Function Template](#73-function-template)
+  - [7.4. Method Template](#74-method-template)
+  - [7.5. Constant/Variable Template](#75-constantvariable-template)
+  - [7.6. Example Template](#76-example-template)
 - [8. References](#8-references)
 
 ## 1. Benefits
 
 - Discoverability
-  > Well-documented APIs enable developers to quickly understand and use package functionality without reading implementation details.
+  > Well-documented APIs enable developers to quickly understand and use packages without reading implementation details.
 
-- Consistency
-  > Following godoc conventions ensures uniform documentation style across the codebase, improving readability and maintainability.
-
-- Self-Documenting Code
-  > Documentation comments serve as inline reference, reducing the need for external documentation and keeping docs in sync with code.
+- Maintainability
+  > Documentation embedded in source code stays synchronized with implementation, reducing drift between code and documentation.
 
 - Tooling Integration
-  > Godoc-compatible comments integrate with Go tooling, enabling automatic documentation generation and IDE support.
+  > Documentation comments are automatically extracted by `go doc` and displayed in IDEs, editors, and pkg.go.dev.
 
-- Onboarding
-  > Comprehensive API documentation reduces onboarding time for new team members and external contributors.
+- Standards Compliance
+  > Following Go documentation conventions ensures consistency across the Go ecosystem.
 
 ## 2. Principles
 
-Effective API documentation follows these core principles.
+Effective API documentation follows these core principles aligned with Go conventions.
 
 - Complete
-  > Document all public APIs including classes, functions, parameters, return values, and exceptions. Private implementation details may be omitted.
+  > Document all exported identifiers (packages, types, functions, methods, constants, and variables). Unexported identifiers may have documentation for internal clarity.
 
 - Contextual
-  > Documentation provides context about usage patterns, performance characteristics, and thread safety guarantees.
+  > Documentation provides context about usage patterns, performance characteristics, and concurrency safety.
 
 - Consistent
-  > Use a uniform style, format, terminology and structure throughout the API documentation using the patterns defined in this skill.
+  > Use a uniform style and format throughout following Go documentation conventions defined in this skill.
 
 - Concise
-  > Use clear, brief descriptions. Avoid redundant information that restates what is obvious from the signature.
+  > Use clear, brief descriptions. The first sentence should be a complete sentence that starts with the name being documented.
 
 - Concrete
   > Provide specific details about behavior, edge cases, and error conditions rather than vague statements.
-
-- Convenient
-  > Documentation should be easy to access and navigate, integrated with development tools and workflows.
 
 - Accurate
   > Documentation must match the actual behavior. Update documentation whenever the implementation changes.
@@ -89,69 +90,88 @@ Effective API documentation follows these core principles.
 - Actionable
   > Include usage examples, preconditions, postconditions, and error handling to help developers use the API correctly.
 
-## 3. Conventions
+## 3. Patterns
 
 ### 3.1. Package Documentation
 
-Package documentation provides an overview of the package's purpose and usage.
-
-- Location
-  > Place package documentation in a `doc.go` file or at the top of the primary source file.
+Package documentation appears in a comment immediately before the package clause or in a separate `doc.go` file.
 
 - Format
-  > Start with `Package <name>` followed by a description of the package's functionality.
+  > Package documentation starts with `Package <name>` followed by a description.
 
 - Content
-  > Include purpose, main types, key functions, usage examples, and any important notes.
+  > Describes the package's purpose, main concepts, and typical usage patterns.
+
+- Location
+  > Can be in any file in the package (typically the main file) or in a dedicated `doc.go` file.
 
 ### 3.2. Function Documentation
 
-Function documentation describes what a function does, its parameters, and return values.
+Function documentation describes what the function does and its contract.
 
-- First Sentence
-  > Start with the function name followed by a verb describing its action.
+- Format
+  > Starts with the function name followed by a description.
 
 - Parameters
-  > Document non-obvious parameters and their expected values.
+  > Parameters are described in the main description when needed, not as separate annotations.
 
 - Return Values
-  > Describe what the function returns, including error conditions.
+  > Return values are described in the main description, including error conditions.
+
+- Errors
+  > Document what errors can be returned and under what conditions.
 
 - Panics
   > Document any conditions that cause the function to panic.
 
 ### 3.3. Type Documentation
 
-Type documentation describes the purpose and usage of types (structs, interfaces, aliases).
+Type documentation describes the purpose and usage of a type (structs, interfaces, aliases).
 
-- First Sentence
-  > Start with the type name followed by a description of what it represents.
+- Format
+  > Starts with the type name followed by a description.
 
-- Fields
-  > Document non-obvious struct fields inline.
+- Content
+  > Explains what the type represents, its responsibilities, and any invariants.
 
-- Methods
-  > Document each method following function documentation conventions.
+- Related Types
+  > May reference related types and their relationships.
 
-### 3.4. Constant and Variable Documentation
+### 3.4. Method Documentation
 
-Constants and variables should be documented to explain their purpose and valid values.
+Method documentation is similar to function documentation.
 
-- Grouped Constants
-  > Document the group with a single comment, then document individual constants as needed.
+- Format
+  > Starts with the method name followed by a description.
 
-- Sentinel Errors
-  > Document error variables with the conditions that produce them.
+- Receiver
+  > The receiver type is mentioned when relevant to understanding the method.
 
-### 3.5. Example Functions
+- Context
+  > Describes how the method relates to the type's overall functionality.
 
-Example functions demonstrate how to use package functionality.
+### 3.5. Constant and Variable Documentation
 
-- Naming
-  > Name examples as `Example`, `ExampleFunctionName`, or `ExampleTypeName_MethodName`.
+Constants and variables are documented with their purpose and usage.
 
-- Output Comments
-  > Include `// Output:` comments to make examples testable.
+- Format
+  > Starts with the identifier name followed by a description.
+
+- Grouped Declarations
+  > Groups of related constants/variables can share a single comment before the group.
+
+### 3.6. Examples
+
+Examples demonstrate typical usage patterns.
+
+- Format
+  > Example functions follow the naming convention `Example`, `Example_suffix`, or `ExampleType_Method`.
+
+- Output
+  > Examples can include `// Output:` comments to specify expected output for testing.
+
+- Documentation
+  > Examples appear in godoc as executable code samples.
 
 - Completeness
   > Examples should be self-contained and runnable.
@@ -160,28 +180,31 @@ Example functions demonstrate how to use package functionality.
 
 1. Identify
 
-    Identify exported functions, types, constants, and variables in `pkg/` or `internal/` that require documentation.
+    Identify exported unctions, types, constants, and variables in `pkg/` or `internal/` that need documentation.
 
-2. Add/Create
+2. Review Existing
 
-    Add documentation comments directly above the exported identifier.
+    Check if documentation exists and if it needs updating or improvement.
 
-3. Documentation Requirements
+3. Add Documentation
 
-    Ensure documentation covers:
-    - Purpose and functionality
-    - Parameters and their expected values
-    - Return values and error conditions
-    - Usage examples for complex APIs
-    - Edge cases and limitations
+    Add or update documentation comments following the templates and style guide.
 
-4. Apply Templates
+4. Verify Format
 
-    Structure all documentation using the [template](#7-template) patterns.
+    Ensure comments follow Go conventions:
+    - Start with the identifier name
+    - Form complete sentences
+    - Use proper punctuation
+    - Are placed immediately before the declaration
 
 5. Validate
 
-    Run `go doc` to verify documentation renders correctly.
+    Run `go doc <package>` or `go doc <package>.<identifier>` to verify documentation renders correctly.
+
+6. Apply Templates
+
+    Structure all documentation using the [template](#7-templates) patterns.
 
 ## 5. Commands
 
@@ -198,149 +221,174 @@ Example functions demonstrate how to use package functionality.
 - License Header
   > All source files must include `// SPDX-License-Identifier: Apache-2.0` at the top.
 
-- First Sentence
-  > Start documentation with the identifier name (function, type, constant) followed by a verb.
+- Comment Style
+  > Use `//` comment style, not `/* */` for documentation comments.
 
-- Complete Sentences
-  > Write documentation as complete sentences with proper punctuation.
+- First Sentence
+  > The first sentence should be a complete, standalone summary that starts with the name being documented.
+
+- Capitalization
+  > Start with the identifier name (capitalized as it appears in code), then continue with normal sentence capitalization.
+
+- Punctuation
+  > Use proper punctuation. End sentences with periods.
 
 - Present Tense
   > Use present tense to describe what the code does (e.g., `Percent calculates` not `Percent will calculate`).
 
-- Line Length
-  > Keep documentation lines under 80 characters for readability in terminals.
+- Blank Lines
+  > No blank lines within a documentation comment block.
 
-- Paragraphs
-  > Separate paragraphs with blank comment lines for complex documentation.
+- Positioning
+  > Place the comment immediately before the declaration with no blank line in between.
 
-- Code Examples
-  > Use indented lines (starting with a tab or spaces) for code examples within comments.
+- Code References
+  > Reference other identifiers without special markup (godoc will automatically link them).
 
 - Links
-  > Reference other identifiers using their full path (e.g., `[errors.Is]`).
+  > Use URLs directly in documentation; godoc will render them as links.
 
-- Deprecation
-  > Mark deprecated items with `Deprecated:` followed by migration instructions.
+- Formatting
+  > Indented text is displayed as preformatted (code blocks).
+
+- Paragraphs
+  > Separate paragraphs with blank comment lines (lines containing only `//`).
+
+- Lists
+  > Use simple text lists; no special markup is needed.
 
 - No Redundancy
   > Avoid repeating the function signature in the documentation.
 
-## 7. Template
+## 7. Templates
 
 Use these templates for documenting Go code. Replace placeholders with actual values.
 
-### 7.1. Package Documentation Template
+### 7.1. Package Template
+
+Use this template for package documentation. Place in the main package file or in `doc.go`.
 
 ```go
 // SPDX-License-Identifier: Apache-2.0
 
-// Package <name> provides <brief description>.
+// Package <name> provides <brief description of package purpose>.
 //
-// <Detailed description of the package's purpose and functionality.>
+// <Extended description of what the package does, main concepts,
+// and typical usage patterns.>
 //
-// # Usage
+// Example usage:
 //
-// <Brief usage example or overview.>
+// <code example showing typical usage>
 //
-//	result, err := <name>.<Function>(args)
-//	if err != nil {
-//		// handle error
-//	}
-//
-// # Key Functions
-//
-//   - [Function1]: <brief description>
-//   - [Function2]: <brief description>
-//
-// # Notes
-//
-// <Any important notes, limitations, or considerations.>
+// <Additional notes about concurrency, performance, or other important
+// considerations.>
 package <name>
 ```
 
-### 7.2. Function Documentation Template
+### 7.2. Type Template
+
+Use this template for documenting types (structs, interfaces, type aliases).
 
 ```go
-// <FunctionName> <verb describing action> <what it does>.
+// <TypeName> <describes what the type represents and its purpose>.
 //
-// <Additional details about behavior, algorithms, or implementation notes.>
-//
-// Parameters:
-//   - param1: <description of first parameter>
-//   - param2: <description of second parameter>
-//
-// Returns:
-//   - <type>: <description of return value>
-//   - error: <description of error conditions>
+// <Extended description of responsibilities, invariants, and usage patterns.
+// Include information about thread safety, lifecycle, or other important
+// characteristics.>
 //
 // Example:
 //
-//	result, err := <FunctionName>(arg1, arg2)
-//	if err != nil {
-//		log.Fatal(err)
-//	}
-//	fmt.Println(result)
-func <FunctionName>(param1 <type>, param2 <type>) (<returnType>, error) {
-	// implementation
-}
-```
-
-### 7.3. Type Documentation Template
-
-```go
-// <TypeName> represents <what it represents>.
-//
-// <Additional details about the type's purpose and usage.>
-//
-// Example:
-//
-//	var t <TypeName>
-//	t.<Method>(args)
+// <code example showing typical usage of the type>
 type <TypeName> struct {
-	// Field1 is <description of field>.
-	Field1 <type>
-
-	// Field2 is <description of field>.
-	Field2 <type>
-}
-
-// <MethodName> <verb describing action> <what it does>.
-//
-// <Additional details if needed.>
-func (t *<TypeName>) <MethodName>() <returnType> {
-	// implementation
+ // <FieldName> <describes the field's purpose>
+ <FieldName> <type>
 }
 ```
 
-### 7.4. Example Function Template
+### 7.3. Function Template
+
+Use this template for documenting functions.
 
 ```go
-// Example demonstrates basic usage of the <package> package.
+// <FunctionName> <describes what the function does>.
+//
+// <Extended description including parameter meanings, return value
+// descriptions, and any error conditions.>
+//
+// The function <describes behavior, preconditions, postconditions>.
+//
+// Returns <description of return value(s)>. If an error occurs,
+// it returns <description of error conditions>.
+//
+// Example:
+//
+// <code example showing typical usage>
+func <FunctionName>(<params>) (<returns>) {
+ // implementation
+}
+```
+
+### 7.4. Method Template
+
+Use this template for documenting methods.
+
+```go
+// <MethodName> <describes what the method does>.
+//
+// <Extended description including how it relates to the receiver type,
+// parameter meanings, return value descriptions, and any error conditions.>
+//
+// The method <describes behavior, preconditions, postconditions>.
+//
+// Returns <description of return value(s)>. If an error occurs,
+// it returns <description of error conditions>.
+func (r <ReceiverType>) <MethodName>(<params>) (<returns>) {
+ // implementation
+}
+```
+
+### 7.5. Constant/Variable Template
+
+Use this template for documenting constants and variables.
+
+```go
+// <IdentifierName> <describes the constant/variable and its purpose>.
+const <IdentifierName> = <value>
+
+// <GroupDescription> describes this group of related constants.
+const (
+ // <ConstName1> <describes this specific constant>
+ <ConstName1> = <value1>
+
+ // <ConstName2> <describes this specific constant>
+ <ConstName2> = <value2>
+)
+```
+
+### 7.6. Example Template
+
+Use this template for creating example functions.
+
+```go
+// Example demonstrates basic usage of <name>.
 func Example() {
-	result, err := <Function>(args)
-	if err != nil {
-		fmt.Println("error:", err)
-		return
-	}
-	fmt.Println(result)
-	// Output: <expected output>
+ // Setup
+ <setup code>
+ 
+ // Usage
+ <example usage code>
+ 
+ // Output:
+ // <expected output>
 }
 
-// Example<FunctionName> demonstrates usage of <FunctionName>.
-func Example<FunctionName>() {
-	result, err := <FunctionName>(arg1, arg2)
-	if err != nil {
-		fmt.Println("error:", err)
-		return
-	}
-	fmt.Printf("<format string>", result)
-	// Output: <expected output>
-}
-
-// Example<FunctionName>_<suffix> demonstrates <specific scenario>.
-func Example<FunctionName>_<suffix>() {
-	// demonstrate specific use case
-	// Output: <expected output>
+// Example<Type>_<method> demonstrates usage of <Type>.<method>.
+func Example<Type>_<method>() {
+ // Example implementation
+ <example code>
+ 
+ // Output:
+ // <expected output>
 }
 ```
 
@@ -348,5 +396,6 @@ func Example<FunctionName>_<suffix>() {
 
 - Go [Documentation Comments](https://go.dev/doc/comment) specification.
 - Go [Effective Go - Commentary](https://go.dev/doc/effective_go#commentary) guide.
-- Go [godoc](https://pkg.go.dev/golang.org/x/tools/cmd/godoc) tool documentation.
-- Go [pkgsite](https://pkg.go.dev/golang.org/x/pkgsite/cmd/pkgsite) tool documentation.
+- Go [Godoc](https://go.dev/blog/godoc) documentation.
+- Go [Godoc](https://pkg.go.dev/golang.org/x/tools/cmd/godoc) tool documentation.
+- Go [Go Code Review](https://github.com/golang/go/wiki/CodeReviewComments#doc-comments) comments.
