@@ -13,27 +13,28 @@ Percent is a Go package that provides utility functions for calculating percenta
   - [1.2. Installation](#12-installation)
   - [1.3. Usage](#13-usage)
 - [2. Contribute](#2-contribute)
-  - [2.1. Task Runner](#21-task-runner)
-    - [2.1.1. Make](#211-make)
-  - [2.2. Bootstrap](#22-bootstrap)
-    - [2.2.1. Scripts](#221-scripts)
-  - [2.3. Dev Containers](#23-dev-containers)
-  - [2.4. Dependency Manager](#24-dependency-manager)
-    - [2.4.1. Go Modules](#241-go-modules)
-  - [2.5. Software Testing](#25-software-testing)
-    - [2.5.1. Unit Testing](#251-unit-testing)
-    - [2.5.2. Fuzz Testing](#252-fuzz-testing)
-    - [2.5.3. Benchmarks](#253-benchmarks)
-    - [2.5.4. Code Coverage](#254-code-coverage)
-  - [2.6. Release Manager](#26-release-manager)
-    - [2.6.1. Semantic-Release](#261-semantic-release)
-  - [2.7. Update Manager](#27-update-manager)
-    - [2.7.1. Renovate](#271-renovate)
-    - [2.7.2. Dependabot](#272-dependabot)
-  - [2.8. Policy Manager](#28-policy-manager)
-    - [2.8.1. Conftest](#281-conftest)
-  - [2.9. Supply Chain Manager](#29-supply-chain-manager)
-    - [2.9.1. Trivy](#291-trivy)
+  - [2.1. AI Agents](#21-ai-agents)
+  - [2.2. Task Runner](#22-task-runner)
+    - [2.2.1. Make](#221-make)
+  - [2.3. Bootstrap](#23-bootstrap)
+    - [2.3.1. Scripts](#231-scripts)
+  - [2.4. Dev Containers](#24-dev-containers)
+  - [2.5. Dependency Manager](#25-dependency-manager)
+    - [2.5.1. Go Modules](#251-go-modules)
+  - [2.6. Software Testing](#26-software-testing)
+    - [2.6.1. Unit Testing](#261-unit-testing)
+    - [2.6.2. Fuzz Testing](#262-fuzz-testing)
+    - [2.6.3. Benchmarks](#263-benchmarks)
+    - [2.6.4. Code Coverage](#264-code-coverage)
+  - [2.7. Release Manager](#27-release-manager)
+    - [2.7.1. Semantic-Release](#271-semantic-release)
+  - [2.8. Update Manager](#28-update-manager)
+    - [2.8.1. Renovate](#281-renovate)
+    - [2.8.2. Dependabot](#282-dependabot)
+  - [2.9. Policy Manager](#29-policy-manager)
+    - [2.9.1. Conftest](#291-conftest)
+  - [2.10. Supply Chain Manager](#210-supply-chain-manager)
+    - [2.10.1. Trivy](#2101-trivy)
 - [3. References](#3-references)
 
 ## 1. Module
@@ -97,9 +98,37 @@ Percent is a Go package that provides utility functions for calculating percenta
 
 Contribution guidelines and project management tools.
 
-### 2.1. Task Runner
+### 2.1. AI Agents
 
-#### 2.1.1. Make
+AI Agents are automated tools that assist in various development tasks such as code generation, testing, and documentation.
+
+1. Insights and Details
+
+    - [AGENTS.md](AGENTS.md)
+      > Instructions for AI coding agents working with the project.
+
+    - [SKILL.md](.github/skills/README.md)
+      > Instructions for AI agent skills used in the project.
+
+2. Usage and Instructions
+
+    - Implicit Invocation
+      > AI Agents can be implicitly invoked based on file paths, programming languages, or specific keywords in user prompts.
+
+      ```plaintext
+      .github/skills/<skill-name>/SKILL.md
+      ```
+
+    - Explicit Invocation
+      > AI Agents can be explicitly invoked by specifying the skill name in user prompts.
+
+      ```plaintext
+      @agent <skill-name> <task-description>
+      ```
+
+### 2.2. Task Runner
+
+#### 2.2.1. Make
 
 [Make](https://www.gnu.org/software/make/) is a automation tool that defines and manages tasks to streamline development workflows.
 
@@ -133,22 +162,14 @@ Contribution guidelines and project management tools.
               teardown          Remove development artifacts and restore the host to its pre-setup state
       ```
 
-### 2.2. Bootstrap
+### 2.3. Bootstrap
 
-#### 2.2.1. Scripts
-
-[scripts/](scripts/README.md) provides scripts to bootstrap, setup, and teardown a software development workspace with requisites.
+#### 2.3.1. Scripts
 
 1. Insights and Details
 
-    - [bootstrap.sh](scripts/bootstrap.sh)
-      > Initializes a software development workspace with requisites.
-
-    - [setup.sh](scripts/setup.sh)
-      > Installs and configures all dependencies essential for development.
-
-    - [teardown.sh](scripts/teardown.sh)
-      > Removes development artifacts and restores the host to its pre-setup state.
+    - [scripts/](scripts/README.md)
+      > Provides scripts to bootstrap, setup, and teardown a software development workspace with requisites.
 
 2. Usage and Instructions
 
@@ -166,23 +187,12 @@ Contribution guidelines and project management tools.
       make teardown
       ```
 
-### 2.3. Dev Containers
-
-[.devcontainer/](.devcontainer/README.md) provides Dev Containers as a consistent development environment using Docker containers.
+### 2.4. Dev Containers
 
 1. Insights and Details
 
-    - [go/](.devcontainer/go/)
-      > Dev Container configuration for Go development environment.
-
-      ```json
-      // ...
-      "postCreateCommand": "sudo make bootstrap && sudo make setup",
-      // ...
-      ```
-
-      > [!NOTE]
-      > The `devcontainer.json` runs the `bootstrap` and `setup` tasks to initialize and configure the development environment.
+    - [.devcontainer/](.devcontainer/README.md)
+      > Provides Dev Containers as a consistent development environment using Docker containers.
 
 2. Usage and Instructions
 
@@ -193,9 +203,9 @@ Contribution guidelines and project management tools.
       # make devcontainer-go
       ```
 
-### 2.4. Dependency Manager
+### 2.5. Dependency Manager
 
-#### 2.4.1. Go Modules
+#### 2.5.1. Go Modules
 
 [Go Modules](https://go.dev/ref/mod) is the dependency management system for Go that simplifies the process of managing dependencies and libraries.
 
@@ -222,9 +232,9 @@ Contribution guidelines and project management tools.
       make go-mod-vendor
       ```
 
-### 2.5. Software Testing
+### 2.6. Software Testing
 
-#### 2.5.1. Unit Testing
+#### 2.6.1. Unit Testing
 
 [Go testing](https://pkg.go.dev/testing) is the standard library package for unit testing in Go.
 
@@ -232,9 +242,6 @@ Contribution guidelines and project management tools.
 
     - `testing.T`
       > Unit tests use the standard Go testing package with `testing.T`.
-
-    - [AGENTS.md](./AGENTS.md)
-      > Automate unit test generation using Large Language Models (LLMs) Agents.
 
 2. Usage and Instructions
 
@@ -250,7 +257,10 @@ Contribution guidelines and project management tools.
       make go-test-unit
       ```
 
-#### 2.5.2. Fuzz Testing
+    - AI Agents
+      > Instruct Agent Skills capabilities to to perform [Unit Testing](.github/skills/unit-testing/SKILL.md) tasks.
+
+#### 2.6.2. Fuzz Testing
 
 [Go fuzzing](https://go.dev/security/fuzz/) is a testing technique that uses randomized inputs to find bugs and security vulnerabilities.
 
@@ -259,10 +269,7 @@ Contribution guidelines and project management tools.
     - `testing.F`
       > Fuzz tests use the standard Go testing package with `testing.F`.
 
-    - [AGENTS.md](./AGENTS.md)
-      > Automate fuzz test generation using Large Language Models (LLMs) Agents.
-
-1. Usage and Instructions
+2. Usage and Instructions
 
     - CI/CD
 
@@ -276,7 +283,10 @@ Contribution guidelines and project management tools.
       make go-test-fuzz
       ```
 
-#### 2.5.3. Benchmarks
+    - AI Agents
+      > Instruct Agent Skills capabilities to to perform [Fuzz Testing](.github/skills/fuzz-testing/SKILL.md) tasks.
+
+#### 2.6.3. Benchmarks
 
 [Go benchmarks](https://pkg.go.dev/testing#hdr-Benchmarks) measure the performance of code and track performance regressions.
 
@@ -285,10 +295,7 @@ Contribution guidelines and project management tools.
     - `testing.B`
       > Benchmark tests use the standard Go testing package with `testing.B`.
 
-    - [AGENTS.md](./AGENTS.md)
-      > Automate benchmark test generation using Large Language Models (LLMs) Agents.
-
-1. Usage and Instructions
+2. Usage and Instructions
 
     - Tasks
 
@@ -296,7 +303,10 @@ Contribution guidelines and project management tools.
       make go-test-bench
       ```
 
-#### 2.5.4. Code Coverage
+    - AI Agents
+      > Instruct Agent Skills capabilities to to perform [Benchmark Testing](.github/skills/benchmark-testing/SKILL.md) tasks.
+
+#### 2.6.4. Code Coverage
 
 [go tool cover](https://pkg.go.dev/cmd/cover) provides code coverage analysis for Go tests.
 
@@ -318,9 +328,9 @@ Contribution guidelines and project management tools.
       make go-test-coverage
       ```
 
-### 2.6. Release Manager
+### 2.7. Release Manager
 
-#### 2.6.1. Semantic-Release
+#### 2.7.1. Semantic-Release
 
 [Semantic-Release](https://github.com/semantic-release/semantic-release) automates the release process by analyzing commit messages to determine the next version number, generating changelog and release notes, and publishing the release.
 
@@ -337,9 +347,9 @@ Contribution guidelines and project management tools.
       uses: sentenz/actions/semantic-release@latest
       ```
 
-### 2.7. Update Manager
+### 2.8. Update Manager
 
-#### 2.7.1. Renovate
+#### 2.8.1. Renovate
 
 [Renovate](https://github.com/renovatebot/renovate) automates dependency updates by creating merge requests for outdated dependencies, libraries and packages.
 
@@ -356,7 +366,7 @@ Contribution guidelines and project management tools.
       uses: sentenz/actions/renovate@latest
       ```
 
-#### 2.7.2. Dependabot
+#### 2.8.2. Dependabot
 
 [Dependabot](https://github.com/dependabot/dependabot-core) automates dependency updates by creating pull requests for outdated dependencies, libraries and packages.
 
@@ -365,9 +375,9 @@ Contribution guidelines and project management tools.
     - [.github/dependabot.yml](.github/dependabot.yml)
       > Configuration file for Dependabot specifying update rules and schedules.
 
-### 2.8. Policy Manager
+### 2.9. Policy Manager
 
-#### 2.8.1. Conftest
+#### 2.9.1. Conftest
 
 [Conftest](https://www.conftest.dev/) is a **Policy as Code (PaC)** tool to streamline policy management for improved development, security and audit capability.
 
@@ -376,7 +386,7 @@ Contribution guidelines and project management tools.
     - [conftest.toml](conftest.toml)
       > Configuration file for Conftest specifying policy paths and output formats.
 
-    - [tests/policy](tests/policy/)
+    - [tests/policy/](tests/policy/)
       > Directory contains Rego policies for Conftest to enforce best practices and compliance standards.
 
 2. Usage and Instructions
@@ -394,16 +404,16 @@ Contribution guidelines and project management tools.
     - Tasks
 
       ```bash
-      make policy-lint-regal <filepath>
+      make policy-regal-lint <filepath>
       ```
 
       ```bash
-      make policy-analysis-conftest <filepath>
+      make policy-conftest-test <filepath>
       ```
 
-### 2.9. Supply Chain Manager
+### 2.10. Supply Chain Manager
 
-#### 2.9.1. Trivy
+#### 2.10.1. Trivy
 
 [Trivy](https://github.com/aquasecurity/trivy) is a comprehensive security scanner for vulnerabilities, misconfigurations, and compliance issues in container images, filesystems, and source code.
 
@@ -434,7 +444,7 @@ Contribution guidelines and project management tools.
       ```
 
       ```bash
-      make sast-trivy-sbom <sbom_path>
+      make sast-trivy-sbom-scan <sbom_path>
       ```
 
       ```bash
@@ -443,6 +453,6 @@ Contribution guidelines and project management tools.
 
 ## 3. References
 
-- GitHub [Template DX](https://github.com/sentenz/template-dx) repository.
+- Sentenz [Template DX](https://github.com/sentenz/template-dx) repository.
 - Sentenz [Actions](https://github.com/sentenz/actions) repository.
 - Sentenz [Manager Tools](https://github.com/sentenz/convention/issues/392) article.

@@ -1,4 +1,4 @@
-# https://EditorConfig.org
+# https://editorConfig.org
 
 root = true
 [**/vendor/*]
