@@ -1,5 +1,17 @@
 # Changelog
 
+# [3.0.0](https://github.com/sentenz/percent/compare/v2.0.0...v3.0.0) (2026-02-03)
+
+
+* fix!: update module path to v2 for Go modules compatibility ([113c07a](https://github.com/sentenz/percent/commit/113c07a7a946b11f2ca59223b0c9dad4e86bcc80))
+
+
+### BREAKING CHANGES
+
+* Module path changed from github.com/sentenz/percent to github.com/sentenz/percent/v2
+
+This change follows Go modules semantic import versioning requirements for v2+ modules.
+
 # [2.0.0](https://github.com/sentenz/percent/compare/v1.0.0...v2.0.0) (2026-02-03)
 
 
