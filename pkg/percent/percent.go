@@ -14,7 +14,7 @@ package percent
 import (
 	"math"
 
-	"github.com/sentenz/percent/internal/pkg/resource"
+	"github.com/sentenz/percent/v2/internal/pkg/resource"
 	"golang.org/x/exp/constraints"
 )
 
