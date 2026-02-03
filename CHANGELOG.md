@@ -1,5 +1,12 @@
 # Changelog
 
+# [2.3.0](https://github.com/sentenz/percent/compare/2.2.0...2.3.0) (2026-02-03)
+
+
+### Features
+
+* update SKILL.md and percent.go with enhanced formula documentatio ([17769bc](https://github.com/sentenz/percent/commit/17769bc2dd2fbd31a5211166b2e6bb0ab1c8a66a))
+
 # [2.2.0](https://github.com/sentenz/percent/compare/2.1.12...2.2.0) (2026-02-01)
 
 
