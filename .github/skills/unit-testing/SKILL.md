@@ -2,7 +2,7 @@
 name: unit-testing
 description: Automates unit test creation for Go projects using the standard testing package with consistent software testing patterns including In-Got-Want, Table-Driven Testing, and AAA patterns. Use when creating, modifying, or reviewing unit tests, or when the user mentions unit tests, test coverage, or Go testing.
 metadata:
-  version: "1.0"
+  version: "1.0.0"
   activation:
     implicit: true
     priority: 1
