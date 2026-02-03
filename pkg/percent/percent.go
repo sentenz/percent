@@ -30,19 +30,21 @@ import (
 
 // Percent calculates the percentage of a given value.
 //
-// The function computes the result as: value * (percent / 100).
+// The calculation follows the formula:
 //
-// The percent parameter must be between 0 and 100 inclusive. Values outside
-// this range return an error.
+//	result = value × (percent / 100)
 //
-// Returns the calculated percentage as a float64. If percent is out of range,
-// it returns 0 and resource.ErrOutOfRange.
+// Where:
+//   - value is the base amount
+//   - percent is the percentage rate in range [0, 100]
+//   - result is the calculated percentage of the value
 //
-// Example:
+// For example, 25% of 200:
 //
-//	// Calculate 25% of 200
-//	result, err := percent.Percent(25, 200)
-//	// result: 50.0, err: nil
+//	result = 200 × (25 / 100) = 200 × 0.25 = 50
+//
+// The function returns the calculated result as float64.
+// Returns 0 and resource.ErrOutOfRange if percent is outside the range [0, 100].
 func Percent[T constraints.Integer | constraints.Float](percent, value T) (float64, error) {
 	if float64(percent) < 0 || float64(percent) > 100 {
 		return 0, resource.ErrOutOfRange
@@ -53,20 +55,24 @@ func Percent[T constraints.Integer | constraints.Float](percent, value T) (float
 
 // Of calculates the percentage that part represents of total.
 //
-// The function computes the result as: (part / total) * 100.
+// The calculation follows the formula:
 //
-// The total parameter must be non-zero. The part parameter must not exceed
-// total. Violations of these constraints return an error.
+//	             part
+//	result = ─────────── × 100
+//	            total
 //
-// Returns the calculated percentage as a float64. If total is zero, it returns
-// 0 and resource.ErrDivideByZero. If part exceeds total, it returns 0 and
-// resource.ErrPartGreaterThanTotal.
+// Where:
+//   - part is the portion being measured (part ≤ total)
+//   - total is the whole amount (total ≠ 0)
+//   - result is the percentage that part represents of total
 //
-// Example:
+// For example, what percentage is 30 of 120:
 //
-//	// Calculate what percentage 30 is of 120
-//	result, err := percent.Of(30, 120)
-//	// result: 25.0, err: nil
+//	result = (30 / 120) × 100 = 0.25 × 100 = 25
+//
+// The function returns the calculated percentage as float64.
+// Returns 0 and resource.ErrDivideByZero if total is zero.
+// Returns 0 and resource.ErrPartGreaterThanTotal if part exceeds total.
 func Of[T constraints.Integer | constraints.Float](part, total T) (float64, error) {
 	if float64(total) == 0 {
 		return 0, resource.ErrDivideByZero
@@ -81,22 +87,23 @@ func Of[T constraints.Integer | constraints.Float](part, total T) (float64, erro
 
 // Change calculates the percentage change between an old value and a new value.
 //
-// The function computes the result as: ((newValue - oldValue) / |oldValue|) * 100.
+// The calculation follows the formula:
 //
-// The absolute value of oldValue is used in the denominator to correctly
-// handle negative base values. The oldValue parameter must be non-zero.
+//	            (newValue - oldValue)
+//	change = ─────────────────────────── × 100
+//	                 |oldValue|
 //
-// A positive result indicates an increase, while a negative result indicates
-// a decrease.
+// Where:
+//   - oldValue is the original value (oldValue ≠ 0)
+//   - newValue is the new value
+//   - change is the percentage change (positive for increase, negative for decrease)
 //
-// Returns the percentage change as a float64. If oldValue is zero, it returns
-// 0 and resource.ErrDivideByZero.
+// For example, change from 50 to 75:
 //
-// Example:
+//	change = (75 - 50) / |50| × 100 = 25 / 50 × 100 = 50%
 //
-//	// Calculate percentage change from 50 to 75
-//	result, err := percent.Change(50, 75)
-//	// result: 50.0, err: nil (50% increase)
+// The function returns the percentage change as float64.
+// Returns 0 and resource.ErrDivideByZero if oldValue is zero.
 func Change[T constraints.Integer | constraints.Float](oldValue, newValue T) (float64, error) {
 	if float64(oldValue) == 0 {
 		return 0, resource.ErrDivideByZero
@@ -107,19 +114,23 @@ func Change[T constraints.Integer | constraints.Float](oldValue, newValue T) (fl
 
 // Remain calculates the remaining value after subtracting a percentage.
 //
-// The function computes the result as: value * ((100 - percent) / 100).
+// The calculation follows the formula:
 //
-// The percent parameter must be between 0 and 100 inclusive. Values outside
-// this range return an error.
+//	                  (100 - percent)
+//	remain = value × ─────────────────
+//	                       100
 //
-// Returns the remaining value as a float64. If percent is out of range,
-// it returns 0 and resource.ErrOutOfRange.
+// Where:
+//   - value is the base amount
+//   - percent is the percentage to subtract in range [0, 100]
+//   - remain is the value remaining after percentage reduction
 //
-// Example:
+// For example, what remains after removing 25% from 200:
 //
-//	// Calculate what remains after removing 25% from 200
-//	result, err := percent.Remain(25, 200)
-//	// result: 150.0, err: nil
+//	remain = 200 × ((100 - 25) / 100) = 200 × 0.75 = 150
+//
+// The function returns the remaining value as float64.
+// Returns 0 and resource.ErrOutOfRange if percent is outside the range [0, 100].
 func Remain[T constraints.Integer | constraints.Float](percent, value T) (float64, error) {
 	if float64(percent) < 0 || float64(percent) > 100 {
 		return 0, resource.ErrOutOfRange
@@ -130,19 +141,20 @@ func Remain[T constraints.Integer | constraints.Float](percent, value T) (float6
 
 // FromRatio converts a decimal ratio to a percentage.
 //
-// The function computes the result as: ratio * 100.
+// The calculation follows the formula:
 //
-// The ratio parameter must be between 0 and 1 inclusive. Values outside
-// this range return an error.
+//	percent = ratio × 100
 //
-// Returns the percentage as a float64. If ratio is out of range,
-// it returns 0 and resource.ErrOutOfRange.
+// Where:
+//   - ratio is the decimal value in range [0, 1]
+//   - percent is the equivalent percentage value
 //
-// Example:
+// For example, convert ratio 0.25 to percentage:
 //
-//	// Convert ratio 0.25 to percentage
-//	result, err := percent.FromRatio(0.25)
-//	// result: 25.0, err: nil
+//	percent = 0.25 × 100 = 25
+//
+// The function returns the percentage as float64.
+// Returns 0 and resource.ErrOutOfRange if ratio is outside the range [0, 1].
 func FromRatio[T constraints.Integer | constraints.Float](ratio T) (float64, error) {
 	if float64(ratio) < 0 || float64(ratio) > 1 {
 		return 0, resource.ErrOutOfRange
@@ -153,19 +165,22 @@ func FromRatio[T constraints.Integer | constraints.Float](ratio T) (float64, err
 
 // ToRatio converts a percentage to a decimal ratio.
 //
-// The function computes the result as: percent / 100.
+// The calculation follows the formula:
 //
-// The percent parameter must be between 0 and 100 inclusive. Values outside
-// this range return an error.
+//	          percent
+//	ratio = ───────────
+//	            100
 //
-// Returns the ratio as a float64. If percent is out of range,
-// it returns 0 and resource.ErrOutOfRange.
+// Where:
+//   - percent is the percentage value in range [0, 100]
+//   - ratio is the equivalent decimal value in range [0, 1]
 //
-// Example:
+// For example, convert 25% to ratio:
 //
-//	// Convert 25% to ratio
-//	result, err := percent.ToRatio(25)
-//	// result: 0.25, err: nil
+//	ratio = 25 / 100 = 0.25
+//
+// The function returns the ratio as float64.
+// Returns 0 and resource.ErrOutOfRange if percent is outside the range [0, 100].
 func ToRatio[T constraints.Integer | constraints.Float](percent T) (float64, error) {
 	if float64(percent) < 0 || float64(percent) > 100 {
 		return 0, resource.ErrOutOfRange
