@@ -9,8 +9,8 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 
-	"github.com/sentenz/percent/v2/internal/pkg/resource"
-	"github.com/sentenz/percent/v2/pkg/percent"
+	"github.com/sentenz/percent/v3/internal/pkg/resource"
+	"github.com/sentenz/percent/v3/pkg/percent"
 )
 
 func TestPercent(t *testing.T) {
