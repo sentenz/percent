@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.1](https://github.com/sentenz/percent/compare/v3.0.0...v3.0.1) (2026-02-03)
+
+
+### Bug Fixes
+
+* prepend 'v' to tag name for SBOM artifact publishing ([f04d646](https://github.com/sentenz/percent/commit/f04d6466adc8548207e761e90cd898426243089a))
+
 # [3.0.0](https://github.com/sentenz/percent/compare/v2.0.0...v3.0.0) (2026-02-03)
 
 
