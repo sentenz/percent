@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.2](https://github.com/sentenz/percent/compare/2.3.1...2.3.2) (2026-02-03)
+
+
+### Bug Fixes
+
+* refine tag format of semantic-release for semantic versioning ([cc0cb68](https://github.com/sentenz/percent/commit/cc0cb681a4cfcdee485acc0f2d274a2187db8078))
+
 ## [2.3.1](https://github.com/sentenz/percent/compare/2.3.0...2.3.1) (2026-02-03)
 
 
