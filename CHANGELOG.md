@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.1](https://github.com/sentenz/percent/compare/2.3.0...2.3.1) (2026-02-03)
+
+
+### Bug Fixes
+
+* update documentation and improve clarity in SKILL.md and percent.go ([1e82d5d](https://github.com/sentenz/percent/commit/1e82d5dc1ae269e1371a99b986a14804d555d781))
+
 # [2.3.0](https://github.com/sentenz/percent/compare/2.2.0...2.3.0) (2026-02-03)
 
 
