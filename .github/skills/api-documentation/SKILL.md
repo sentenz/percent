@@ -38,7 +38,8 @@ Instructions for AI coding agents on adding godoc-compatible documentation comme
   - [3.3. Type Documentation](#33-type-documentation)
   - [3.4. Method Documentation](#34-method-documentation)
   - [3.5. Constant and Variable Documentation](#35-constant-and-variable-documentation)
-  - [3.6. Examples](#36-examples)
+  - [3.6. Formula Documentation](#36-formula-documentation)
+  - [3.7. Examples](#37-examples)
 - [4. Workflow](#4-workflow)
 - [5. Commands](#5-commands)
 - [6. Style Guide](#6-style-guide)
@@ -48,7 +49,8 @@ Instructions for AI coding agents on adding godoc-compatible documentation comme
   - [7.3. Function Template](#73-function-template)
   - [7.4. Method Template](#74-method-template)
   - [7.5. Constant/Variable Template](#75-constantvariable-template)
-  - [7.6. Example Template](#76-example-template)
+  - [7.6. Formula Template](#76-formula-template)
+  - [7.7. Example Template](#77-example-template)
 - [8. References](#8-references)
 
 ## 1. Benefits
@@ -160,7 +162,26 @@ Constants and variables are documented with their purpose and usage.
 - Grouped Declarations
   > Groups of related constants/variables can share a single comment before the group.
 
-### 3.6. Examples
+### 3.6. Formula Documentation
+
+Functions involving mathematical formulas should document the formula for clarity and understanding.
+
+- Format
+  > Include the mathematical formula in a clear, readable format within the function documentation.
+
+- Notation
+  > Use standard mathematical notation. Variables in formulas should match parameter names when possible.
+
+- Formula Placement
+  > Place the formula after the main description and before examples, using indentation for preformatted display.
+
+- Explanation
+  > Provide context for the formula, including what each variable represents and any important mathematical properties.
+
+- Edge Cases
+  > Document special cases, limitations, or boundary conditions related to the formula.
+
+### 3.7. Examples
 
 Examples demonstrate typical usage patterns.
 
@@ -365,7 +386,37 @@ const (
 )
 ```
 
-### 7.6. Example Template
+### 7.6. Formula Template
+
+Use this template for documenting functions that implement mathematical formulas.
+
+```go
+// <FunctionName> <describes what the function calculates>.
+//
+// <Extended description of the calculation and its purpose.>
+//
+// Formula:
+//
+//	<mathematical formula using standard notation>
+//
+// Where:
+//   - <param1> is <description of first parameter>
+//   - <param2> is <description of second parameter>
+//   - <variable> represents <description if formula uses additional variables>
+//
+// The function <describes behavior, constraints, and special cases>.
+//
+// Returns <description of return value>. Returns an error if <error conditions>.
+//
+// Example:
+//
+//	<code example with inputs and expected output>
+func <FunctionName>(<params>) (<returns>) {
+ // implementation
+}
+```
+
+### 7.7. Example Template
 
 Use this template for creating example functions.
 
