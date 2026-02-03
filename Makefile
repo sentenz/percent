@@ -96,12 +96,6 @@ go-test-fuzz:
 	done
 .PHONY: go-test-fuzz
 
-## Generate fuzz tests for Go functions using AI agents-based with AGENTS.md
-copilot-agents-test-fuzz:
-	# TODO: Implement AI agents-based fuzz test generation
-	@echo "AI agents-based fuzz test generation is not yet implemented."
-.PHONY: copilot-agents-test-fuzz
-
 ## Format Go code according to Go standards
 go-fmt:
 	go fmt ./...
