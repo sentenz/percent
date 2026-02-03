@@ -460,7 +460,7 @@ func <FunctionName>(<params>) (<returns>) {
 //
 // Where:
 //   - value is the base amount
-//   - percent is the percentage (0-100)
+//   - percent is the percentage [0, 100]
 //   - result is the calculated percentage of the value
 //
 // For example, 25% of 200:
