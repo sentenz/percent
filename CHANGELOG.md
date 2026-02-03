@@ -1,5 +1,46 @@
 # Changelog
 
+# [2.0.0](https://github.com/sentenz/percent/compare/v1.0.0...v2.0.0) (2026-02-03)
+
+
+* chore!: change MIT license with Apache 2.0 using SPDX identifiers ([#12](https://github.com/sentenz/percent/issues/12)) ([bca28c8](https://github.com/sentenz/percent/commit/bca28c8f18a05ba8e724cab73f8041c38f8905d5)), closes [#11](https://github.com/sentenz/percent/issues/11)
+
+
+### Bug Fixes
+
+* add benchmark comparison task to Makefile and update AGENTS.md ([42707eb](https://github.com/sentenz/percent/commit/42707ebc643b03494d2e3dcacdde20d6282482dc))
+* add release trigger types for semantic-release workflow ([e141df3](https://github.com/sentenz/percent/commit/e141df3d99d2bb1c9a646ff398d3109b4c0ab2ff))
+* add tag-format parameter to semantic-release GitHub Action ([f2917d0](https://github.com/sentenz/percent/commit/f2917d07d0dcc2cfdcdb50f7924297c601d682ef))
+* add Trivy action for SBOM generation and publishing to releases ([dbf7968](https://github.com/sentenz/percent/commit/dbf796851627daaa649cd414e14885f27e757f84))
+* correct tag_name reference for SBOM artifact publishing ([49ef8ed](https://github.com/sentenz/percent/commit/49ef8ed1eed08228ad12090386aca74233ae83b8))
+* ensure SBOM generation job depends on semantic-release completion ([6c57639](https://github.com/sentenz/percent/commit/6c57639f9cf4904578f2b7b03eba4d3a3c1182c2))
+* ensure tag_name is set for SBOM artifact publishing ([b522d47](https://github.com/sentenz/percent/commit/b522d47df2a314e460d2ebb7c2d1bbd3f565d243))
+* publish SBOM artifacts to GitHub releases ([#58](https://github.com/sentenz/percent/issues/58)) ([c96e509](https://github.com/sentenz/percent/commit/c96e509a561bf27c4dcb3bb3120d51f67cd25240)), closes [#57](https://github.com/sentenz/percent/issues/57)
+* publish SBOM to release notes ([170527c](https://github.com/sentenz/percent/commit/170527c339c7d7f68eff151e76fb47772d83500a))
+* refine tag format of semantic-release for semantic versioning ([cc0cb68](https://github.com/sentenz/percent/commit/cc0cb681a4cfcdee485acc0f2d274a2187db8078))
+* remove conditional trigger for SBOM generation on release events ([755d5a4](https://github.com/sentenz/percent/commit/755d5a4bcaac44a609fb3f350d8c0e78173f4d70))
+* remove hidden types from release notes configuration ([c15a938](https://github.com/sentenz/percent/commit/c15a9386fd5c71aa657f5ad54c1d4724ac55cbb1))
+* remove redundant SBOM generation job and correct tag_name reference ([2b77f3e](https://github.com/sentenz/percent/commit/2b77f3e69ced7032efd22eab66e1cc3e6182e97e))
+* resolve plugin configuration in .releaserc.json ([cffd6f3](https://github.com/sentenz/percent/commit/cffd6f351d792cde7856972fce93f528a151643e))
+* resolve semantic-release configuration to adhere conventional commits ([c377588](https://github.com/sentenz/percent/commit/c37758837012305554d9fcef96e6ae164dcfd2f7))
+* standardize quotes for condition checks in SBOM generation steps ([eb753d4](https://github.com/sentenz/percent/commit/eb753d481a6326e792815c86d53ed6c5ca704fc7))
+* update documentation and improve clarity in SKILL.md and percent.go ([1e82d5d](https://github.com/sentenz/percent/commit/1e82d5dc1ae269e1371a99b986a14804d555d781))
+* update release trigger type from 'created' to 'published' in Trivy workflow ([cfe9bc6](https://github.com/sentenz/percent/commit/cfe9bc66da70e502f27551a5d8e1ee3b7aeaede1))
+* update semantic-release workflow to remove release trigger and adjust SBOM publishing ([b1c0ddc](https://github.com/sentenz/percent/commit/b1c0ddc94046465354deb1835d2a3a7738bb6086))
+* update tag_name reference for SBOM artifact publishing ([1ec77e6](https://github.com/sentenz/percent/commit/1ec77e655bd6967cf4409701cf0bda1cdd96d61d))
+
+
+### Features
+
+* add Agent Skills documentation for unit, benchmark, fuzz testing, and API documentation ([6017d90](https://github.com/sentenz/percent/commit/6017d902ca355ae1813c152016e6ddef5c7ae242))
+* add AGENTS.md for automated unit testing guidelines ([812e990](https://github.com/sentenz/percent/commit/812e990ec324ae3106e73c632824c3142b785891))
+* update SKILL.md and percent.go with enhanced formula documentatio ([17769bc](https://github.com/sentenz/percent/commit/17769bc2dd2fbd31a5211166b2e6bb0ab1c8a66a))
+
+
+### BREAKING CHANGES
+
+* The project's license has changed from MIT to Apache 2.0. Users must ensure compliance with Apache 2.0 requirements.
+
 ## [2.3.2](https://github.com/sentenz/percent/compare/2.3.1...2.3.2) (2026-02-03)
 
 
