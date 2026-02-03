@@ -39,6 +39,7 @@ Instructions for AI coding agents on adding godoc-compatible documentation comme
   - [3.4. Method Documentation](#34-method-documentation)
   - [3.5. Constant and Variable Documentation](#35-constant-and-variable-documentation)
   - [3.6. Examples](#36-examples)
+  - [3.7. Formula Documentation](#37-formula-documentation)
 - [4. Workflow](#4-workflow)
 - [5. Commands](#5-commands)
 - [6. Style Guide](#6-style-guide)
@@ -49,6 +50,7 @@ Instructions for AI coding agents on adding godoc-compatible documentation comme
   - [7.4. Method Template](#74-method-template)
   - [7.5. Constant/Variable Template](#75-constantvariable-template)
   - [7.6. Example Template](#76-example-template)
+  - [7.7. Formula Template](#77-formula-template)
 - [8. References](#8-references)
 
 ## 1. Benefits
@@ -175,6 +177,34 @@ Examples demonstrate typical usage patterns.
 
 - Completeness
   > Examples should be self-contained and runnable.
+
+### 3.7. Formula Documentation
+
+Mathematical formulas and equations for algorithms and technical documentation.
+
+> [!NOTE]
+> Go's godoc does not natively support LaTeX or MathML rendering. Use text-based representations, Unicode symbols, and preformatted blocks for mathematical expressions.
+
+- Text Descriptions
+  > Describe formulas using clear mathematical language (e.g., "the square root of the sum of squares").
+
+- Unicode Symbols
+  > Use Unicode mathematical symbols for common operations (×, ÷, ≤, ≥, √, ∑, π, Δ, etc.).
+
+- ASCII Representations
+  > Use ASCII art for simple formulas (e.g., `(a + b) / c`, `sqrt(x^2 + y^2)`).
+
+- Preformatted Blocks
+  > Use indented text for multi-line formulas and equations to preserve formatting.
+
+- Variable Notation
+  > Clearly define variables and their meanings before presenting formulas.
+
+- Examples
+  > Include concrete numerical examples to illustrate formula application.
+
+- External References
+  > Link to external resources (Wikipedia, MathWorld) for complex mathematical concepts.
 
 ## 4. Workflow
 
@@ -389,6 +419,109 @@ func Example<Type>_<method>() {
  
  // Output:
  // <expected output>
+}
+```
+
+### 7.7. Formula Template
+
+Use this template for documenting functions with mathematical formulas.
+
+```go
+// <FunctionName> <describes what the function calculates>.
+//
+// The calculation follows the formula:
+//
+//	<formula in ASCII or indented text>
+//
+// Where:
+//   - <var1> is <description>
+//   - <var2> is <description>
+//   - <result> is <description>
+//
+// For example, with <var1> = <value1> and <var2> = <value2>:
+//
+//	<result> = <calculated_example>
+//
+// The function returns <description of return value>.
+// If an error occurs, it returns <description of error conditions>.
+func <FunctionName>(<params>) (<returns>) {
+ // implementation
+}
+```
+
+**Example with percentage calculation:**
+
+```go
+// Percent calculates the percentage of a value.
+//
+// The calculation follows the formula:
+//
+//	result = value × (percent / 100)
+//
+// Where:
+//   - value is the base amount
+//   - percent is the percentage (0-100)
+//   - result is the calculated percentage of the value
+//
+// For example, 25% of 200:
+//
+//	result = 200 × (25 / 100) = 50
+//
+// The function returns the calculated result as float64.
+// Returns an error if percent is outside the range [0, 100].
+func Percent[T constraints.Integer | constraints.Float](percent, value T) (float64, error) {
+ // implementation
+}
+```
+
+**Example with Unicode symbols:**
+
+```go
+// Distance calculates the Euclidean distance between two points.
+//
+// The calculation follows the formula:
+//
+//	d = √((x₂ - x₁)² + (y₂ - y₁)²)
+//
+// Where:
+//   - (x₁, y₁) is the first point
+//   - (x₂, y₂) is the second point
+//   - d is the distance (d ≥ 0)
+//
+// For example, distance between (0, 0) and (3, 4):
+//
+//	d = √((3 - 0)² + (4 - 0)²) = √(9 + 16) = √25 = 5
+//
+// The function returns the distance as a non-negative float64.
+func Distance(x1, y1, x2, y2 float64) float64 {
+ // implementation
+}
+```
+
+**Example with preformatted multi-line formula:**
+
+```go
+// Change calculates the percentage change between two values.
+//
+// The calculation follows the formula:
+//
+//	         (newValue - oldValue)
+//	change = ───────────────────── × 100
+//	              |oldValue|
+//
+// Where:
+//   - oldValue is the original value
+//   - newValue is the new value
+//   - change is the percentage change (positive for increase, negative for decrease)
+//
+// For example, change from 50 to 75:
+//
+//	change = (75 - 50) / |50| × 100 = 50%
+//
+// The function returns the percentage change as float64.
+// Returns an error if oldValue is zero (division by zero).
+func Change[T constraints.Integer | constraints.Float](oldValue, newValue T) (float64, error) {
+ // implementation
 }
 ```
 
