@@ -2,7 +2,7 @@
 name: api-documentation
 description: Automates API documentation creation for Go projects using godoc conventions and best practices. Use when creating, modifying, or reviewing documentation comments, or when the user mentions godoc, documentation, or API docs.
 metadata:
-  version: "1.1.0"
+  version: "1.1.1"
   activation:
     implicit: true
     priority: 2
@@ -431,7 +431,7 @@ Use this template for documenting functions with mathematical formulas.
 //
 // The calculation follows the formula:
 //
-//   <formula in ASCII or indented text>
+//	<formula in ASCII or indented text>
 //
 // Where:
 //   - <var1> is <description>
@@ -440,7 +440,7 @@ Use this template for documenting functions with mathematical formulas.
 //
 // For example, with <var1> = <value1> and <var2> = <value2>:
 //
-//   <result> = <calculated_example>
+//	<result> = <calculated_example>
 //
 // The function returns <description of return value>.
 // If an error occurs, it returns <description of error conditions>.
@@ -456,7 +456,7 @@ func <FunctionName>(<params>) (<returns>) {
 //
 // The calculation follows the formula:
 //
-//   result = value × (percent / 100)
+//	result = value × (percent / 100)
 //
 // Where:
 //   - value is the base amount
@@ -465,7 +465,7 @@ func <FunctionName>(<params>) (<returns>) {
 //
 // For example, 25% of 200:
 //
-//   result = 200 × (25 / 100) = 50
+//	result = 200 × (25 / 100) = 50
 //
 // The function returns the calculated result as float64.
 // Returns an error if percent is outside the range [0, 100].
@@ -481,7 +481,7 @@ func Percent[T constraints.Integer | constraints.Float](percent, value T) (float
 //
 // The calculation follows the formula:
 //
-//   d = √((x₂ - x₁)² + (y₂ - y₁)²)
+//	d = √((x₂ - x₁)² + (y₂ - y₁)²)
 //
 // Where:
 //   - (x₁, y₁) is the first point
@@ -490,7 +490,7 @@ func Percent[T constraints.Integer | constraints.Float](percent, value T) (float
 //
 // For example, distance between (0, 0) and (3, 4):
 //
-//   d = √((3 - 0)² + (4 - 0)²) = √(9 + 16) = √25 = 5
+//	d = √((3 - 0)² + (4 - 0)²) = √(9 + 16) = √25 = 5
 //
 // The function returns the distance as a non-negative float64.
 func Distance(x1, y1, x2, y2 float64) float64 {
@@ -505,9 +505,9 @@ func Distance(x1, y1, x2, y2 float64) float64 {
 //
 // The calculation follows the formula:
 //
-//            (newValue - oldValue)
-//   change = ───────────────────── × 100
-//                 |oldValue|
+//	         (newValue - oldValue)
+//	change = ───────────────────── × 100
+//	              |oldValue|
 //
 // Where:
 //   - oldValue is the original value
@@ -516,7 +516,7 @@ func Distance(x1, y1, x2, y2 float64) float64 {
 //
 // For example, change from 50 to 75:
 //
-//   change = (75 - 50) / |50| × 100 = 50%
+//	change = (75 - 50) / |50| × 100 = 50%
 //
 // The function returns the percentage change as float64.
 // Returns an error if oldValue is zero (division by zero).
