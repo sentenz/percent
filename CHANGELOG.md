@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.3](https://github.com/sentenz/percent/compare/v3.0.2...v3.0.3) (2026-02-04)
+
+
+### Bug Fixes
+
+* update module path and imports to v3 for Go modules compatibility ([b5e9531](https://github.com/sentenz/percent/commit/b5e953137f828bf4f295f308300db62c4fb2dac4))
+
 ## [3.0.2](https://github.com/sentenz/percent/compare/v3.0.1...v3.0.2) (2026-02-04)
 
 
