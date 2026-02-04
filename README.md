@@ -1,8 +1,8 @@
 # Percent
 
 [![Go Version](https://img.shields.io/github/go-mod/go-version/sentenz/percent?logo=go)](https://go.dev/doc/install)
-[![GoDoc](https://godoc.org/github.com/sentenz/percent?status.svg)](https://godoc.org/github.com/sentenz/percent/pkg/percent)
-[![Go Report Card](https://goreportcard.com/badge/github.com/sentenz/percent)](https://goreportcard.com/report/github.com/sentenz/percent)
+[![GoDoc](https://pkg.go.dev/badge/github.com/sentenz/percent/v3)](https://pkg.go.dev/github.com/sentenz/percent/v3/pkg/percent)
+[![Go Report Card](https://goreportcard.com/badge/github.com/sentenz/percent/v3)](https://goreportcard.com/report/github.com/sentenz/percent/v3)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/sentenz/percent/actions/workflows/go-tests.yml)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
@@ -12,6 +12,7 @@ Percent is a Go package that provides utility functions for calculating percenta
   - [1.1. Prerequisites](#11-prerequisites)
   - [1.2. Installation](#12-installation)
   - [1.3. Usage](#13-usage)
+  - [1.4. Versioning](#14-versioning)
 - [2. Contribute](#2-contribute)
   - [2.1. AI Agents](#21-ai-agents)
   - [2.2. Task Runner](#22-task-runner)
@@ -47,10 +48,10 @@ Percent is a Go package that provides utility functions for calculating percenta
 ### 1.2. Installation
 
 - Install
-  > Install the package via `go get`.
+  > Install the package via `go get` command.
 
   ```bash
-  go get github.com/sentenz/percent/v3
+  go get github.com/sentenz/percent/v3@latest
   ```
 
 - Import
@@ -92,6 +93,46 @@ Percent is a Go package that provides utility functions for calculating percenta
       }
       fmt.Printf("50 is %.2f%% of 200\n", pct) // Output: 50 is 25.00% of 200
   }
+  ```
+
+### 1.4. Versioning
+
+This module follows [Go's semantic import versioning](https://go.dev/ref/mod#major-version-suffixes) for major versions v2 and above.
+
+- Module Path
+  > For major versions v2+, the module path includes a version suffix.
+
+  | Version        | Module Path                     |
+  | -------------- | ------------------------------- |
+  | v0.x.x, v1.x.x | `github.com/sentenz/percent`    |
+  | v2.x.x         | `github.com/sentenz/percent/v2` |
+  | v3.x.x         | `github.com/sentenz/percent/v3` |
+
+- Go Proxy
+  > Verify module availability on the [Go Module Proxy](https://proxy.golang.org/).
+
+  ```bash
+  # For v3.x.x versions
+  curl https://proxy.golang.org/github.com/sentenz/percent/v3/@v/v3.0.3.info
+  ```
+
+- Documentation
+  > Access documentation on [pkg.go.dev](https://pkg.go.dev/) using the versioned path.
+
+  | Version | Documentation URL                                |
+  | ------- | ------------------------------------------------ |
+  | v1.x.x  | https://pkg.go.dev/github.com/sentenz/percent    |
+  | v3.x.x  | https://pkg.go.dev/github.com/sentenz/percent/v3 |
+
+- Migration
+  > When upgrading to a new major version, update imports in all Go files.
+
+  ```go
+  // Before (v1.x.x)
+  import "github.com/sentenz/percent/pkg/percent"
+
+  // After (v3.x.x)
+  import "github.com/sentenz/percent/v3/pkg/percent"
   ```
 
 ## 2. Contribute
