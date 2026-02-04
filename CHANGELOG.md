@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.2](https://github.com/sentenz/percent/compare/v3.0.1...v3.0.2) (2026-02-04)
+
+
+### Bug Fixes
+
+* remove version suffix from module path and imports ([042b65b](https://github.com/sentenz/percent/commit/042b65b512c848bb1114f0bc6cf0f311ed2ebb2c))
+
 ## [3.0.1](https://github.com/sentenz/percent/compare/v3.0.0...v3.0.1) (2026-02-03)
 
 
