@@ -1,4 +1,4 @@
-module github.com/sentenz/percent/v3
+module github.com/sentenz/percent
 
 go 1.24.0
 

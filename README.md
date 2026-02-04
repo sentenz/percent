@@ -50,14 +50,14 @@ Percent is a Go package that provides utility functions for calculating percenta
   > Install the package via `go get`.
 
   ```bash
-  go get github.com/sentenz/percent/v3
+  go get github.com/sentenz/percent
   ```
 
 - Import
   > Import the package in a called Go source file.
 
   ```go
-  import "github.com/sentenz/percent/v3/pkg/percent"
+  import "github.com/sentenz/percent/pkg/percent"
   ```
 
 ### 1.3. Usage
@@ -72,7 +72,7 @@ Percent is a Go package that provides utility functions for calculating percenta
       "fmt"
       "log"
       
-      "github.com/sentenz/percent/v3/pkg/percent"
+      "github.com/sentenz/percent/pkg/percent"
   )
 
   func main() {
