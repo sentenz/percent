@@ -1,5 +1,5 @@
 ---
-name: api-documentation
+name: go-api-documentation
 description: Automates API documentation creation for Go projects using godoc conventions and best practices. Use when creating, modifying, or reviewing documentation comments, or when the user mentions godoc, documentation, or API docs.
 metadata:
   version: "1.1.1"
@@ -210,7 +210,7 @@ Mathematical formulas and equations for algorithms and technical documentation.
 
 1. Identify
 
-    Identify exported unctions, types, constants, and variables in `pkg/` or `internal/` that need documentation.
+    Identify exported functions, types, constants, and variables in `pkg/` or `internal/` that need documentation.
 
 2. Review Existing
 
