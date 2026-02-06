@@ -505,6 +505,9 @@ AI Agents are automated tools that assist in various development tasks such as c
     - [.agents/skills/](.agents/skills/)
       > Directory containing AI agent skill definitions and configurations.
 
+    - [Sentenz SKills](https://github.com/sentenz/skills)
+      > Reusable AI agent skills for various development tasks.
+
 2. Usage and Instructions
 
     - Tasks
@@ -522,3 +525,4 @@ AI Agents are automated tools that assist in various development tasks such as c
 - Sentenz [Template DX](https://github.com/sentenz/template-dx) repository.
 - Sentenz [Actions](https://github.com/sentenz/actions) repository.
 - Sentenz [Manager Tools](https://github.com/sentenz/convention/issues/392) article.
+- Sentenz [Skills](https://github.com/sentenz/skills) repository.
