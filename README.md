@@ -15,6 +15,8 @@ Percent is a Go package that provides utility functions for calculating percenta
   - [1.4. Versioning](#14-versioning)
 - [2. Contribute](#2-contribute)
   - [2.1. AI Agents](#21-ai-agents)
+  - [2.2. Skills Manager](#22-skills-manager)
+    - [2.2.1. Skills CLI](#221-skills-cli)
   - [2.2. Task Runner](#22-task-runner)
     - [2.2.1. Make](#221-make)
   - [2.3. Bootstrap](#23-bootstrap)
@@ -36,8 +38,6 @@ Percent is a Go package that provides utility functions for calculating percenta
     - [2.9.1. Conftest](#291-conftest)
   - [2.10. Supply Chain Manager](#210-supply-chain-manager)
     - [2.10.1. Trivy](#2101-trivy)
-  - [2.11. Skills Manager](#211-skills-manager)
-    - [2.11.1. Skills CLI](#2111-skills-cli)
 - [3. References](#3-references)
 
 ## 1. Module
@@ -150,8 +150,8 @@ AI Agents are automated tools that assist in various development tasks such as c
     - [AGENTS.md](AGENTS.md)
       > Instructions for AI coding agents working with the project.
 
-    - [SKILL.md](.github/skills/README.md)
-      > Instructions for AI agent skills used in the project.
+    - [.agents/skills/](.agents/skills/)
+      > Directory containing AI agent skill definitions and configurations.
 
 2. Usage and Instructions
 
@@ -159,7 +159,7 @@ AI Agents are automated tools that assist in various development tasks such as c
       > AI Agents can be implicitly invoked based on file paths, programming languages, or specific keywords in user prompts.
 
       ```plaintext
-      .github/skills/<skill-name>/SKILL.md
+      .agents/skills/<skill-name>/SKILL.md
       ```
 
     - Explicit Invocation
@@ -167,6 +167,29 @@ AI Agents are automated tools that assist in various development tasks such as c
 
       ```plaintext
       @agent <skill-name> <task-description>
+      ```
+
+### 2.2. Skills Manager
+
+#### 2.2.1. Skills CLI
+
+[Skills CLI](https://skills.sh/) is a command-line tool for managing AI agent skills in development projects.
+
+1. Insights and Details
+
+    - [Sentenz Skills](https://github.com/sentenz/skills)
+      > Reusable AI agent skills for various development tasks.
+
+2. Usage and Instructions
+
+    - Tasks
+
+      ```bash
+      make skills-add
+      ```
+
+      ```bash
+      make skills-update
       ```
 
 ### 2.2. Task Runner
@@ -492,32 +515,6 @@ AI Agents are automated tools that assist in various development tasks such as c
 
       ```bash
       make sast-trivy-sbom-license <sbom_path>
-      ```
-
-### 2.11. Skills Manager
-
-#### 2.11.1. Skills CLI
-
-[Skills CLI](https://skills.sh/) is a command-line tool for managing AI agent skills in development projects.
-
-1. Insights and Details
-
-    - [.agents/skills/](.agents/skills/)
-      > Directory containing AI agent skill definitions and configurations.
-
-    - [Sentenz SKills](https://github.com/sentenz/skills)
-      > Reusable AI agent skills for various development tasks.
-
-2. Usage and Instructions
-
-    - Tasks
-
-      ```bash
-      make skills-add
-      ```
-
-      ```bash
-      make skills-update
       ```
 
 ## 3. References
