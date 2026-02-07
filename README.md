@@ -117,8 +117,6 @@ This module follows [Go's semantic import versioning](https://go.dev/ref/mod#maj
 
 [CONTRIBUTING.md](CONTRIBUTING.md) provides guidens and instructions for contributing to the project.
 
-1. Guidens and Instructions
-
 - [AI Agents](CONTRIBUTING.md#1-ai-agents)
   > Automated tools that assist in various development tasks such as code generation, testing, and documentation.
 
