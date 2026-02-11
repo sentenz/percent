@@ -17,6 +17,8 @@
     - [3.1.3. Testing](#313-testing)
     - [3.1.4. Code Quality](#314-code-quality)
     - [3.1.5. Policy \& Security](#315-policy--security)
+- [4. Commmit Strategy](#4-commmit-strategy)
+- [5. Versioning Strategy](#5-versioning-strategy)
 - [4. Agent Skills](#4-agent-skills)
 
 ## 1. Tech Stack
@@ -220,6 +222,16 @@ Run `make help` to see all available commands with descriptions.
 
 - `make trivy-scan`
   > Scan Infrastructure-as-Code files for misconfigurations using Trivy.
+
+## 4. Commmit Strategy
+
+- [Conventional Commits](https://www.conventionalcommits.org/)
+  > Specification for standardized commit message format to maintain a clear and consistent commit history.
+
+## 5. Versioning Strategy
+
+- [Semantic Versioning](https://semver.org/)
+  > Versioning scheme using MAJOR.MINOR.PATCH format for release management to indicate the nature of changes.
 
 ## 4. Agent Skills
 
