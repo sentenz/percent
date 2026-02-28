@@ -1,6 +1,7 @@
 # Contributing
 
 Contribution guidelines and project management tools.
+
 - [1. AI Agents](#1-ai-agents)
 - [2. Skills Manager](#2-skills-manager)
   - [2.1. Skills CLI](#21-skills-cli)
