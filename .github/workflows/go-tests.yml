@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v6.0.2
 
       - name: Set up Go
-        uses: actions/setup-go@v6.2.0
+        uses: actions/setup-go@v6.3.0
         with:
           go-version-file: 'go.mod'
 
@@ -25,7 +25,7 @@ jobs:
         run: make go-test-unit
 
       - name: Publish Test Report
-        uses: mikepenz/action-junit-report@v6.2.0
+        uses: mikepenz/action-junit-report@v6.3.1
         if: always()
         with:
           report_paths: 'logs/unit/junit-report.xml'
