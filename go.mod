@@ -5,7 +5,7 @@ go 1.25.0
 require golang.org/x/exp v0.0.0-20251125195548-87e1e737ad39
 
 require (
-	github.com/boumenot/gocover-cobertura v1.4.0
+	github.com/boumenot/gocover-cobertura v1.5.0
 	github.com/google/go-cmp v0.7.0
 	github.com/jstemmer/go-junit-report/v2 v2.1.0
 	golang.org/x/perf v0.0.0-20251208221838-04cf7a2dca90
