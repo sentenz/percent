@@ -3,6 +3,7 @@ package main
 import (
 	"path/filepath"
 	"regexp"
+	"strings"
 )
 
 // As golint-ci referencing https://golang.org/s/generatedcode, be laxer
@@ -12,10 +13,13 @@ type Ignore struct {
 	Dirs           *regexp.Regexp
 	Files          *regexp.Regexp
 	GeneratedFiles bool
+	NonCodeLines   bool
 	cache          map[string]bool
 }
 
 func (i *Ignore) Match(fileName string, data []byte) (ret bool) {
+	fileName = strings.ReplaceAll(fileName, "\\", "/")
+
 	if i.cache == nil {
 		i.cache = map[string]bool{}
 	} else if match, exists := i.cache[fileName]; exists {
@@ -23,6 +27,10 @@ func (i *Ignore) Match(fileName string, data []byte) (ret bool) {
 	}
 
 	dir := filepath.Dir(fileName)
+	// NOTE(boumenot): I think this is a behavior change or due to where I run the unit tests.  On Windows
+	//                 the directory separator is being changed from / to \.  I **think** this is a behavior
+	//                 change because this is old code, and only the Go version has been updated.
+	dir = strings.ReplaceAll(dir, "\\", "/")
 
 	if i.dirMatch(dir) ||
 		(i.Files != nil && i.Files.MatchString(fileName)) {
