@@ -161,5 +161,5 @@ This module follows [Go's semantic import versioning](https://go.dev/ref/mod#maj
 
 - Sentenz [Template DX](https://github.com/sentenz/template-dx) repository.
 - Sentenz [Actions](https://github.com/sentenz/actions) repository.
-- Sentenz [Manager Tools](https://github.com/sentenz/convention/issues/392) article.
+- Sentenz [Manager Tools](https://sentenz.github.io/convention/articles/manager-tools/) article.
 - Sentenz [Skills](https://github.com/sentenz/skills) repository.
