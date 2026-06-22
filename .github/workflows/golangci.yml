@@ -9,7 +9,7 @@ jobs:
   golangci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: Golangci
         run: |
           docker run --rm -v "${PWD}:/workspace" -w /workspace golangci/golangci-lint:v2.7.2-alpine@sha256:1e1851102b736971267400e08b3e4b2e7799c73976a998820f6f6b6b86b48343 golangci-lint run ./...
