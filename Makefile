@@ -42,88 +42,6 @@ teardown:
 	@cd ./scripts/ && bash ./teardown.sh
 .PHONY: teardown
 
-# ── Go Tools ─────────────────────────────────────────────────────────────────────────────────────
-
-## Tidy Go modules
-go-mod-tidy:
-	go mod tidy
-.PHONY: go-mod-tidy
-
-## Vendor Go modules
-go-mod-vendor:
-	go mod vendor
-.PHONY: go-mod-vendor
-
-## Run Go unit tests with race detection and JUnit XML report
-go-test-unit:
-	@mkdir -p logs/unit
-	go test -race -json ./... 2>&1 | tee logs/unit/test-output.json | go run -mod=vendor github.com/jstemmer/go-junit-report/v2 -set-exit-code -iocopy -out logs/unit/junit-report.xml
-.PHONY: go-test-unit
-
-## Run Go tests with coverage report
-go-test-coverage:
-	@mkdir -p logs/coverage
-
-	go test -coverprofile=logs/coverage/coverage.out ./...
-	go tool cover -html=logs/coverage/coverage.out -o logs/coverage/coverage.html
-	go run -mod=vendor github.com/boumenot/gocover-cobertura < logs/coverage/coverage.out > logs/coverage/coverage.xml
-.PHONY: go-test-coverage
-
-## Run Go benchmarks
-go-test-bench:
-	go test -bench=. -benchmem ./...
-.PHONY: go-test-bench
-
-# [EXPERIMENTAL] Compare Go benchmark results before and after changes
-go-test-bench-compare:
-	@mkdir -p logs/bench
-
-	go test -bench=. -benchmem -count=10 ./pkg/percent > logs/bench/bench1.txt
-	go test -bench=. -benchmem -count=10 ./pkg/percent > logs/bench/bench2.txt
-
-	@if [ ! -f logs/bench/bench1.txt ] || [ ! -f logs/bench/bench2.txt ]; then \
-		echo "Error: Both logs/bench/bench1.txt and logs/bench/bench2.txt must exist to compare benchmarks."; \
-		exit 1; \
-	fi
-
-	go run -mod=vendor golang.org/x/perf/cmd/benchstat logs/bench/bench1.txt logs/bench/bench2.txt
-.PHONY: go-test-bench-compare
-
-## Run fuzz tests
-go-test-fuzz:
-	@for fuzz in FuzzPercent FuzzOf FuzzChange FuzzRemain FuzzFromRatio FuzzToRatio; do \
-		echo "Fuzzing: $${fuzz}"; \
-		go test -fuzz="$${fuzz}" -fuzztime=10s ./pkg/percent || exit 1; \
-	done
-.PHONY: go-test-fuzz
-
-## Format Go code according to Go standards
-go-fmt:
-	go fmt ./...
-.PHONY: go-fmt
-
-## Update Go source files to use new APIs
-go-fix:
-	go fix ./...
-.PHONY: go-fix
-
-## Check Go code for common mistakes
-go-vet:
-	go vet ./...
-.PHONY: go-vet
-
-## Check Go code for known vulnerabilities
-go-vuln:
-	go run -mod=vendor golang.org/x/vuln/cmd/govulncheck ./...
-.PHONY: go-vuln
-
-## Run all Go code quality checks
-go-check:
-	$(MAKE) go-fmt
-	$(MAKE) go-vet
-	$(MAKE) go-vuln
-.PHONY: go-check
-
 # ── Git Hooks Manager ────────────────────────────────────────────────────────────────────────────
 
 ## Initialize Lefthook Git hooks in the local repository
@@ -633,3 +551,85 @@ pages-doxygen-serve:
 	echo "Serving $$OUTDIR at http://localhost:8000"; \
 	python3 -m http.server --directory "$$OUTDIR" 8000
 .PHONY: pages-doxygen-serve
+
+# ── Go Tools ─────────────────────────────────────────────────────────────────────────────────────
+
+## Tidy Go modules
+go-mod-tidy:
+	go mod tidy
+.PHONY: go-mod-tidy
+
+## Vendor Go modules
+go-mod-vendor:
+	go mod vendor
+.PHONY: go-mod-vendor
+
+## Run Go unit tests with race detection and JUnit XML report
+go-test-unit:
+	@mkdir -p logs/unit
+	go test -race -json ./... 2>&1 | tee logs/unit/test-output.json | go run -mod=vendor github.com/jstemmer/go-junit-report/v2 -set-exit-code -iocopy -out logs/unit/junit-report.xml
+.PHONY: go-test-unit
+
+## Run Go tests with coverage report
+go-test-coverage:
+	@mkdir -p logs/coverage
+
+	go test -coverprofile=logs/coverage/coverage.out ./...
+	go tool cover -html=logs/coverage/coverage.out -o logs/coverage/coverage.html
+	go run -mod=vendor github.com/boumenot/gocover-cobertura < logs/coverage/coverage.out > logs/coverage/coverage.xml
+.PHONY: go-test-coverage
+
+## Run Go benchmarks
+go-test-bench:
+	go test -bench=. -benchmem ./...
+.PHONY: go-test-bench
+
+# [EXPERIMENTAL] Compare Go benchmark results before and after changes
+go-test-bench-compare:
+	@mkdir -p logs/bench
+
+	go test -bench=. -benchmem -count=10 ./pkg/percent > logs/bench/bench1.txt
+	go test -bench=. -benchmem -count=10 ./pkg/percent > logs/bench/bench2.txt
+
+	@if [ ! -f logs/bench/bench1.txt ] || [ ! -f logs/bench/bench2.txt ]; then \
+		echo "Error: Both logs/bench/bench1.txt and logs/bench/bench2.txt must exist to compare benchmarks."; \
+		exit 1; \
+	fi
+
+	go run -mod=vendor golang.org/x/perf/cmd/benchstat logs/bench/bench1.txt logs/bench/bench2.txt
+.PHONY: go-test-bench-compare
+
+## Run fuzz tests
+go-test-fuzz:
+	@for fuzz in FuzzPercent FuzzOf FuzzChange FuzzRemain FuzzFromRatio FuzzToRatio; do \
+		echo "Fuzzing: $${fuzz}"; \
+		go test -fuzz="$${fuzz}" -fuzztime=10s ./pkg/percent || exit 1; \
+	done
+.PHONY: go-test-fuzz
+
+## Format Go code according to Go standards
+go-fmt:
+	go fmt ./...
+.PHONY: go-fmt
+
+## Update Go source files to use new APIs
+go-fix:
+	go fix ./...
+.PHONY: go-fix
+
+## Check Go code for common mistakes
+go-vet:
+	go vet ./...
+.PHONY: go-vet
+
+## Check Go code for known vulnerabilities
+go-vuln:
+	go run -mod=vendor golang.org/x/vuln/cmd/govulncheck ./...
+.PHONY: go-vuln
+
+## Run all Go code quality checks
+go-check:
+	$(MAKE) go-fmt
+	$(MAKE) go-vet
+	$(MAKE) go-vuln
+.PHONY: go-check
