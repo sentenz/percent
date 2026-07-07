@@ -136,25 +136,31 @@ This module follows [Go's semantic import versioning](https://go.dev/ref/mod#maj
 - [Bootstrap](CONTRIBUTING.md#4-bootstrap)
   > Scripts to bootstrap, setup, and teardown a software development workspace with requisites.
 
-- [Dev Containers](CONTRIBUTING.md#5-dev-containers)
+- [Dev Containers](CONTRIBUTING.md#6-dev-containers)
   > Consistent development environments using Docker containers.
 
-- [Dependency Manager](CONTRIBUTING.md#6-dependency-manager)
+- [Dependency Manager](CONTRIBUTING.md#7-dependency-manager)
   > Go Modules for managing dependencies and vendored modules.
 
-- [Software Testing](CONTRIBUTING.md#7-software-testing)
+- [Software Testing](CONTRIBUTING.md#8-software-testing)
   > Unit tests, fuzz tests, benchmarks, and coverage for ensuring code quality and reliability.
 
-- [Release Manager](CONTRIBUTING.md#8-release-manager)
+- [Release Manager](CONTRIBUTING.md#9-release-manager)
   > Semantic-Release automates the release process by analyzing commit messages.
 
-- [Update Manager](CONTRIBUTING.md#9-update-manager)
+- [Update Manager](CONTRIBUTING.md#10-update-manager)
   > Renovate and Dependabot automate dependency updates by creating pull requests.
 
-- [Policy Manager](CONTRIBUTING.md#12-policy-manager)
+- [Secrets Manager](CONTRIBUTING.md#11-secrets-manager)
+  > SOPS for managing secrets and sensitive data.
+
+- [Policy Manager](CONTRIBUTING.md#13-policy-manager)
   > Conftest for policy-as-code enforcement.
 
-- [Supply Chain Manager](CONTRIBUTING.md#13-supply-chain-manager)
+- [SAST Manager](CONTRIBUTING.md#14-sast-manager)
+  > Gitleaks, TruffleHog, and Semgrep for static application security testing.
+
+- [Supply Chain Manager](CONTRIBUTING.md#15-supply-chain-manager)
   > Trivy for security scanning of vulnerabilities, misconfigurations, and compliance issues.
 
 ## 3. References

@@ -1,6 +1,42 @@
 # https://www.toptal.com/developers/gitignore/
 
-build/
-logs/
-*.log
+### Miscellaneous ###
+logs/*
+*.log.*
+
+### Dotenv ###
+# Ignore dotenv files (unencrypted), allow encrypted files with .enc
 .env
+.env.*
+!.env.enc
+!.env.*.enc
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+### Go ###
+# If you prefer the allow list template instead of the deny list, see community template:
+# https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
+#
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Go workspace file
+go.work
