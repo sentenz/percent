@@ -32,7 +32,6 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           semantic-version: "latest"
-          tag-format: "v${version}"
 
       - name: Run SBOM Generation (CycloneDX)
         if: steps.release.outputs.new-release-published == 'true'
