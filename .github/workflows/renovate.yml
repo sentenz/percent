@@ -5,26 +5,28 @@ name: Renovate
 on:
   workflow_dispatch:
   schedule:
-    # Run weekly on Sundays at 4:00 AM UTC
     - cron: "0 4 * * 0"
+
+concurrency:
+  group: renovate
+  cancel-in-progress: false
+
+permissions:
+  contents: read
 
 jobs:
   renovate:
     name: Renovate Action
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-      issues: write
-      checks: read
-      id-token: write
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Run Renovate
-        uses: sentenz/actions/renovate@c393f1ada4c285deb9408247138486bbc773b7fe # 1.4.0
+        uses: sentenz/actions/renovate@62c4352acdd45163bd10ae248b71c6ad6a99e3c3 # 1.4.1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          autodiscover: "true"
-          log-level: "info"
+          token: ${{ secrets.RENOVATE_TOKEN }}
+          autodiscover: "false"

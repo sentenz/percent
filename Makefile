@@ -25,7 +25,7 @@ help:
 	@awk '/^##/{c=substr($$0,3);next}c&&/^[[:alpha:]][[:alnum:]_-]+:/{print "$(shell tput -Txterm setaf 6)\t" substr($$1,1,index($$1,":")) "$(shell tput -Txterm sgr0)",c}1{c=0}' $(MAKEFILE_LIST) | column -s: -t
 .PHONY: help
 
-# ── Setup & Teardown ─────────────────────────────────────────────────────────────────────────────
+# ─── Setup & Teardown ────────────────────────────────────────────────────────────────────────────
 
 ## Initialize a software development workspace with requisites
 bootstrap:
@@ -42,7 +42,7 @@ teardown:
 	@cd ./scripts/ && bash ./teardown.sh
 .PHONY: teardown
 
-# ── Git Hooks Manager ────────────────────────────────────────────────────────────────────────────
+# ─── Git Hooks Manager ───────────────────────────────────────────────────────────────────────────
 
 ## Initialize Lefthook Git hooks in the local repository
 githooks-lefthook-initialize:
@@ -54,7 +54,7 @@ githooks-lefthook-deinitialize:
 	lefthook uninstall
 .PHONY: githooks-lefthook-deinitialize
 
-# ── Skills Manager ───────────────────────────────────────────────────────────────────────────────
+# ─── Skills Manager ──────────────────────────────────────────────────────────────────────────────
 
 ## Provision new Agent Skills into the project environment
 skills-agent-add:
@@ -66,7 +66,7 @@ skills-agent-update:
 	skills update sentenz/skills
 .PHONY: skills-agent-update
 
-# ── Dependency Manager ───────────────────────────────────────────────────────────────────────────
+# ─── Dependency Manager ──────────────────────────────────────────────────────────────────────────
 
 DEPENDENCY_IMAGE_RENOVATE ?= docker.io/renovate/renovate:43.251.3@sha256:e5c59392e4fc8279e2034773f356c06e0a5ffc0c5ad97ab9c2edc1d9944fb9af
 
@@ -77,7 +77,7 @@ dependency-renovate-update:
 	docker run --rm -v "${PWD}:/workspace" -w /workspace -e LOG_LEVEL=debug -e RENOVATE_REPOSITORIES -e RENOVATE_TOKEN=$(RENOVATE_TOKEN) "$(DEPENDENCY_IMAGE_RENOVATE)" renovate --platform=local --repository-cache=reset > logs/dependency/renovate.log 2>&1
 .PHONY: dependency-renovate-update
 
-# ── Secrets Manager ──────────────────────────────────────────────────────────────────────────────
+# ─── Secrets Manager ─────────────────────────────────────────────────────────────────────────────
 
 SECRETS_IMAGE_SOPS ?= ghcr.io/getsops/sops:v3.13.1@sha256:320f253aced1393537b1e90c77eb48295204d805d4c68933264cd1285192465d
 SECRETS_SOPS_UID ?= sops-percent
@@ -211,7 +211,7 @@ secrets-sops-view:
 	docker run --rm -v "${PWD}:/workspace" -v "$${HOME}/.gnupg:/root/.gnupg" -w /workspace $(SECRETS_IMAGE_SOPS) decrypt "$(filter-out $@,$(MAKECMDGOALS))"
 .PHONY: secrets-sops-view
 
-# ── Policy Manager ───────────────────────────────────────────────────────────────────────────────
+# ─── Policy Manager ──────────────────────────────────────────────────────────────────────────────
 
 POLICY_IMAGE_CONFTEST ?= docker.io/openpolicyagent/conftest:v0.68.2@sha256:5fd81e332d7e4bc01daf3ef35371800a9a9720a30c0c37a78de0c5fbe4b6d622
 
@@ -245,7 +245,7 @@ policy-regal-lint:
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(POLICY_IMAGE_REGAL)" lint "$(filter-out $@,$(MAKECMDGOALS))" --format json > logs/policy/regal.json 2>&1
 .PHONY: policy-regal-lint
 
-# ── Static Analysis ──────────────────────────────────────────────────────────────────────────────
+# ─── Static Analysis ─────────────────────────────────────────────────────────────────────────────
 
 LINT_IMAGE_MARKDOWNLINT ?= davidanson/markdownlint-cli2:0.22.1@sha256:0ed9a5f4c77ef447da2a2ac6e67caf74b214a7f80288819565e8b7d2ac148fe5
 LINT_FILES_MARKDOWNLINT ?= "**/*.md"
@@ -257,7 +257,7 @@ lint-markdown:
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(LINT_IMAGE_MARKDOWNLINT)" $(LINT_FILES_MARKDOWNLINT) > logs/lint/markdownlint 2>&1
 .PHONY: lint-markdown
 
-# ── SAST Manager ─────────────────────────────────────────────────────────────────────────────────
+# ─── SAST Manager ────────────────────────────────────────────────────────────────────────────────
 
 SAST_IMAGE_SEMGREP ?= semgrep/semgrep:1.168.0@sha256:59fbed6127ea7c5dde3ba6a85142733bb20ea9aaa36120c953904f1539aaf66e
 SAST_FILES_SEMGREP ?= .
@@ -470,7 +470,7 @@ sast-trufflehog-git:
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRUFFLEHOG)" git file:///workspace --no-update --json > logs/sast/trufflehog-git.json 2> logs/sast/trufflehog-git.log
 .PHONY: sast-trufflehog-git
 
-# ── Supply Chain Security ────────────────────────────────────────────────────────────────────────
+# ─── Supply Chain Security ───────────────────────────────────────────────────────────────────────
 
 SAST_IMAGE_COSIGN ?= cgr.dev/chainguard/cosign:3.0.0@sha256:b6bc266358e9368be1b3d01fca889b78d5ad5a47832986e14640c34a237ef638
 
@@ -518,7 +518,7 @@ sast-cosign-verify:
 .PHONY: sast-cosign-verify
 
 
-# ── Static Site Generator (SSG) ─────────────────────────────────────────────────────────────────
+# ─── Static Site Generator (SSG) ────────────────────────────────────────────────────────────────
 
 ### Setup documentation pages with MkDocs
 pages-mkdocs-setup:
@@ -535,7 +535,7 @@ pages-mkdocs-serve:
 	@. $(PIP_VENV)/activate; mkdocs serve --dev-addr 127.0.0.1:8000 --livereload
 .PHONY: pages-mkdocs-serve
 
-# ── Documentation Generators ─────────────────────────────────────────────────────────────────────
+# ─── Documentation Generators ────────────────────────────────────────────────────────────────────
 
 ## Build content using Static Site Generator (SSG) for Doxygen documentation
 pages-doxygen-build:
@@ -552,7 +552,7 @@ pages-doxygen-serve:
 	python3 -m http.server --directory "$$OUTDIR" 8000
 .PHONY: pages-doxygen-serve
 
-# ── Go Tools ─────────────────────────────────────────────────────────────────────────────────────
+# ─── Go Tools ────────────────────────────────────────────────────────────────────────────────────
 
 ## Tidy Go modules
 go-mod-tidy:

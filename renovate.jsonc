@@ -1,0 +1,224 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "rebaseWhen": "behind-base-branch",
+  "minimumReleaseAge": "1 day",
+  "minimumReleaseAgeBehaviour": "timestamp-optional",
+  "internalChecksFilter": "strict",
+  "dependencyDashboard": true,
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 0,
+  "ignorePaths": [
+    "**/node_modules/**",
+    "**/bower_components/**",
+    "**/charts/**",
+    "test/**",
+    "tests/**"
+  ],
+  "nuget": {
+    "ignorePaths": [
+      "tests/**",
+      "**/tests/**"
+    ]
+  },
+  "labels": [
+    "dependencies"
+  ],
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": [
+      "security"
+    ],
+    "automerge": false
+  },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update versioned Docker image references in Makefiles and KinD cluster configuration.",
+      "managerFilePatterns": [
+        "**/[Mm]akefile",
+        "**/GNUMakefile",
+        "**/*.mk",
+        "**/kind-cluster.{yml,yaml}"
+      ],
+      "matchStringsStrategy": "any",
+      "matchStrings": [
+        "(?<depName>(?:(?:[A-Za-z0-9.-]+(?::[0-9]+)?/)?[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)+)):(?<currentValue>v?\\d[0-9A-Za-z_.-]*)(?:@(?<currentDigest>sha256:[a-f0-9]{64}))?"
+      ],
+      "autoReplaceStringTemplate": "{{{prefix}}}{{{depName}}}:{{{newValue}}}{{#if newDigest}}@{{{newDigest}}}{{else}}{{#if currentDigest}}@{{{currentDigest}}}{{/if}}{{/if}}",
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Group major updates.",
+      "matchManagers": [
+        "!gomod"
+      ],
+      "matchDatasources": [
+        "!docker"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "groupName": "major versions",
+      "groupSlug": "major-versions",
+      "automerge": false
+    },
+    {
+      "description": "Group minor updates.",
+      "matchManagers": [
+        "!gomod"
+      ],
+      "matchDatasources": [
+        "!docker"
+      ],
+      "matchUpdateTypes": [
+        "minor"
+      ],
+      "groupName": "minor versions",
+      "groupSlug": "minor-versions",
+      "automerge": false
+    },
+    {
+      "description": "Group patch updates.",
+      "matchManagers": [
+        "!gomod"
+      ],
+      "matchDatasources": [
+        "!docker"
+      ],
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "groupName": "patch versions",
+      "groupSlug": "patch-versions",
+      "automerge": false
+    },
+    {
+      "description": "Group Go dependency updates from go.mod and go.sum.",
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchFileNames": [
+        "go.mod",
+        "go.sum"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch"
+      ],
+      "groupName": "go dependencies",
+      "groupSlug": "go-dependencies",
+      "semanticCommits": "enabled",
+      "semanticCommitType": "fix",
+      "semanticCommitScope": "deps",
+      "automerge": false
+    },
+    {
+      "description": "Pin Dockerfile and Containerfile images to immutable digests.",
+      "matchManagers": [
+        "dockerfile"
+      ],
+      "matchDatasources": [
+        "docker"
+      ],
+      "pinDigests": true,
+      "automerge": false
+    },
+    {
+      "description": "Group non-major Dockerfile and Containerfile image updates.",
+      "matchManagers": [
+        "dockerfile"
+      ],
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "digest",
+        "pinDigest"
+      ],
+      "groupName": "dockerfile container images",
+      "groupSlug": "dockerfile-container-images",
+      "automerge": false
+    },
+    {
+      "description": "Pin custom-manager Docker images to immutable digests.",
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchDatasources": [
+        "docker"
+      ],
+      "pinDigests": true,
+      "automerge": false
+    },
+    {
+      "description": "Group Docker image updates in Makefiles.",
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchFileNames": [
+        "**/[Mm]akefile",
+        "**/GNUMakefile",
+        "**/*.mk"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "digest",
+        "pinDigest"
+      ],
+      "groupName": "makefile container images",
+      "groupSlug": "makefile-container-images",
+      "automerge": true
+    },
+    {
+      "description": "Pin Docker images used by GitHub Actions to immutable digests.",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchDepTypes": [
+        "docker",
+        "container",
+        "service"
+      ],
+      "pinDigests": true,
+      "automerge": false
+    },
+    {
+      "description": "Group Docker image updates used by GitHub Actions.",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchDepTypes": [
+        "docker",
+        "container",
+        "service"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "digest",
+        "pinDigest"
+      ],
+      "groupName": "github actions container images",
+      "groupSlug": "github-actions-container-images",
+      "semanticCommits": "enabled",
+      "semanticCommitType": "ci",
+      "semanticCommitScope": "deps",
+      "automerge": false
+    }
+  ]
+}
