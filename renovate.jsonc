@@ -195,7 +195,7 @@
         "service"
       ],
       "pinDigests": true,
-      "automerge": false
+      "automerge": true
     },
     {
       "description": "Group Docker image updates used by GitHub Actions.",
@@ -219,7 +219,7 @@
       "semanticCommits": "enabled",
       "semanticCommitType": "ci",
       "semanticCommitScope": "deps",
-      "automerge": false
+      "automerge": true
     }
   ]
 }
