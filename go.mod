@@ -8,7 +8,7 @@ require (
 	github.com/boumenot/gocover-cobertura v1.5.0
 	github.com/google/go-cmp v0.7.0
 	github.com/jstemmer/go-junit-report/v2 v2.1.0
-	golang.org/x/perf v0.0.0-20251208221838-04cf7a2dca90
+	golang.org/x/perf v0.0.0-20260709024250-82a0b07e230d
 	golang.org/x/vuln v1.6.0
 )
 
