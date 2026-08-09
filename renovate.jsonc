@@ -11,6 +11,7 @@
   "prHourlyLimit": 0,
   "prConcurrentLimit": 0,
   "ignorePaths": [
+    "**/vendor/**",
     "**/node_modules/**",
     "**/bower_components/**",
     "**/charts/**",
