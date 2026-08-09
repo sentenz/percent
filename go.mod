@@ -2,7 +2,7 @@ module github.com/sentenz/percent/v3
 
 go 1.25.0
 
-require golang.org/x/exp v0.0.0-20251125195548-87e1e737ad39
+require golang.org/x/exp v0.0.0-20260727155853-b88d891fe743
 
 require (
 	github.com/boumenot/gocover-cobertura v1.5.0
