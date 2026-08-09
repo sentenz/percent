@@ -1,8 +1,8 @@
 # https://www.toptal.com/developers/gitignore/
 
 ### Miscellaneous ###
-logs/*
-*.log.*
+logs/
+*.log
 
 ### Dotenv ###
 # Ignore dotenv files (unencrypted), allow encrypted files with .enc
@@ -17,6 +17,14 @@ logs/*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+### Certificates ###
+*.pem
+*.key
+*.crt
+*.cer
+*.der
+*.priv
 
 ### Go ###
 # If you prefer the allow list template instead of the deny list, see community template:
