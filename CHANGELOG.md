@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.0.6](https://github.com/sentenz/percent/compare/v3.0.5...v3.0.6) (2026-08-10)
+
+### Bug Fixes
+
+* resolve semantic-release notes generation ([#138](https://github.com/sentenz/percent/issues/138)) ([6e8d529](https://github.com/sentenz/percent/commit/6e8d5293e9f8792bb46c5889814f7fb85ff84b7b))
+
 ## [3.0.5](https://github.com/sentenz/percent/compare/3.0.4...3.0.5) (2026-08-10)
 
 ## [3.0.4](https://github.com/sentenz/percent/compare/v3.0.3...3.0.4) (2026-08-09)
