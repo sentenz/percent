@@ -2,7 +2,6 @@
 
 [![Go Version](https://img.shields.io/github/go-mod/go-version/sentenz/percent?logo=go)](https://go.dev/doc/install)
 [![GoDoc](https://pkg.go.dev/badge/github.com/sentenz/percent/v3)](https://pkg.go.dev/github.com/sentenz/percent/v3/pkg/percent)
-[![Go Report Card](https://goreportcard.com/badge/github.com/sentenz/percent/v3)](https://goreportcard.com/report/github.com/sentenz/percent/v3)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/sentenz/percent/actions/workflows/go-tests.yml)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
