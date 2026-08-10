@@ -37,18 +37,17 @@
   "customManagers": [
     {
       "customType": "regex",
-      "description": "Update versioned Docker image references in Makefiles and KinD cluster configuration.",
+      "description": "Update versioned Docker image references in Makefiles.",
       "managerFilePatterns": [
         "**/[Mm]akefile",
         "**/GNUMakefile",
-        "**/*.mk",
-        "**/kind-cluster.{yml,yaml}"
+        "**/*.mk"
       ],
       "matchStringsStrategy": "any",
       "matchStrings": [
         "(?<depName>(?:(?:[A-Za-z0-9.-]+(?::[0-9]+)?/)?[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)+)):(?<currentValue>v?\\d[0-9A-Za-z_.-]*)(?:@(?<currentDigest>sha256:[a-f0-9]{64}))?"
       ],
-      "autoReplaceStringTemplate": "{{{prefix}}}{{{depName}}}:{{{newValue}}}{{#if newDigest}}@{{{newDigest}}}{{else}}{{#if currentDigest}}@{{{currentDigest}}}{{/if}}{{/if}}",
+      "autoReplaceStringTemplate": "{{{depName}}}:{{{newValue}}}{{#if newDigest}}@{{{newDigest}}}{{else}}{{#if currentDigest}}@{{{currentDigest}}}{{/if}}{{/if}}",
       "datasourceTemplate": "docker",
       "versioningTemplate": "docker"
     }
@@ -57,7 +56,8 @@
     {
       "description": "Group major updates.",
       "matchManagers": [
-        "!gomod"
+        "!gomod",
+        "!github-actions"
       ],
       "matchDatasources": [
         "!docker"
@@ -72,7 +72,8 @@
     {
       "description": "Group minor updates.",
       "matchManagers": [
-        "!gomod"
+        "!gomod",
+        "!github-actions"
       ],
       "matchDatasources": [
         "!docker"
@@ -87,7 +88,8 @@
     {
       "description": "Group patch updates.",
       "matchManagers": [
-        "!gomod"
+        "!gomod",
+        "!github-actions"
       ],
       "matchDatasources": [
         "!docker"
@@ -100,18 +102,36 @@
       "automerge": false
     },
     {
-      "description": "Group Go dependency updates from go.mod and go.sum.",
+      "description": "Only propose Go module updates compatible with the repository Go version.",
       "matchManagers": [
         "gomod"
       ],
-      "matchFileNames": [
-        "go.mod",
-        "go.sum"
+      "constraintsFiltering": "strict"
+    },
+    {
+      "description": "Group major Go module dependency updates separately.",
+      "matchManagers": [
+        "gomod"
       ],
       "matchUpdateTypes": [
-        "major",
+        "major"
+      ],
+      "groupName": "go major dependencies",
+      "groupSlug": "go-major-dependencies",
+      "semanticCommits": "enabled",
+      "semanticCommitType": "fix",
+      "semanticCommitScope": "deps",
+      "automerge": false
+    },
+    {
+      "description": "Group non-major Go module dependency updates.",
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchUpdateTypes": [
         "minor",
-        "patch"
+        "patch",
+        "digest"
       ],
       "groupName": "go dependencies",
       "groupSlug": "go-dependencies",
@@ -183,6 +203,23 @@
       "groupName": "makefile container images",
       "groupSlug": "makefile-container-images",
       "automerge": true
+    },
+    {
+      "description": "Group non-container GitHub Actions dependency updates.",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchDepTypes": [
+        "action",
+        "uses-with",
+        "github-runner"
+      ],
+      "groupName": "github actions dependencies",
+      "groupSlug": "github-actions-dependencies",
+      "semanticCommits": "enabled",
+      "semanticCommitType": "ci",
+      "semanticCommitScope": "deps",
+      "automerge": false
     },
     {
       "description": "Pin Docker images used by GitHub Actions to immutable digests.",
