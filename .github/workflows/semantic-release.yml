@@ -32,6 +32,10 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           semantic-version: "latest"
+          extra-plugins: |
+            @semantic-release/changelog@^6
+            @semantic-release/git@^10
+            conventional-changelog-conventionalcommits@9.3.1
 
       - name: Run SBOM Generation (CycloneDX)
         if: steps.release.outputs.new-release-published == 'true'
@@ -55,7 +59,7 @@ jobs:
         if: steps.release.outputs.new-release-published == 'true'
         uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # v3.0.2
         with:
-          tag_name: v${{ steps.release.outputs.new-release-version }}
+          tag_name: ${{ steps.release.outputs.new-release-git-tag }}
           files: |
             sbom.cdx.json
             sbom.spdx.json
