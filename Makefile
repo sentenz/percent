@@ -68,7 +68,7 @@ skills-agent-update:
 
 # ─── Dependency Manager ──────────────────────────────────────────────────────────────────────────
 
-DEPENDENCY_IMAGE_RENOVATE ?= docker.io/renovate/renovate:44.14.12@sha256:160125831b82ae05c734870b9f65094e0f8699a0e44f3274bacc7b36a9041047
+DEPENDENCY_IMAGE_RENOVATE ?= docker.io/renovate/renovate:44.17.0@sha256:01b5fdda2e9426ad3fdf7f7a183dc1faeaaf89a316191ca5b6127bfedb39d5ba
 
 ## Update project dependencies locally using Renovate and generate a report
 dependency-renovate-update:
