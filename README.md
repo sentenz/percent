@@ -13,7 +13,7 @@ Percent is a Go package that provides utility functions for calculating percenta
   - [1.2. Installation](#12-installation)
   - [1.3. Usage](#13-usage)
   - [1.4. Versioning](#14-versioning)
-- [2. Contribute](#2-contribute)
+- [2. Contribution](#2-contribution)
 - [3. References](#3-references)
 
 ## 1. Module
@@ -120,9 +120,9 @@ This module follows [Go's semantic import versioning](https://go.dev/ref/mod#maj
   import "github.com/sentenz/percent/v3/pkg/percent"
   ```
 
-## 2. Contribute
+## 2. Contribution
 
-[CONTRIBUTING.md](CONTRIBUTING.md) provides guidens and instructions for contributing to the project.
+[CONTRIBUTING.md](CONTRIBUTING.md) provides guidance and instructions for contributing to the project.
 
 - [AI Agents](CONTRIBUTING.md#1-ai-agents)
   > Automated tools that assist in various development tasks such as code generation, testing, and documentation.
