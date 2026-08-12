@@ -28,7 +28,7 @@ jobs:
 
       - name: Run Semantic Release
         id: release
-        uses: sentenz/actions/semantic-release@d3b0a0d59ac008f6918c5d8304acab2c9d1abbf2 # 1.4.3
+        uses: sentenz/actions/semantic-release@1.4.3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           semantic-version: "latest"
