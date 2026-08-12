@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.7](https://github.com/sentenz/percent/compare/v3.0.6...v3.0.7) (2026-08-12)
+
+### Bug Fixes
+
+* **ci:** repair semantic-release workflow ([724b4c2](https://github.com/sentenz/percent/commit/724b4c21057b2e5334def6a4200407bc9777b1b6))
+* generating empty Changelog entries resolved in semantic-release.yml ([a996296](https://github.com/sentenz/percent/commit/a996296fa4e012f003b43491742bdee12a033e9a))
+
 ## [3.0.6](https://github.com/sentenz/percent/compare/v3.0.5...v3.0.6) (2026-08-10)
 
 ### Bug Fixes
