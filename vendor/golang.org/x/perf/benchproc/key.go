@@ -53,7 +53,7 @@ func (k Key) String() string {
 	return k.string(true)
 }
 
-// StringValues returns Key as a space-separated sequences of
+// StringValues returns Key as a space-separated sequence of
 // values in field order.
 func (k Key) StringValues() string {
 	return k.string(false)

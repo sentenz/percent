@@ -192,7 +192,7 @@ func (t *Table) Format(w io.Writer) error {
 		span := len(spanCols)
 		for _, col := range spanCols {
 			// What's the target average width at this
-			// point? Round up w/span.
+			// point? Round up with span.
 			avg := (w + span - 1) / span
 			// Expand column if it isn't wide enough.
 			ws[col] = max(ws[col], avg)

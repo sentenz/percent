@@ -106,7 +106,7 @@ func (a *decimal) Assign(v uint64) {
 const uintSize = 32 << (^uint(0) >> 63)
 const maxShift = uintSize - 4
 
-// Binary shift right (/ 2) by k bits.  k <= maxShift to avoid overflow.
+// Binary shift right (/ 2) by k bits. k <= maxShift to avoid overflow.
 func rightShift(a *decimal, k uint) {
 	r := 0 // read pointer
 	w := 0 // write pointer
@@ -163,7 +163,7 @@ func rightShift(a *decimal, k uint) {
 // Cheat sheet for left shift: table indexed by shift count giving
 // number of new digits that will be introduced by that shift.
 //
-// For example, leftcheats[4] = {2, "625"}.  That means that
+// For example, leftcheats[4] = {2, "625"}. That means that
 // if we are shifting by 4 (multiplying by 16), it will add 2 digits
 // when the string prefix is "625" through "999", and one fewer digit
 // if the string prefix is "000" through "624".
@@ -265,7 +265,7 @@ func prefixIsLessThan(b []byte, s string) bool {
 	return false
 }
 
-// Binary shift left (* 2) by k bits.  k <= maxShift to avoid overflow.
+// Binary shift left (* 2) by k bits. k <= maxShift to avoid overflow.
 func leftShift(a *decimal, k uint) {
 	delta := leftcheats[k].delta
 	if prefixIsLessThan(a.d[0:a.nd], leftcheats[k].cutoff) {

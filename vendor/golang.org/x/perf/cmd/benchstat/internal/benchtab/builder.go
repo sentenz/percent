@@ -47,7 +47,7 @@ type builderTable struct {
 }
 
 type builderCell struct {
-	// values is the observed values in this cell.
+	// values are the observed values in this cell.
 	values []float64
 	// residue is the set of residue keys mapped to this cell.
 	// It is used to check for non-unique keys.
@@ -120,7 +120,7 @@ type TableOpts struct {
 	// intervals; e.g., 0.95 for 95%.
 	Confidence float64
 
-	// Thresholds is the thresholds to use for statistical tests.
+	// Thresholds are the thresholds to use for statistical tests.
 	Thresholds *benchmath.Thresholds
 
 	// Units is the unit metadata. This gives distributional
@@ -356,7 +356,7 @@ func (t *Tables) ToText(w io.Writer, color bool) error {
 	})
 }
 
-// ToCSV returns t to CSV (comma-separated values) format.
+// ToCSV renders t in CSV (comma-separated values) format.
 //
 // Warnings are written to a separate stream so as not to interrupt
 // the regular format of the CSV table.

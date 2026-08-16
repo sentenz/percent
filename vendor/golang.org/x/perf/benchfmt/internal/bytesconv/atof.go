@@ -120,7 +120,7 @@ func (b *decimal) set(s []byte) (ok bool) {
 	// optional exponent moves decimal point.
 	// if we read a very large, very long number,
 	// just be sure to move the decimal point by
-	// a lot (say, 100000).  it doesn't matter if it's
+	// a lot (say, 100000). It doesn't matter if it's
 	// not the exact number.
 	if i < len(s) && lower(s[i]) == 'e' {
 		i++
@@ -251,7 +251,7 @@ func readFloat(s []byte) (mantissa uint64, exp int, neg, trunc, hex, ok bool) {
 	// optional exponent moves decimal point.
 	// if we read a very large, very long number,
 	// just be sure to move the decimal point by
-	// a lot (say, 100000).  it doesn't matter if it's
+	// a lot (say, 100000). It doesn't matter if it's
 	// not the exact number.
 	if i < len(s) && lower(s[i]) == expChar {
 		i++
