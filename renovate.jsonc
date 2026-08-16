@@ -106,7 +106,10 @@
       "matchManagers": [
         "gomod"
       ],
-      "constraintsFiltering": "strict"
+      "constraintsFiltering": "strict",
+      "postUpdateOptions": [
+        "gomodTidy"
+      ]
     },
     {
       "description": "Group major Go module dependency updates separately.",
