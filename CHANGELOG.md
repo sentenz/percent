@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.0.8](https://github.com/sentenz/percent/compare/v3.0.7...v3.0.8) (2026-08-16)
+
+### Bug Fixes
+
+* **renovate:** tidy Go modules before vendoring ([8c75499](https://github.com/sentenz/percent/commit/8c75499730ba6eb07d9a07aeb3621cd9affed59a))
+
 ## [3.0.7](https://github.com/sentenz/percent/compare/v3.0.6...v3.0.7) (2026-08-12)
 
 ### Bug Fixes
