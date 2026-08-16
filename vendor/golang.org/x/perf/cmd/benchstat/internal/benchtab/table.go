@@ -37,7 +37,7 @@ type Table struct {
 	// col Keys have the same Projection.
 	Rows, Cols []benchproc.Key
 
-	// Cells is the cells in the body of this table. Each key in
+	// Cells contain the cells in the body of this table. Each key in
 	// this map is a pair of some Key from Rows and some Key
 	// from Cols. However, not all Pairs may be present in the
 	// map.
