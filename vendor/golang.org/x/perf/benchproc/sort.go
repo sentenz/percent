@@ -104,7 +104,7 @@ var builtinOrders = map[string]func(a, b string) int{
 
 const numPrefixes = `KMGTPEZY`
 
-var numRe = regexp.MustCompile(`([0-9.]+)([k` + numPrefixes + `]i?)?[bB]?`)
+var numRe = regexp.MustCompile(`^([+-]?[0-9.]+)([k` + numPrefixes + `]i?)?[bB]?$`)
 
 // parseNum is a fuzzy number parser. It supports common patterns,
 // such as SI prefixes.
