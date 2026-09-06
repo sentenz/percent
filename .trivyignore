@@ -1,4 +1,0 @@
-# AVD-DS-0002: .devcontainer/go/Dockerfile intentionally has no USER directive.
-# The Dev Container common-utils feature provisions the non-root vscode user,
-# and .devcontainer/go/devcontainer.json connects with remoteUser set to vscode.
-AVD-DS-0002
