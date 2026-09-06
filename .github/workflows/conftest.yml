@@ -17,6 +17,6 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Run Conftest
-        uses: sentenz/actions/conftest@48302ad4cbb2e77116d2666bbad2821e74dd5ada # 1.4.8
+        uses: sentenz/actions/conftest@9f37c086ab1c2d31687e731bfbc6184e0b882a7f # 1.4.10
         with:
           policy-path: "./tests/policy"
