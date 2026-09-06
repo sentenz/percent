@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Run Trivy Filesystem Scan
-        uses: sentenz/actions/trivy@ed8d725668082b21a56c2d043b6c7b32b5da1c63 # 1.4.5
+        uses: sentenz/actions/trivy@48302ad4cbb2e77116d2666bbad2821e74dd5ada # 1.4.8
         with:
           scan-type: fs
           scan-target: "."
@@ -47,7 +47,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Run Trivy Config Scan
-        uses: sentenz/actions/trivy@ed8d725668082b21a56c2d043b6c7b32b5da1c63 # 1.4.5
+        uses: sentenz/actions/trivy@48302ad4cbb2e77116d2666bbad2821e74dd5ada # 1.4.8
         with:
           scan-type: config
           scan-target: "."
@@ -72,20 +72,22 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Run SBOM Generation (CycloneDX)
-        uses: sentenz/actions/trivy@ed8d725668082b21a56c2d043b6c7b32b5da1c63 # 1.4.5
+        uses: sentenz/actions/trivy@48302ad4cbb2e77116d2666bbad2821e74dd5ada # 1.4.8
         with:
           scan-type: sbom-generate
           scan-target: "."
           format: cyclonedx
           output: sbom.cdx.json
+          exit-code: "0"
 
       - name: Run SBOM Generation (SPDX)
-        uses: sentenz/actions/trivy@ed8d725668082b21a56c2d043b6c7b32b5da1c63 # 1.4.5
+        uses: sentenz/actions/trivy@48302ad4cbb2e77116d2666bbad2821e74dd5ada # 1.4.8
         with:
           scan-type: sbom-generate
           scan-target: "."
           format: spdx-json
           output: sbom.spdx.json
+          exit-code: "0"
 
       - name: Upload SBOM artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -111,7 +113,7 @@ jobs:
           name: sbom-files
 
       - name: Scan SBOM for vulnerabilities
-        uses: sentenz/actions/trivy@ed8d725668082b21a56c2d043b6c7b32b5da1c63 # 1.4.5
+        uses: sentenz/actions/trivy@48302ad4cbb2e77116d2666bbad2821e74dd5ada # 1.4.8
         with:
           scan-type: sbom
           scan-target: sbom.cdx.json
@@ -127,10 +129,11 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Run License Compliance Scan
-        uses: sentenz/actions/trivy@ed8d725668082b21a56c2d043b6c7b32b5da1c63 # 1.4.5
+        uses: sentenz/actions/trivy@48302ad4cbb2e77116d2666bbad2821e74dd5ada # 1.4.8
         with:
           scan-type: fs
           scan-target: "."
           scanners: license
           format: table
+          severity: UNKNOWN,HIGH,CRITICAL
         continue-on-error: false

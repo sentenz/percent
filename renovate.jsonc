@@ -102,7 +102,7 @@
       "automerge": false
     },
     {
-      "description": "Only propose Go module updates compatible with the repository Go version.",
+      "description": "Manage Go module updates compatible with the repository Go version.",
       "matchManagers": [
         "gomod"
       ],
@@ -110,6 +110,16 @@
       "postUpdateOptions": [
         "gomodTidy"
       ]
+    },
+    {
+      "description": "Enable indirect Go module updates.",
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchDepTypes": [
+        "indirect"
+      ],
+      "enabled": true
     },
     {
       "description": "Group major Go module dependency updates separately.",
