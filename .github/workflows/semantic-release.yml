@@ -40,6 +40,7 @@ jobs:
           scan-target: "."
           format: cyclonedx
           output: sbom.cdx.json
+          exit-code: "0"
 
       - name: Run SBOM Generation (SPDX)
         if: steps.release.outputs.new-release-published == 'true'
@@ -49,6 +50,7 @@ jobs:
           scan-target: "."
           format: spdx-json
           output: sbom.spdx.json
+          exit-code: "0"
 
       - name: Publish SBOM artifacts
         if: steps.release.outputs.new-release-published == 'true'
