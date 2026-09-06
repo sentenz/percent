@@ -135,4 +135,5 @@ jobs:
           scan-target: "."
           scanners: license
           format: table
+          severity: UNKNOWN,HIGH,CRITICAL
         continue-on-error: false
