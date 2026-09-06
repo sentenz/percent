@@ -99,6 +99,11 @@ Standard Go project layout following community best practices for organizing cod
 ├── pkg/                # Public library code (importable by external projects)
 │   └── percent/        # Main package with percentage utilities
 ├── scripts/            # Scripts for build, setup, and deployment
+├── specs/              # Specification-Driven Development (SDD) documents
+│   ├── constitution.md # Project governing principles
+│   └── percent/        # Specifications for the percent package
+│       ├── spec.md     # Feature specification with golden dataset
+│       └── plan.md     # Technical implementation plan
 ├── tests/              # Additional test files and test data
 │   ├── data/           # Test data files (e.g., JSON, YAML)
 │   └── policy/         # Policy tests with Conftest/Rego
@@ -122,6 +127,9 @@ Standard Go project layout following community best practices for organizing cod
 
 - `.github/skills/`
   > Agent skills documentation following the Agent Skills specification for AI coding assistants.
+
+- `specs/`
+  > Specification-Driven Development (SDD) documents: constitution, feature specs, golden datasets, and implementation plans.
 
 - `tests/policy/`
   > Policy-as-code tests using Conftest and Rego for validating configurations.
@@ -237,4 +245,15 @@ Run `make help` to see all available commands with descriptions.
 
 - [.github/skills/README.md](.github/skills/README.md)
   > Agent Skills are modular capabilities for AI coding agents.
+
+## 5. Specification-Driven Development (SDD)
+
+- [specs/constitution.md](specs/constitution.md)
+  > Project governing principles that all AI agents and contributors must follow.
+
+- [specs/percent/spec.md](specs/percent/spec.md)
+  > Feature specification for the percent package: user stories, acceptance criteria, and golden dataset.
+
+- [specs/percent/plan.md](specs/percent/plan.md)
+  > Technical implementation plan: function designs, project structure, and release checklist.
 
