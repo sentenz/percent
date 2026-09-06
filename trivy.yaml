@@ -269,7 +269,8 @@ scan:
     # - secret
   show-suppressed: false
   skip-dirs: []
-  skip-files: []
+  skip-files:
+    - "vendor/golang.org/x/telemetry/package-lock.json"
   skip-version-check: false
 secret:
   config: trivy-secret.yaml
