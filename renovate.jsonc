@@ -102,11 +102,10 @@
       "automerge": false
     },
     {
-      "description": "Manage Go module updates compatible with the repository Go version.",
+      "description": "Manage Go module updates.",
       "matchManagers": [
         "gomod"
       ],
-      "constraintsFiltering": "strict",
       "postUpdateOptions": [
         "gomodTidy"
       ]
