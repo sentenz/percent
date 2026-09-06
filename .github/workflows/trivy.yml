@@ -78,6 +78,7 @@ jobs:
           scan-target: "."
           format: cyclonedx
           output: sbom.cdx.json
+          exit-code: "0"
 
       - name: Run SBOM Generation (SPDX)
         uses: sentenz/actions/trivy@48302ad4cbb2e77116d2666bbad2821e74dd5ada # 1.4.8
@@ -86,6 +87,7 @@ jobs:
           scan-target: "."
           format: spdx-json
           output: sbom.spdx.json
+          exit-code: "0"
 
       - name: Upload SBOM artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
