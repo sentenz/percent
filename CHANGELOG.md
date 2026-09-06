@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.0.12](https://github.com/sentenz/percent/compare/v3.0.11...v3.0.12) (2026-09-06)
+
+### Bug Fixes
+
+* **deps:** update go dependencies ([#156](https://github.com/sentenz/percent/issues/156)) ([cfd6bc1](https://github.com/sentenz/percent/commit/cfd6bc1313084a7f72802a0ff4b63d784819f1ff))
+
 ## [3.0.11](https://github.com/sentenz/percent/compare/v3.0.10...v3.0.11) (2026-08-30)
 
 ### Bug Fixes
