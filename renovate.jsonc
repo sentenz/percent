@@ -106,11 +106,20 @@
       "matchManagers": [
         "gomod"
       ],
-      "enabled": true,
       "constraintsFiltering": "strict",
       "postUpdateOptions": [
         "gomodTidy"
       ]
+    },
+    {
+      "description": "Enable indirect Go module updates.",
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchDepTypes": [
+        "indirect"
+      ],
+      "enabled": true
     },
     {
       "description": "Group major Go module dependency updates separately.",
