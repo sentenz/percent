@@ -21,10 +21,7 @@ deny_gitlab_ci contains msg if {
 	version := parts[count(parts) - 1]
 
 	not is_strict_semver(version)
-	msg := sprintf(
-		"Component '%s' uses label tags specifier '%s'. Pin to the exact semantic versioning tag like 'v1.2.3'.",
-		[component, version],
-	)
+	msg := $"Component '{component}' uses label tag '{version}'. Pin to an exact version like 'v1.2.3'."
 }
 
 is_strict_semver(v) if {
