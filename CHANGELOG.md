@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.0.15](https://github.com/sentenz/percent/compare/v3.0.14...v3.0.15) (2026-10-04)
+
+### Bug Fixes
+
+* **deps:** update go dependencies ([#173](https://github.com/sentenz/percent/issues/173)) ([f2a7e37](https://github.com/sentenz/percent/commit/f2a7e379a9b8a635b6b162593cc124995203841c))
+
 ## [3.0.14](https://github.com/sentenz/percent/compare/v3.0.13...v3.0.14) (2026-09-29)
 
 ### Bug Fixes
