@@ -19,10 +19,7 @@ deny_poetry_deps contains msg if {
 	some name, version in dependencies
 
 	not is_strict_semver(version)
-	msg := sprintf(
-		"Dependency '%s' uses ranged version specifier '%s'. Pin to the exact semantic versioning tag like 'v1.2.3'.",
-		[name, version],
-	)
+	msg := $"Dependency '{name}' uses version range '{version}'. Pin to an exact version like 'v1.2.3'."
 }
 
 # METADATA
@@ -38,10 +35,7 @@ deny_poetry_dev_deps contains msg if {
 	some name, version in dependencies
 
 	not is_strict_semver(version)
-	msg := sprintf(
-		"Dev Dependency '%s' uses ranged version specifier '%s'. Pin to the exact semantic versioning tag like 'v1.2.3'.",
-		[name, version],
-	)
+	msg := $"Dev dependency '{name}' uses version range '{version}'. Pin to an exact version like 'v1.2.3'."
 }
 
 is_strict_semver(v) if {
