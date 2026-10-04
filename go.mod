@@ -8,7 +8,7 @@ require (
 	github.com/boumenot/gocover-cobertura v1.5.0
 	github.com/google/go-cmp v0.7.0
 	github.com/jstemmer/go-junit-report/v2 v2.1.0
-	golang.org/x/perf v0.0.0-20260908200009-22c9c6c9d4da
+	golang.org/x/perf v0.0.0-20260929162123-406019bb8b68
 	golang.org/x/vuln v1.8.0
 )
 
@@ -18,5 +18,5 @@ require (
 	golang.org/x/sync v0.23.0 // indirect
 	golang.org/x/sys v0.48.0 // indirect
 	golang.org/x/telemetry v0.0.0-20260924152758-ed294f943157 // indirect
-	golang.org/x/tools v0.50.0 // indirect
+	golang.org/x/tools v0.51.0 // indirect
 )
