@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.0.18](https://github.com/sentenz/percent/compare/v3.0.17...v3.0.18) (2026-10-25)
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/telemetry digest to 6cd571d ([#185](https://github.com/sentenz/percent/issues/185)) ([eb589b7](https://github.com/sentenz/percent/commit/eb589b78d569d1c56951a64ac36a3a78aba9c50d))
+
 ## [3.0.17](https://github.com/sentenz/percent/compare/v3.0.16...v3.0.17) (2026-10-18)
 
 ### Bug Fixes
