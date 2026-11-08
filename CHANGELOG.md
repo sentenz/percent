@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.0.19](https://github.com/sentenz/percent/compare/v3.0.18...v3.0.19) (2026-11-08)
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 47ce03d ([#191](https://github.com/sentenz/percent/issues/191)) ([6869c8c](https://github.com/sentenz/percent/commit/6869c8c3e33b2a2dd93b69922f68a424bb5d7b13))
+
 ## [3.0.18](https://github.com/sentenz/percent/compare/v3.0.17...v3.0.18) (2026-10-25)
 
 ### Bug Fixes
