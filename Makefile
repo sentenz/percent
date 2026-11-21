@@ -68,7 +68,7 @@ skills-agent-update:
 
 # ─── Dependency Manager ──────────────────────────────────────────────────────────────────────────
 
-DEPENDENCY_IMAGE_RENOVATE ?= docker.io/renovate/renovate:44.222.3@sha256:0d4a5af4e1d73308ddcba85928258444443bbd1ee5416978ecfe1465e41fc688
+DEPENDENCY_IMAGE_RENOVATE ?= docker.io/renovate/renovate:44.239.1@sha256:7dba1a3b916a2cf302ba0df458ddcc8fcbac3c92d0fe9882ac13ba0363de656b
 
 ## Update project dependencies locally using Renovate and generate a report
 dependency-renovate-update:
@@ -259,7 +259,7 @@ lint-markdown:
 
 # ─── SAST Manager ────────────────────────────────────────────────────────────────────────────────
 
-SAST_IMAGE_SEMGREP ?= semgrep/semgrep:1.184.0@sha256:cc1b68266f267878b39739373ea9985b9a78e5d64497dd875c8de100b22695ed
+SAST_IMAGE_SEMGREP ?= semgrep/semgrep:1.185.0@sha256:67518c174185a2043fdbed16c70631b79209499b3671178e7194379b48295a0d
 SAST_FILES_SEMGREP ?= .
 SAST_REGEX_SEMGREP = $(if $(strip $(SAST_FILES_SEMGREP)),$(SAST_FILES_SEMGREP),.)
 
@@ -454,7 +454,7 @@ sast-gitleaks-staged:
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_GITLEAKS)" protect --redact --staged --source /workspace --report-format json --report-path logs/sast/gitleaks-protect.json 2>&1
 .PHONY: sast-gitleaks-staged
 
-SAST_IMAGE_TRUFFLEHOG ?= trufflesecurity/trufflehog:3.99.8@sha256:674b2f187620a19df77f44cf9a7d77efcc581a5662accef2f2739cbb46ba4a3a
+SAST_IMAGE_TRUFFLEHOG ?= trufflesecurity/trufflehog:3.99.9@sha256:2ec535840f860aa27f11fee20222fb790326ecd66325c96bd49d02ec6af46eca
 
 ## Scan local filesystem for leaked secrets using TruffleHog and generate a report
 sast-trufflehog-fs:
