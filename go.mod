@@ -9,14 +9,14 @@ require (
 	github.com/google/go-cmp v0.7.0
 	github.com/jstemmer/go-junit-report/v2 v2.1.0
 	golang.org/x/perf v0.0.0-20261009192801-be2c69fb417e
-	golang.org/x/vuln v1.9.0
+	golang.org/x/vuln v1.10.0
 )
 
 require (
 	github.com/aclements/go-moremath v0.0.0-20241023150245-c8bbc672ef66 // indirect
-	golang.org/x/mod v0.42.0 // indirect
-	golang.org/x/sync v0.24.0 // indirect
-	golang.org/x/sys v0.49.0 // indirect
-	golang.org/x/telemetry v0.0.0-20261021172232-6cd571d43fbb // indirect
-	golang.org/x/tools v0.52.1-0.20261106145633-d407941a339a // indirect
+	golang.org/x/mod v0.43.0 // indirect
+	golang.org/x/sync v0.25.0 // indirect
+	golang.org/x/sys v0.50.0 // indirect
+	golang.org/x/telemetry v0.0.0-20261116191925-e77a43154acb // indirect
+	golang.org/x/tools v0.53.0 // indirect
 )
